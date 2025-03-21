@@ -69,7 +69,6 @@
             <input type="text" id="referralId" name="referralId"><br>
             
             <input type="submit" value="Submit">
-        </form>
     </div>
         </form>
         <div class="success-message" id="successMessage">
