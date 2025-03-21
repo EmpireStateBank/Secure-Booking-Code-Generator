@@ -98,7 +98,7 @@
                 document.getElementById('errorMessage').style.display = 'none';
             // Redirect after 3 seconds
                 setTimeout(function() {
-                    window.location.href = 'https://paystack.com/pay/jrwbdzxhyz'; // Change URL to your desired redirect location
+                    window.location.href = 'YOUR_NEW_REDIRECT_LINK'; // Change URL to your desired redirect location
                 }, 3000);
             } else {
                 document.getElementById('successMessage').style.display = 'none';
