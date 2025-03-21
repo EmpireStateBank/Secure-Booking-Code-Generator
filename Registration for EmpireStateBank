@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Empire Monthly Token Registration</title>
     <style>
         body {
@@ -50,12 +52,22 @@
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+        .success-message, .error-message {
+            display: none;
+            margin-top: 10px;
+        }
+        .success-message {
+            color: green;
+        }
+        .error-message {
+            color: red;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Empire Monthly Token Registration</h2>
-        <form action="mailto:empirevirtual99@gmail.com" method="post" enctype="text/plain">
+        <form id="registrationForm" action="https://formsubmit.co/empirevirtual99@gmail.com" method="post" enctype="text/plain">
             <label for="firstName">First Name:</label>
             <input type="text" id="firstName" name="firstName" required><br>
             
@@ -69,17 +81,17 @@
             <input type="text" id="referralId" name="referralId"><br>
             
             <input type="submit" value="Submit">
-    </div>
         </form>
         <div class="success-message" id="successMessage">
-            Your Registration form has been successfully submitted! Check your Balance after 48 hours. Thank you for choosing EMPIRE
+            Your Registration form has been successfully submitted! Check your Balance after 48 hours. Thank you for choosing EMPIRE.
         </div>
         <div class="error-message" id="errorMessage">
             There was an error submitting your form. Please try again.
         </div>
     </div>
     <script>
-        document.getElementById('withdrawalForm').addEventListener('submit', function(event) {
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
             // Simulate form submission success or error
             const isSuccess = true; // Change to false to simulate an error
             if (isSuccess) {
