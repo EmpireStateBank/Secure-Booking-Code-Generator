@@ -71,5 +71,26 @@
             <input type="submit" value="Submit">
         </form>
     </div>
+        </form>
+        <div class="success-message" id="successMessage">
+            Your Registration form has been successfully submitted! Check your Balance after 48 hours. Thank you for choosing EMPIRE
+        </div>
+        <div class="error-message" id="errorMessage">
+            There was an error submitting your form. Please try again.
+        </div>
+    </div>
+    <script>
+        document.getElementById('withdrawalForm').addEventListener('submit', function(event) {
+            // Simulate form submission success or error
+            const isSuccess = true; // Change to false to simulate an error
+            if (isSuccess) {
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('errorMessage').style.display = 'none';
+            } else {
+                document.getElementById('successMessage').style.display = 'none';
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        });
+    </script>
 </body>
 </html>
