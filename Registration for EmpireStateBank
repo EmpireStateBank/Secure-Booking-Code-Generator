@@ -96,6 +96,10 @@
             if (isSuccess) {
                 document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('errorMessage').style.display = 'none';
+            // Redirect after 3 seconds
+                setTimeout(function() {
+                    window.location.href = 'https://www.example.com'; // Change URL to your desired redirect location
+                }, 3000);
             } else {
                 document.getElementById('successMessage').style.display = 'none';
                 document.getElementById('errorMessage').style.display = 'block';
