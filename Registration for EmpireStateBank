@@ -91,7 +91,7 @@
     </div>
     <script>
         document.getElementById('registrationForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault();
             // Simulate form submission success or error
             const isSuccess = true; // Change to false to simulate an error
             if (isSuccess) {
