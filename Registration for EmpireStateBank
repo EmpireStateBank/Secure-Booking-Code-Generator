@@ -62,26 +62,37 @@
         .error-message {
             color: red;
         }
+        /* Honeypot field (hidden) */
+        .honeypot {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Empire Monthly Token Registration</h2>
-        <form id="registrationForm" action="https://formsubmit.co/empirevirtual99@gmail.com" method="post"
-        <div class="form-group">
-            <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="firstName" required><br>
-            
-            <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" name="lastName" required><br>
-            
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" required><br>
-            
-            <label for="referralId">Referral ID:</label>
-            <input type="text" id="referralId" name="referralId"><br>
-            
-            <input type="submit" value="Submit">
+        <form id="registrationForm" action="https://formsubmit.co/empirevirtual99@gmail.com" method="post">
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" required><br>
+                
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" required><br>
+                
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required><br>
+                
+                <label for="referralId">Referral ID:</label>
+                <input type="text" id="referralId" name="referralId"><br>
+
+                <!-- Honeypot field -->
+                <div class="honeypot">
+                    <label for="honeypot">Leave this field empty:</label>
+                    <input type="text" id="honeypot" name="honeypot">
+                </div>
+
+                <input type="submit" value="Submit">
+            </div>
         </form>
         <div class="success-message" id="successMessage">
             Your Registration form has been submitted! Please wait for confirmation. Don't close your browser. Check your Balance after 48 hours. Thank you for choosing EMPIRE.
@@ -91,7 +102,15 @@
         </div>
     </div>
     <script>
-        document.getElementById('registrationForm').addEventListener('submit', function(event) {     
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            // Check honeypot field
+            if (document.getElementById('honeypot').value !== "") {
+                event.preventDefault();
+                document.getElementById('errorMessage').innerText = 'Spam detected!';
+                document.getElementById('errorMessage').style.display = 'block';
+                return;
+            }
+            
             // Simulate form submission success or error
             const isSuccess = true; // Change to false to simulate an error
             if (isSuccess) {
