@@ -35,13 +35,6 @@
             border-bottom: 1px solid #ddd;
             padding: 10px 0;
         }
-        .fixture a {
-            text-decoration: none;
-            color: #0066cc;
-        }
-        .fixture a:hover {
-            text-decoration: underline;
-        }
         .fixture div {
             width: 20%;
             text-align: center;
@@ -60,7 +53,7 @@
         <input type="password" id="pinInput" maxlength="4" pattern="\d{4}" title="4 digit PIN" required>
         <button onclick="checkPin()">Submit</button>
     </div>
-    <div class="container" id="content">
+    <div class="container" id="content1">
         <div class="header">
             <h1>England: Premier League</h1>
         </div>
@@ -74,12 +67,12 @@
         <div class="fixture">
             <div>2025-04-02</div>
             <div>14:15</div>
-            <div><a href="https://betking.com" target="_blank">Team A</a></div>
-            <div><a href="https://betking.com" target="_blank">Team B</a></div>
+            <div>Team A</div>
+            <div>Team B</div>
             <div>OV2.5</div>
         </div>
     </div>
-    <div class="container" id="content">
+    <div class="container" id="content2">
         <div class="header">
             <h1>Spain: Laliga</h1>
         </div>
@@ -93,8 +86,8 @@
         <div class="fixture">
             <div>2025-04-02</div>
             <div>20:25</div>
-            <div><a href="https://betking.com" target="_blank">Celtavigo</a></div>
-            <div><a href="https://betking.com" target="_blank">AC Milan</a></div>
+            <div>Celtavigo</div>
+            <div>AC Milan</div>
             <div>0-3</div>
         </div>
     </div>  
@@ -105,7 +98,10 @@
             const pin = document.getElementById("pinInput").value;
             if (pin === correctPin) {
                 document.getElementById("pinPrompt").style.display = "none";
-                document.getElementById("content").style.display = "block";
+                const containers = document.getElementsByClassName("container");
+                for (let i = 0; i < containers.length; i++) {
+                    containers[i].style.display = "block";
+                }
             } else {
                 alert("Incorrect PIN. Please try again.");
             }
