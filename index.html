@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soccer Tips</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none; /* Hide the container initially */
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            display: inline;
+            font-size: 24px;
+            margin: 0;
+        }
+        .fixture {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .fixture a {
+            text-decoration: none;
+            color: #0066cc;
+        }
+        .fixture a:hover {
+            text-decoration: underline;
+        }
+        .fixture div {
+            width: 20%;
+            text-align: center;
+        }
+        .fixture:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+        .fixture:nth-child(even) {
+            background-color: #e9e9e9;
+        }
+    </style>
+</head>
+<body>
+    <div id="pinPrompt">
+        <label for="pinInput">Enter PIN:</label>
+        <input type="password" id="pinInput" maxlength="4" pattern="\d{4}" title="4 digit PIN" required>
+        <button onclick="checkPin()">Submit</button>
+    </div>
+    <div class="container" id="content">
+        <div class="header">
+            <h1>England: Premier League</h1>
+        </div>
+        <div class="fixture">
+            <div>DATE</div>
+            <div>TIME</div>
+            <div>HOME</div>
+            <div>AWAY</div>
+            <div>TIP</div>
+        </div>
+        <div class="fixture">
+            <div>2025-04-02</div>
+            <div>14:15</div>
+            <div><a href="https://betking.com" target="_blank">Team A</a></div>
+            <div><a href="https://betking.com" target="_blank">Team B</a></div>
+            <div>OV2.5</div>
+        </div>
+    </div>
+    <script>
+        const correctPin = "1234"; // Set your PIN here
+
+        function checkPin() {
+            const pin = document.getElementById("pinInput").value;
+            if (pin === correctPin) {
+                document.getElementById("pinPrompt").style.display = "none";
+                document.getElementById("content").style.display = "block";
+            } else {
+                alert("Incorrect PIN. Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>
