@@ -30,13 +30,12 @@
             margin: 0;
         }
         .fixture {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
             border-bottom: 1px solid #ddd;
             padding: 10px 0;
         }
         .fixture div {
-            width: 20%;
             text-align: center;
         }
         .fixture:nth-child(odd) {
@@ -81,7 +80,8 @@
             <div>OV2.5</div>
         </div>
     </div>
-    <div class="header">
+    <div class="container" id="content2">
+        <div class="header">
             <h1>Portugal: Liga Portugal</h1>
         </div>
         <div class="fixture">
@@ -99,7 +99,8 @@
             <div>OV2.5</div>
         </div>
     </div>
-    <div class="header">
+    <div class="container" id="content3">
+        <div class="header">
             <h1>Ukraine: Premier League</h1>
         </div>
         <div class="fixture">
