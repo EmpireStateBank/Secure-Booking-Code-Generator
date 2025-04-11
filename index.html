@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <title>Soccer Tips</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+            margin: auto;
+            max-width: 800px;
+        }
+        .tip {
+            background: #fff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .tip h3 {
+            margin: 0;
+            color: #007bff;
+        }
+        .tip p {
+            margin: 5px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+        }
+        #passwordPrompt {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        function unlockSite() {
+            const passwordInput = document.getElementById('passwordInput').value;
+            if (passwordInput === '1404') {
+                document.getElementById('passwordPrompt').style.display = 'none';
+                document.getElementById('contentSection').style.display = 'block';
+            } else {
+                alert('Incorrect password! Please try again.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="passwordPrompt">
+        <div style="text-align: center;">
+            <h2>Enter Password to Access Tips</h2>
+            <input type="password" id="passwordInput" placeholder="Password" autofocus style="padding: 10px; font-size: 16px;">
+            <button onclick="unlockSite()" style="padding: 10px 20px; font-size: 16px; margin-top: 10px;">Submit</button>
+        </div>
+    </div>
+
+    <div id="contentSection" class="hidden" style="display: none;">
+        <header>
+            <h1>Soccer Tips</h1>
+            <p>Your trusted guide for the latest soccer match predictions</p>
+        </header>
+
+        <div class="container">
+            <div class="tip">
+                <h3>Country: England</h3>
+                <p><strong>League:</strong> Premier League</p>
+                <p><strong>Match Date & Time:</strong> 2025-04-15 20:00</p>
+                <p><strong>Teams:</strong> Manchester United vs Chelsea</p>
+                <p><strong>Tip:</strong> Manchester United to win</p>
+            </div>
+
+            <div class="tip">
+                <h3>Country: Spain</h3>
+                <p><strong>League:</strong> La Liga</p>
+                <p><strong>Match Date & Time:</strong> 2025-04-16 18:30</p>
+                <p><strong>Teams:</strong> FC Barcelona vs Real Madrid</p>
+                <p><strong>Tip:</strong> Over 2.5 goals</p>
+            </div>
+
+            <div class="tip">
+                <h3>Country: Italy</h3>
+                <p><strong>League:</strong> Serie A</p>
+                <p><strong>Match Date & Time:</strong> 2025-04-17 21:00</p>
+                <p><strong>Teams:</strong> Juventus vs AC Milan</p>
+                <p><strong>Tip:</strong> Both teams to score</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 Soccer Tips. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
