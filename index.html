@@ -148,7 +148,7 @@
         .pin-input input::-ms-clear {
             display: none;
         }
-        .submit-button {
+        .submit-button, .toggle-button {
             padding: 12px 28px;
             font-size: 20px;
             margin-top: 26px;
@@ -161,8 +161,9 @@
             font-weight: bold;
             letter-spacing: 1px;
             transition: background 0.2s, box-shadow 0.2s;
+            display: inline-block;
         }
-        .submit-button:hover {
+        .submit-button:hover, .toggle-button:hover {
             background: linear-gradient(90deg, #4f00bc 0%, #ffb347 100%);
             box-shadow: 0 4px 16px #ffb34744;
         }
@@ -171,6 +172,76 @@
             margin-bottom: 20px;
             border-radius: 16px;
             box-shadow: 0 4px 24px #4f00bc55;
+        }
+        /* Remade user profile card */
+        .profile-card {
+            background: linear-gradient(135deg, #1e003a 0%, #007bff 90%);
+            padding: 34px 26px 26px 26px;
+            margin: 32px auto 16px auto;
+            border-radius: 24px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.35), 0 2px 6px #4f00bc44;
+            max-width: 370px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            color: #fff;
+            overflow: hidden;
+        }
+        .profile-avatar {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ffb347;
+            margin-bottom: 18px;
+            box-shadow: 0 0 24px #ffb34799, 0 6px 24px #4f00bc44;
+            background: #fff;
+        }
+        .profile-card h2 {
+            margin: 0 0 10px 0;
+            color: #ffb347;
+            font-size: 2em;
+            letter-spacing: 2px;
+            text-shadow: 0 1px 10px #7200b3bb;
+        }
+        .profile-details {
+            width: 100%;
+            text-align: left;
+            margin-top: 10px;
+        }
+        .profile-details p {
+            margin: 9px 0;
+            font-size: 1.15em;
+        }
+        .profile-label {
+            font-weight: bold;
+            color: #ffd700;
+        }
+        .profile-value {
+            color: #fff;
+            margin-left: 8px;
+        }
+        .expired-label {
+            color: #ff4d4d;
+            background: #2b0518;
+            padding: 7px 14px;
+            margin: 15px 0 0 0;
+            border-radius: 14px;
+            font-weight: bold;
+            font-size: 17px;
+            text-align: center;
+        }
+        .note-below-profile {
+            text-align: center;
+            margin-top: 18px;
+            margin-bottom: 2px;
+            font-size: 17px;
+            color: #ffb347;
+        }
+        .toggle-button {
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
         /* Scrollbar styling for dark background */
         ::-webkit-scrollbar {
@@ -197,16 +268,24 @@
             .expired {
                 margin: 10px;
             }
+            .profile-card {
+                padding: 16px 6px 10px 6px;
+            }
         }
     </style>
     <script>
+        // Add an 'img' property for each user with the path to the user's profile image.
+        // To add/change a user's image, just edit the 'img' value for their object.
         const users = [
-            { username: 'user1', pin: '1170', expiryDate: new Date('2025-05-14') },
-            { username: 'user1', pin: '0265', expiryDate: new Date('2025-05-14') },
-            { username: 'user2', pin: '1987', expiryDate: new Date('2025-05-14') },
-            { username: 'user2', pin: '3572', expiryDate: new Date('2025-05-30') },
-            { username: 'user3', pin: '1999', expiryDate: new Date('2025-05-25') }
+            { username: 'user1', pin: '1170', plan: 'Daily', expiryDate: new Date('2025-05-14'), img: 'user1.jpg' },
+            { username: 'user1', pin: '0265', plan: 'Weekly', expiryDate: new Date('2025-05-14'), img: 'user2.jpg' },
+            { username: 'user2', pin: '1987', plan: 'Monthly', expiryDate: new Date('2025-05-14'), img: 'user3.jpg' },
+            { username: 'user2', pin: '3572', plan: 'Monthly', expiryDate: new Date('2025-05-30'), img: 'user4.jpg' },
+            { username: 'user3', pin: '1999', plan: 'Weekly', expiryDate: new Date('2025-05-25'), img: 'user5.jpg' }
         ];
+
+        let currentUser = null;
+        let isExpired = false;
 
         function unlockSite() {
             const passwordInput = document.getElementById('passwordInput').value.replace(/\s+/g, '');
@@ -218,13 +297,53 @@
                 return;
             }
 
-            if (today >= user.expiryDate) {
-                document.getElementById('passwordPrompt').style.display = 'none';
-                document.getElementById('expiredMessage').style.display = 'block';
+            currentUser = user;
+            showProfileCard(user, today);
+
+            document.getElementById('passwordPrompt').style.display = 'none';
+            document.getElementById('profileCardSection').style.display = 'block';
+            document.getElementById('fixturesSection').style.display = 'none';
+        }
+
+        function showProfileCard(user, today) {
+            // Set profile data
+            document.getElementById('profileUserId').textContent = user.pin;
+            document.getElementById('profilePlan').textContent = user.plan;
+            document.getElementById('profileExpiry').textContent = user.expiryDate.toISOString().substring(0, 10);
+
+            // Set profile image (defaults to logo if not found)
+            const avatar = document.getElementById('profileAvatar');
+            if (user.img && user.img.trim() !== "") {
+                avatar.src = user.img;
             } else {
-                document.getElementById('passwordPrompt').style.display = 'none';
-                document.getElementById('contentSection').style.display = 'block';
+                avatar.src = "-5890865169557472356_109.jpg";
             }
+
+            isExpired = (today >= user.expiryDate);
+            const expiredMsg = document.getElementById('expiredProfileMsg');
+            const noteBelowProfile = document.getElementById('noteBelowProfile');
+            const viewPredictionBtn = document.getElementById('viewPredictionBtn');
+            if (isExpired) {
+                expiredMsg.style.display = 'block';
+                noteBelowProfile.style.display = 'none';
+                viewPredictionBtn.style.display = 'none';
+            } else {
+                expiredMsg.style.display = 'none';
+                noteBelowProfile.style.display = 'block';
+                viewPredictionBtn.style.display = 'inline-block';
+            }
+        }
+
+        function showFixtures() {
+            document.getElementById('profileCardSection').style.display = 'none';
+            document.getElementById('fixturesSection').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showProfile() {
+            document.getElementById('fixturesSection').style.display = 'none';
+            document.getElementById('profileCardSection').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </head>
@@ -241,13 +360,33 @@
         </div>
     </div>
 
-    <div id="expiredMessage" class="expired hidden" style="display: none;">
-        <h2>Your subscription has expired</h2>
-        <p>Resubscribe to gain back access.</p>
-        <a href="https://paystack.com/pay/azohnqhgu-" target="_blank">SUBSCRIBE NOW</a>
+    <div id="profileCardSection" class="hidden" style="display:none;">
+        <div class="profile-card" id="profileCard">
+            <!-- Avatar will be changed by JS -->
+            <img src="-5890865169557472356_109.jpg" alt="Profile Avatar" class="profile-avatar" id="profileAvatar">
+            <h2>Empire Member</h2>
+            <div class="profile-details">
+                <p><span class="profile-label">User ID:</span> <span class="profile-value" id="profileUserId"></span></p>
+                <p><span class="profile-label">Subscription Plan:</span> <span class="profile-value" id="profilePlan"></span></p>
+                <p><span class="profile-label">Expiry Date:</span> <span class="profile-value" id="profileExpiry"></span></p>
+            </div>
+            <span id="expiredProfileMsg" class="expired-label" style="display:none;">
+                Your subscription has expired!<br>
+                <a href="https://paystack.com/pay/azohnqhgu-" target="_blank" style="color:#ffb347;text-decoration:underline;">SUBSCRIBE NOW</a>
+            </span>
+        </div>
+        <div id="noteBelowProfile" class="note-below-profile" style="display:none;">
+            <span>Note: <b>View Prediction</b> below user's Profile</span>
+        </div>
+        <div style="text-align:center;">
+            <button id="viewPredictionBtn" class="toggle-button" onclick="showFixtures()" style="display:none;">View Prediction</button>
+        </div>
     </div>
 
-    <div id="contentSection" class="hidden" style="display: none;">
+    <div id="fixturesSection" class="hidden" style="display:none;">
+        <div style="text-align:right; margin-bottom:10px;">
+            <button class="toggle-button" onclick="showProfile()">View Profile</button>
+        </div>
         <header>
             <div class="header-container">
                 <img src="-5890865169557472356_109.jpg" alt="Header Logo">
@@ -255,7 +394,6 @@
                 <p>Your trusted guide for the latest soccer match predictions</p>
             </div>
         </header>
-
         <div class="container">
             <div class="tip">
                 <h3>Country: Spain</h3>
@@ -264,7 +402,6 @@
                 <p><strong>Teams:</strong> Girona 🆚 ATM</p>
                 <p><strong>Tip:</strong> Away win</p>
             </div>
-
             <div class="tip">
                 <h3>Country: Spain</h3>
                 <p><strong>League:</strong> LaLiga</p>
@@ -272,7 +409,6 @@
                 <p><strong>Teams:</strong> Villarreal 🆚 Seville</p>
                 <p><strong>Tip:</strong> Home win</p>
             </div>
-
             <div class="tip">
                 <h3>Country: Italy</h3>
                 <p><strong>League:</strong> Serie A</p>
@@ -280,7 +416,6 @@
                 <p><strong>Teams:</strong> Udinese 🆚 Florentina</p>
                 <p><strong>Tip:</strong> Away win</p>
             </div>
-
             <div class="tip">
                 <h3>Country: Belgium</h3>
                 <p><strong>League:</strong> Pro League</p>
@@ -288,7 +423,6 @@
                 <p><strong>Teams:</strong> Club Brugge 🆚 Royal Antwerp</p>
                 <p><strong>Tip:</strong> Home win</p>
             </div>
-
             <div class="tip">
                 <h3>Country: Belgium</h3>
                 <p><strong>League:</strong> Pro League</p>
@@ -296,7 +430,6 @@
                 <p><strong>Teams:</strong> Saint Gilloise 🆚 KAA Gent</p>
                 <p><strong>Tip:</strong> Home win</p>
             </div>
-
             <div class="tip">
                 <h3>Country: Denmark</h3>
                 <p><strong>League:</strong> Superligaen</p>
@@ -304,7 +437,6 @@
                 <p><strong>Teams:</strong> FC Copenhagen 🆚 Nordsjaelland</p>
                 <p><strong>Tip:</strong> Home win</p>
             </div>
-
             <div class="tip">
                 <h3>Country: Norway</h3>
                 <p><strong>League:</strong> Tippeligaen</p>
@@ -312,7 +444,6 @@
                 <p><strong>Teams:</strong> Haugesund 🆚 Brann</p>
                 <p><strong>Tip:</strong> Away win</p>
             </div>
-
             <div class="tip">
                 <h3>Country: Swedish</h3>
                 <p><strong>League:</strong> Allsvenskan</p>
@@ -320,7 +451,6 @@
                 <p><strong>Teams:</strong> Halmstads 🆚 Elfsborg</p>
                 <p><strong>Tip:</strong> Away win</p>
             </div>
-
             <div class="tip">
                 <h3>Country: Bulgaria</h3>
                 <p><strong>League:</strong> Premier League</p>
@@ -328,7 +458,6 @@
                 <p><strong>Teams:</strong> Lokomotiv Sofia 🆚 FC Hebar Pazardzhik</p>
                 <p><strong>Tip:</strong> Home win</p>
             </div>
-
             <div class="tip">
                 <h3>Country: Turkey</h3>
                 <p><strong>League:</strong> Super Lig</p>
@@ -337,7 +466,6 @@
                 <p><strong>Tip:</strong> Home win</p>
             </div>
         </div>
-
         <div class="footer">
             <p>&copy; 2025 Empire Tips. All rights reserved.</p>
         </div>
