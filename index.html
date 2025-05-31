@@ -34,36 +34,6 @@
             border-radius: 16px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.6);
         }
-        .container {
-            padding: 20px;
-            margin: auto;
-            max-width: 800px;
-        }
-        .tip {
-            background: rgba(30,30,40,0.7);
-            padding: 24px 18px;
-            margin: 18px 0;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-            border: 1.5px solid rgba(100,75,255,0.15);
-            backdrop-filter: blur(3px);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .tip:hover {
-            transform: translateY(-3px) scale(1.01);
-            box-shadow: 0 12px 40px rgba(80, 0, 200, 0.25);
-            border-color: #007bff99;
-        }
-        .tip h3 {
-            margin: 0;
-            color: #ffb347;
-            text-shadow: 0 1px 8px #7200b3bb;
-            letter-spacing: 1px;
-        }
-        .tip p {
-            margin: 6px 0;
-            color: #e0e0e0;
-        }
         .footer {
             text-align: center;
             margin-top: 32px;
@@ -256,12 +226,6 @@
         }
         /* Responsive for mobile */
         @media (max-width: 600px) {
-            .container {
-                padding: 8px;
-            }
-            .tip {
-                padding: 12px 8px;
-            }
             .input-container {
                 padding: 18px 8px 16px 8px;
             }
@@ -394,77 +358,9 @@
                 <p>Your trusted guide for the latest soccer match predictions</p>
             </div>
         </header>
-        <div class="container">
-            <div class="tip">
-                <h3>Country: Spain</h3>
-                <p><strong>League:</strong> LaLiga</p>
-                <p><strong>Match Date & Time:</strong> 2025-05-25 12:00</p>
-                <p><strong>Teams:</strong> Girona 🆚 ATM</p>
-                <p><strong>Tip:</strong> Away win</p>
-            </div>
-            <div class="tip">
-                <h3>Country: Spain</h3>
-                <p><strong>League:</strong> LaLiga</p>
-                <p><strong>Match Date & Time:</strong> 2025-05-25 15:00</p>
-                <p><strong>Teams:</strong> Villarreal 🆚 Seville</p>
-                <p><strong>Tip:</strong> Home win</p>
-            </div>
-            <div class="tip">
-                <h3>Country: Italy</h3>
-                <p><strong>League:</strong> Serie A</p>
-                <p><strong>Match Date & Time:</strong> 2025-05-25 19:45</p>
-                <p><strong>Teams:</strong> Udinese 🆚 Florentina</p>
-                <p><strong>Tip:</strong> Away win</p>
-            </div>
-            <div class="tip">
-                <h3>Country: Belgium</h3>
-                <p><strong>League:</strong> Pro League</p>
-                <p><strong>Match Date & Time:</strong> 2025-05-25 17:30</p>
-                <p><strong>Teams:</strong> Club Brugge 🆚 Royal Antwerp</p>
-                <p><strong>Tip:</strong> Home win</p>
-            </div>
-            <div class="tip">
-                <h3>Country: Belgium</h3>
-                <p><strong>League:</strong> Pro League</p>
-                <p><strong>Match Date & Time:</strong> 2025-05-25 17:30</p>
-                <p><strong>Teams:</strong> Saint Gilloise 🆚 KAA Gent</p>
-                <p><strong>Tip:</strong> Home win</p>
-            </div>
-            <div class="tip">
-                <h3>Country: Denmark</h3>
-                <p><strong>League:</strong> Superligaen</p>
-                <p><strong>Match Date & Time:</strong> 2025-05-25 16:30</p>
-                <p><strong>Teams:</strong> FC Copenhagen 🆚 Nordsjaelland</p>
-                <p><strong>Tip:</strong> Home win</p>
-            </div>
-            <div class="tip">
-                <h3>Country: Norway</h3>
-                <p><strong>League:</strong> Tippeligaen</p>
-                <p><strong>Match Date & Time:</strong> 2025-05-25 18:15</p>
-                <p><strong>Teams:</strong> Haugesund 🆚 Brann</p>
-                <p><strong>Tip:</strong> Away win</p>
-            </div>
-            <div class="tip">
-                <h3>Country: Swedish</h3>
-                <p><strong>League:</strong> Allsvenskan</p>
-                <p><strong>Match Date & Time:</strong> 2025-05-25 13:00</p>
-                <p><strong>Teams:</strong> Halmstads 🆚 Elfsborg</p>
-                <p><strong>Tip:</strong> Away win</p>
-            </div>
-            <div class="tip">
-                <h3>Country: Bulgaria</h3>
-                <p><strong>League:</strong> Premier League</p>
-                <p><strong>Match Date & Time:</strong> 2025-05-25 18:45</p>
-                <p><strong>Teams:</strong> Lokomotiv Sofia 🆚 FC Hebar Pazardzhik</p>
-                <p><strong>Tip:</strong> Home win</p>
-            </div>
-            <div class="tip">
-                <h3>Country: Turkey</h3>
-                <p><strong>League:</strong> Super Lig</p>
-                <p><strong>Match Date & Time:</strong> 2025-05-25 17:00</p>
-                <p><strong>Teams:</strong> Istanbul Basaksehir 🆚 Adana Demirsper</p>
-                <p><strong>Tip:</strong> Home win</p>
-            </div>
+        <!-- Image replaces the tip container below -->
+        <div style="text-align:center; margin: 32px 0;">
+            <img src="your-image.jpg" alt="Your Image" style="max-width:90%; border-radius:18px; box-shadow:0 4px 24px rgba(0,0,0,0.3);">
         </div>
         <div class="footer">
             <p>&copy; 2025 Empire Tips. All rights reserved.</p>
