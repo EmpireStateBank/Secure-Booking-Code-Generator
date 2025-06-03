@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <title>Soccer Tips</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #181818 0%, #2c003e 100%);
+            color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        header {
+            background: linear-gradient(90deg, #4f00bc 0%, #007bff 100%);
+            color: white;
+            padding: 30px 20px 20px 20px;
+            text-align: center;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        .header-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header-container img {
+            max-width: 80px;
+            margin-bottom: 12px;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+        }
+        .footer {
+            text-align: center;
+            margin-top: 32px;
+            padding: 16px;
+            background: rgba(32, 0, 64, 0.6);
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            color: #a0a0a0;
+        }
+        #passwordPrompt {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(115deg, #1a0036 0%, #000 100%);
+        }
+        .hidden {
+            display: none;
+        }
+        .expired {
+            text-align: center;
+            padding: 24px;
+            color: #ff4d4d;
+            background: rgba(40,0,20,0.7);
+            border-radius: 18px;
+            margin: 30px;
+            box-shadow: 0 4px 24px rgba(100,0,0,0.1);
+        }
+        .expired a {
+            color: #ffb347;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .expired a:hover {
+            text-decoration: underline;
+        }
+        .input-container {
+            text-align: center;
+            padding: 32px 24px 30px 24px;
+            border-radius: 16px;
+            background: rgba(34, 34, 40, 0.95);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        .input-container h2 {
+            margin-bottom: 10px;
+            color: #ffb347;
+            text-shadow: 0 1px 8px #7200b3bb;
+        }
+        .input-container h3 {
+            margin-bottom: 20px;
+            color: #a0a0a0;
+        }
+        .pin-input {
+            display: inline-block;
+            width: 220px;
+            position: relative;
+        }
+        .pin-input input {
+            width: 100%;
+            height: 50px;
+            font-size: 26px;
+            text-align: center;
+            letter-spacing: 15px;
+            border: 2px solid #ffb347;
+            border-radius: 8px;
+            outline: none;
+            padding: 0 15px;
+            box-sizing: border-box;
+            background-color: #181818;
+            color: #fff;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 8px #4f00bc22;
+        }
+        .pin-input input:focus {
+            border-color: #7200b3;
+            box-shadow: 0 4px 12px #4f00bc44;
+        }
+        .pin-input input::placeholder {
+            color: #777;
+        }
+        .pin-input input::-ms-reveal,
+        .pin-input input::-ms-clear {
+            display: none;
+        }
+        .submit-button, .toggle-button {
+            padding: 12px 28px;
+            font-size: 20px;
+            margin-top: 26px;
+            background: linear-gradient(90deg, #ffb347 0%, #4f00bc 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #4f00bc44;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: background 0.2s, box-shadow 0.2s;
+            display: inline-block;
+        }
+        .submit-button:hover, .toggle-button:hover {
+            background: linear-gradient(90deg, #4f00bc 0%, #ffb347 100%);
+            box-shadow: 0 4px 16px #ffb34744;
+        }
+        .logo {
+            max-width: 84px;
+            margin-bottom: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px #4f00bc55;
+        }
+        /* Remade user profile card */
+        .profile-card {
+            background: linear-gradient(135deg, #1e003a 0%, #007bff 90%);
+            padding: 34px 26px 26px 26px;
+            margin: 32px auto 16px auto;
+            border-radius: 24px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.35), 0 2px 6px #4f00bc44;
+            max-width: 370px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            color: #fff;
+            overflow: hidden;
+        }
+        .profile-avatar {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ffb347;
+            margin-bottom: 18px;
+            box-shadow: 0 0 24px #ffb34799, 0 6px 24px #4f00bc44;
+            background: #fff;
+        }
+        .profile-card h2 {
+            margin: 0 0 10px 0;
+            color: #ffb347;
+            font-size: 2em;
+            letter-spacing: 2px;
+            text-shadow: 0 1px 10px #7200b3bb;
+        }
+        .profile-details {
+            width: 100%;
+            text-align: left;
+            margin-top: 10px;
+        }
+        .profile-details p {
+            margin: 9px 0;
+            font-size: 1.15em;
+        }
+        .profile-label {
+            font-weight: bold;
+            color: #ffd700;
+        }
+        .profile-value {
+            color: #fff;
+            margin-left: 8px;
+        }
+        .expired-label {
+            color: #ff4d4d;
+            background: #2b0518;
+            padding: 7px 14px;
+            margin: 15px 0 0 0;
+            border-radius: 14px;
+            font-weight: bold;
+            font-size: 17px;
+            text-align: center;
+        }
+        .note-below-profile {
+            text-align: center;
+            margin-top: 18px;
+            margin-bottom: 2px;
+            font-size: 17px;
+            color: #ffb347;
+        }
+        .toggle-button {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        /* Scrollbar styling for dark background */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #353348;
+            border-radius: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #181818;
+        }
+        /* Responsive for mobile */
+        @media (max-width: 600px) {
+            .input-container {
+                padding: 18px 8px 16px 8px;
+            }
+            .expired {
+                margin: 10px;
+            }
+            .profile-card {
+                padding: 16px 6px 10px 6px;
+            }
+        }
+        /* Odds info styling */
+        .odds-section {
+            background: rgba(24, 20, 40, 0.92);
+            border-radius: 12px;
+            box-shadow: 0 2px 18px #0006;
+            margin: 20px auto 0 auto;
+            padding: 18px 20px 14px 20px;
+            max-width: 380px;
+            color: #fff;
+            text-align: center;
+        }
+        .odds-section .note {
+            color: #ffb347;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .odds-section .odds-list {
+            margin: 12px 0 0 0;
+            font-size: 1.16em;
+            color: #a0ffa0;
+        }
+        .odds-section .odds-total {
+            color: #ffd700;
+            font-size: 1.2em;
+            margin: 6px 0 0 0;
+            font-weight: bold;
+        }
+        .odds-section .odds-progress {
+            margin-top: 10px;
+            color: #bbb;
+            font-size: 1em;
+        }
+        .odds-section .odds-expiry {
+            margin-top: 10px;
+            color: #ffb347;
+            font-size: 0.98em;
+        }
+    </style>
+    <script>
+        // Add an 'img' property for each user with the path to the user's profile image.
+        // To add/change a user's image, just edit the 'img' value for their object.
+        // Added new odds field per plan for demonstration, you might want to fetch this from backend
+        const users = [
+            { username: 'user1', pin: '1108', plan: 'Daily', expiryDate: new Date('2025-05-14'), img: 'user1.jpg', odds: [1.30, 1.20, 1.56] },
+            { username: 'user1', pin: '0276', plan: 'Weekly', expiryDate: new Date('2025-05-14'), img: 'user2.jpg', odds: [2.00, 1.40, 2.50, 1.80] },
+            { username: 'user2', pin: '1901', plan: 'Monthly', expiryDate: new Date('2025-05-14'), img: 'user3.jpg', odds: [2.00, 1.50, 2.30, 1.80, 2.20] },
+            { username: 'user2', pin: '3572', plan: 'Monthly', expiryDate: new Date('2025-06-30'), img: 'AddText_05-30-08.18.22.png', odds: [2.00, 1.50, 2.30, 1.80, 2.20] },
+            { username: 'user3', pin: '1541', plan: 'Weekly', expiryDate: new Date('2025-05-25'), img: 'user5.jpg', odds: [1.90, 1.60, 2.30, 1.50] }
+        ];
+
+        const planExpectedOdds = {
+            'Daily': 6.00,
+            'Weekly': 25.00,
+            'Monthly': 50.00
+        };
+
+        let currentUser = null;
+        let isExpired = false;
+
+        function unlockSite() {
+            const passwordInput = document.getElementById('passwordInput').value.replace(/\s+/g, '');
+            const today = new Date();
+            const user = users.find(user => user.pin === passwordInput);
+
+            if (!user) {
+                alert('Incorrect PIN! Please try again.');
+                return;
+            }
+
+            currentUser = user;
+            showProfileCard(user, today);
+
+            document.getElementById('passwordPrompt').style.display = 'none';
+            document.getElementById('profileCardSection').style.display = 'block';
+            document.getElementById('fixturesSection').style.display = 'none';
+        }
+
+        function showProfileCard(user, today) {
+            // Set profile data
+            document.getElementById('profileUserId').textContent = user.pin;
+            document.getElementById('profilePlan').textContent = user.plan;
+            document.getElementById('profileExpiry').textContent = user.expiryDate.toISOString().substring(0, 10);
+
+            // Set profile image (defaults to logo if not found)
+            const avatar = document.getElementById('profileAvatar');
+            if (user.img && user.img.trim() !== "") {
+                avatar.src = user.img;
+            } else {
+                avatar.src = "-5890865169557472356_109.jpg";
+            }
+
+            isExpired = (today >= user.expiryDate);
+            const expiredMsg = document.getElementById('expiredProfileMsg');
+            const noteBelowProfile = document.getElementById('noteBelowProfile');
+            const viewPredictionBtn = document.getElementById('viewPredictionBtn');
+            if (isExpired) {
+                expiredMsg.style.display = 'block';
+                noteBelowProfile.style.display = 'none';
+                viewPredictionBtn.style.display = 'none';
+                document.getElementById('oddsSection').style.display = 'none';
+            } else {
+                expiredMsg.style.display = 'none';
+                noteBelowProfile.style.display = 'block';
+                viewPredictionBtn.style.display = 'inline-block';
+                renderOddsSection(user);
+            }
+        }
+
+        function renderOddsSection(user) {
+            // For demo, use the user's odds field. In real usage, fetch from backend.
+            const odds = user.odds || [];
+            const plan = user.plan;
+            const expectedOdd = planExpectedOdds[plan] || 0;
+            let total = 1;
+            let left = expectedOdd;
+            if (odds.length > 0) {
+                total = odds.reduce((acc, odd) => acc * odd, 1);
+                left = (expectedOdd - total) > 0 ? (expectedOdd - total) : 0;
+            }
+            // Day remaining
+            const today = new Date();
+            const expiry = user.expiryDate;
+            let daysLeft = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
+            daysLeft = daysLeft < 0 ? 0 : daysLeft;
+
+            // Odds list string
+            const oddsStr = odds.map(o => o.toFixed(2)).join(" × ");
+
+            // Fill odds section content
+            document.getElementById('oddsSection').style.display = 'block';
+            document.getElementById('oddsNote').innerHTML = `Expected Odd for <b>${plan}</b> plan: <span style="color:#ffd700;">${expectedOdd.toFixed(2)}</span>`;
+            document.getElementById('oddsList').textContent = oddsStr ? `Current Odds: ${oddsStr}` : "No odds yet";
+            document.getElementById('oddsTotal').textContent = `Total Odds: ${total.toFixed(2)}`;
+            document.getElementById('oddsLeft').textContent = `Odd left to reach target: ${left.toFixed(2)}`;
+            document.getElementById('oddsExpiry').textContent = `Subscription expires in ${daysLeft} day${daysLeft === 1 ? '' : 's'}.`;
+        }
+
+        function showFixtures() {
+            document.getElementById('profileCardSection').style.display = 'none';
+            document.getElementById('fixturesSection').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('oddsSection').style.display = 'none';
+        }
+
+        function showProfile() {
+            document.getElementById('fixturesSection').style.display = 'none';
+            document.getElementById('profileCardSection').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (currentUser && !isExpired) {
+                renderOddsSection(currentUser);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="passwordPrompt">
+        <div class="input-container">
+            <img src="-5890865169557472356_109.jpg" alt="Logo" class="logo">
+            <h2>Welcome to Empire Tips</h2>
+            <h3>Please enter your PIN below to access the best soccer tips</h3>
+            <div class="pin-input">
+                <input type="password" id="passwordInput" maxlength="4" placeholder="••••" inputmode="numeric" pattern="[0-9]*">
+            </div>
+            <button onclick="unlockSite()" class="submit-button">Submit</button>
+        </div>
+    </div>
+
+    <div id="profileCardSection" class="hidden" style="display:none;">
+        <div class="profile-card" id="profileCard">
+            <!-- Avatar will be changed by JS -->
+            <img src="-5890865169557472356_109.jpg" alt="Profile Avatar" class="profile-avatar" id="profileAvatar">
+            <h2>Empire Member</h2>
+            <div class="profile-details">
+                <p><span class="profile-label">User ID:</span> <span class="profile-value" id="profileUserId"></span></p>
+                <p><span class="profile-label">Subscription Plan:</span> <span class="profile-value" id="profilePlan"></span></p>
+                <p><span class="profile-label">Expiry Date:</span> <span class="profile-value" id="profileExpiry"></span></p>
+            </div>
+            <span id="expiredProfileMsg" class="expired-label" style="display:none;">
+                Your subscription has expired!<br>
+                <a href="https://paystack.com/pay/azohnqhgu-" target="_blank" style="color:#ffb347;text-decoration:underline;">SUBSCRIBE NOW</a>
+            </span>
+        </div>
+        <div id="noteBelowProfile" class="note-below-profile" style="display:none;">
+            <span>Note: <b>View Prediction</b> below user's Profile</span>
+        </div>
+
+        <!-- Odds Section -->
+        <div id="oddsSection" class="odds-section" style="display:none;">
+            <span class="note" id="oddsNote"></span>
+            <div class="odds-list" id="oddsList"></div>
+            <div class="odds-total" id="oddsTotal"></div>
+            <div class="odds-progress" id="oddsLeft"></div>
+            <div class="odds-expiry" id="oddsExpiry"></div>
+        </div>
+
+        <div style="text-align:center;">
+            <button id="viewPredictionBtn" class="toggle-button" onclick="showFixtures()" style="display:none;">View Prediction</button>
+        </div>
+    </div>
+
+    <div id="fixturesSection" class="hidden" style="display:none;">
+        <div style="text-align:right; margin-bottom:10px;">
+            <button class="toggle-button" onclick="showProfile()">View Profile</button>
+        </div>
+        <header>
+            <div class="header-container">
+                <img src="-5890865169557472356_109.jpg" alt="Header Logo">
+                <h1>Empire Tips</h1>
+                <p>Your trusted guide for the latest soccer match predictions</p>
+            </div>
+        </header>
+        <!-- Image replaces the tip container below -->
+        <div style="text-align:center; margin: 32px 0;">
+            <img src="AddText_05-31-09.48.03.png" alt="Your Image" style="max-width:90%; border-radius:18px; box-shadow:0 4px 24px rgba(0,0,0,0.3);">
+        </div>
+        <div class="footer">
+            <p>&copy; 2025 Empire Tips. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
