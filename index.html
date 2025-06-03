@@ -213,29 +213,6 @@
             margin-top: 10px;
             margin-bottom: 10px;
         }
-        /* Scrollbar styling for dark background */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #353348;
-            border-radius: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #181818;
-        }
-        /* Responsive for mobile */
-        @media (max-width: 600px) {
-            .input-container {
-                padding: 18px 8px 16px 8px;
-            }
-            .expired {
-                margin: 10px;
-            }
-            .profile-card {
-                padding: 16px 6px 10px 6px;
-            }
-        }
         /* Odds info styling */
         .odds-section {
             background: rgba(24, 20, 40, 0.92);
@@ -275,27 +252,54 @@
             color: #ffb347;
             font-size: 0.98em;
         }
+        .warning-label {
+            color: #f6b800;
+            background: #2b2b05;
+            padding: 7px 14px;
+            margin: 10px 0 0 0;
+            border-radius: 14px;
+            font-weight: bold;
+            font-size: 17px;
+            text-align: center;
+            display: block;
+        }
+        @media (max-width: 600px) {
+            .input-container {
+                padding: 18px 8px 16px 8px;
+            }
+            .expired {
+                margin: 10px;
+            }
+            .profile-card {
+                padding: 16px 6px 10px 6px;
+            }
+        }
     </style>
     <script>
-        // Add an 'img' property for each user with the path to the user's profile image.
-        // To add/change a user's image, just edit the 'img' value for their object.
-        // Added new odds field per plan for demonstration, you might want to fetch this from backend
+        // Demo users, add 'odds' array for each user.
         const users = [
             { username: 'user1', pin: '1108', plan: 'Daily', expiryDate: new Date('2025-05-14'), img: 'user1.jpg', odds: [1.30, 1.20, 1.56] },
             { username: 'user1', pin: '0276', plan: 'Weekly', expiryDate: new Date('2025-05-14'), img: 'user2.jpg', odds: [2.00, 1.40, 2.50, 1.80] },
-            { username: 'user2', pin: '1901', plan: 'Monthly', expiryDate: new Date('2025-05-14'), img: 'user3.jpg', odds: [2.00, 1.50, 2.30, 1.80, 2.20] },
-            { username: 'user2', pin: '3572', plan: 'Monthly', expiryDate: new Date('2025-06-30'), img: 'AddText_05-30-08.18.22.png', odds: [2.00, 1.50, 2.30, 1.80, 2.20] },
-            { username: 'user3', pin: '1541', plan: 'Weekly', expiryDate: new Date('2025-05-25'), img: 'user5.jpg', odds: [1.90, 1.60, 2.30, 1.50] }
+            { username: 'user2', pin: '1777', plan: 'Daily', expiryDate: new Date('2025-05-14'), img: 'user3.jpg', odds: [1.90, 1.60, 2.30, 1.80, 2.00] },
+            { username: 'user2', pin: '3572', plan: 'Monthly', expiryDate: new Date('2025-06-03'), img: 'AddText_05-30-08.18.22.png', odds: [2.00, 1.50, 2.30, 1.80, 2.20] },
+            { username: 'user3', pin: '1776', plan: 'Daily', expiryDate: new Date('2025-06-25'), img: 'user5.jpg', odds: [1.90, 1.60, 2.30,] }
         ];
 
+        // Expected and hide thresholds for each plan.
         const planExpectedOdds = {
             'Daily': 6.00,
             'Weekly': 25.00,
             'Monthly': 50.00
         };
+        const planHideOdds = {
+            'Daily': 8.00,
+            'Weekly': 28.00,
+            'Monthly': 56.00
+        };
 
         let currentUser = null;
         let isExpired = false;
+        let isOddExpired = false;
 
         function unlockSite() {
             const passwordInput = document.getElementById('passwordInput').value.replace(/\s+/g, '');
@@ -316,12 +320,11 @@
         }
 
         function showProfileCard(user, today) {
-            // Set profile data
             document.getElementById('profileUserId').textContent = user.pin;
             document.getElementById('profilePlan').textContent = user.plan;
-            document.getElementById('profileExpiry').textContent = user.expiryDate.toISOString().substring(0, 10);
+            // Removed the expiry date label here
 
-            // Set profile image (defaults to logo if not found)
+            // Set profile image
             const avatar = document.getElementById('profileAvatar');
             if (user.img && user.img.trim() !== "") {
                 avatar.src = user.img;
@@ -329,25 +332,55 @@
                 avatar.src = "-5890865169557472356_109.jpg";
             }
 
-            isExpired = (today >= user.expiryDate);
+            // Calculate odds
+            const odds = user.odds || [];
+            const plan = user.plan;
+            const expectedOdd = planExpectedOdds[plan] || 0;
+            const hideOdd = planHideOdds[plan] || 0;
+            let totalOdd = 1;
+            if (odds.length > 0) {
+                totalOdd = odds.reduce((acc, odd) => acc * odd, 1);
+            }
+            isExpired = false;
+            isOddExpired = false;
+            let showWarning = false;
+
+            if (totalOdd >= expectedOdd && totalOdd < hideOdd) {
+                showWarning = true;
+            }
+            if (totalOdd >= hideOdd) {
+                isOddExpired = true;
+            }
+
+            // Date-based expiry fallback
             const expiredMsg = document.getElementById('expiredProfileMsg');
             const noteBelowProfile = document.getElementById('noteBelowProfile');
             const viewPredictionBtn = document.getElementById('viewPredictionBtn');
-            if (isExpired) {
+            const warningMsg = document.getElementById('oddWarningMsg');
+            if (isOddExpired) {
                 expiredMsg.style.display = 'block';
                 noteBelowProfile.style.display = 'none';
                 viewPredictionBtn.style.display = 'none';
                 document.getElementById('oddsSection').style.display = 'none';
+                warningMsg.style.display = 'none';
+            } else if (showWarning) {
+                expiredMsg.style.display = 'none';
+                noteBelowProfile.style.display = 'block';
+                viewPredictionBtn.style.display = 'inline-block';
+                document.getElementById('oddsSection').style.display = 'block';
+                warningMsg.style.display = 'block';
+                warningMsg.textContent = `You have reached the expected odd (${expectedOdd.toFixed(2)}). Your Subscription will expire soon!`;
             } else {
                 expiredMsg.style.display = 'none';
                 noteBelowProfile.style.display = 'block';
                 viewPredictionBtn.style.display = 'inline-block';
-                renderOddsSection(user);
+                document.getElementById('oddsSection').style.display = 'block';
+                warningMsg.style.display = 'none';
             }
+            renderOddsSection(user);
         }
 
         function renderOddsSection(user) {
-            // For demo, use the user's odds field. In real usage, fetch from backend.
             const odds = user.odds || [];
             const plan = user.plan;
             const expectedOdd = planExpectedOdds[plan] || 0;
@@ -357,22 +390,15 @@
                 total = odds.reduce((acc, odd) => acc * odd, 1);
                 left = (expectedOdd - total) > 0 ? (expectedOdd - total) : 0;
             }
-            // Day remaining
-            const today = new Date();
-            const expiry = user.expiryDate;
-            let daysLeft = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
-            daysLeft = daysLeft < 0 ? 0 : daysLeft;
-
             // Odds list string
             const oddsStr = odds.map(o => o.toFixed(2)).join(" × ");
 
-            // Fill odds section content
-            document.getElementById('oddsSection').style.display = 'block';
+            document.getElementById('oddsSection').style.display = isOddExpired ? 'none' : 'block';
             document.getElementById('oddsNote').innerHTML = `Expected Odd for <b>${plan}</b> plan: <span style="color:#ffd700;">${expectedOdd.toFixed(2)}</span>`;
             document.getElementById('oddsList').textContent = oddsStr ? `Current Odds: ${oddsStr}` : "No odds yet";
             document.getElementById('oddsTotal').textContent = `Total Odds: ${total.toFixed(2)}`;
             document.getElementById('oddsLeft').textContent = `Odd left to reach target: ${left.toFixed(2)}`;
-            document.getElementById('oddsExpiry').textContent = `Subscription expires in ${daysLeft} day${daysLeft === 1 ? '' : 's'}.`;
+            document.getElementById('oddsExpiry').textContent = ``; // Removed any expiry date text
         }
 
         function showFixtures() {
@@ -386,7 +412,7 @@
             document.getElementById('fixturesSection').style.display = 'none';
             document.getElementById('profileCardSection').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            if (currentUser && !isExpired) {
+            if (currentUser && !isExpired && !isOddExpired) {
                 renderOddsSection(currentUser);
             }
         }
@@ -413,7 +439,7 @@
             <div class="profile-details">
                 <p><span class="profile-label">User ID:</span> <span class="profile-value" id="profileUserId"></span></p>
                 <p><span class="profile-label">Subscription Plan:</span> <span class="profile-value" id="profilePlan"></span></p>
-                <p><span class="profile-label">Expiry Date:</span> <span class="profile-value" id="profileExpiry"></span></p>
+                <!-- Removed Expiry Date label row -->
             </div>
             <span id="expiredProfileMsg" class="expired-label" style="display:none;">
                 Your subscription has expired!<br>
@@ -431,6 +457,7 @@
             <div class="odds-total" id="oddsTotal"></div>
             <div class="odds-progress" id="oddsLeft"></div>
             <div class="odds-expiry" id="oddsExpiry"></div>
+            <span id="oddWarningMsg" class="warning-label" style="display:none;"></span>
         </div>
 
         <div style="text-align:center;">
