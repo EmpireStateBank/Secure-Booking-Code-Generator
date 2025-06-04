@@ -263,6 +263,20 @@
             text-align: center;
             display: block;
         }
+        /* Fixture images vertical layout */
+        .fixture-images-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            margin: 32px 0;
+        }
+        .fixture-images-vertical img {
+            max-width: 320px;
+            width: 100%;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+        }
         @media (max-width: 600px) {
             .input-container {
                 padding: 18px 8px 16px 8px;
@@ -272,6 +286,12 @@
             }
             .profile-card {
                 padding: 16px 6px 10px 6px;
+            }
+            .fixture-images-vertical {
+                gap: 10px;
+            }
+            .fixture-images-vertical img {
+                max-width: 98vw;
             }
         }
     </style>
@@ -476,9 +496,11 @@
                 <p>Your trusted guide for the latest soccer match predictions</p>
             </div>
         </header>
-        <!-- Image replaces the tip container below -->
-        <div style="text-align:center; margin: 32px 0;">
-            <img src="AddText_06-04-06.07.37.png" alt="Your Image" style="max-width:90%; border-radius:18px; box-shadow:0 4px 24px rgba(0,0,0,0.3);">
+        <!-- Fixture prediction images below, vertical layout -->
+        <div class="fixture-images-vertical">
+            <img src="AddText_06-04-06.07.37.png" alt="Fixture Prediction 1">
+            <img src="AddText_06-04-06.12.00.png" alt="Fixture Prediction 2">
+            <!-- Add more images if needed, each will be stacked below the previous one -->
         </div>
         <div class="footer">
             <p>&copy; 2025 Empire Tips. All rights reserved.</p>
