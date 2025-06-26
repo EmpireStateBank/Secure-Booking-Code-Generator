@@ -263,62 +263,43 @@
             text-align: center;
             display: block;
         }
-        /* Fixture images vertical layout */
-        .fixture-images-vertical {
+        /* Fixture names and image popups */
+        .fixture-names-list {
+            margin: 30px auto 0 auto;
+            max-width: 360px;
             display: flex;
             flex-direction: column;
+            gap: 18px;
             align-items: center;
-            gap: 24px;
-            margin: 32px 0;
         }
-        .fixture-images-vertical img {
-            max-width: 320px;
-            width: 100%;
-            border-radius: 18px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.3);
-            cursor: pointer;
-            transition: transform 0.18s, box-shadow 0.18s;
-        }
-        .fixture-images-vertical img:hover {
-            transform: scale(1.045);
-            box-shadow: 0 6px 48px #4f00bc99;
-        }
-        /* Lightbox overlay */
-        #lightboxOverlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.82);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-        #lightboxOverlay.active {
-            display: flex;
-        }
-        #lightboxOverlay img {
-            max-width: 90vw;
-            max-height: 84vh;
-            border-radius: 18px;
-            box-shadow: 0 0 60px #000a;
-            background: #fff;
-            padding: 6px;
-        }
-        .close-btn {
-            position: absolute;
-            top: 28px;
-            right: 44px;
-            background: none;
+        .fixture-name-btn {
+            background: linear-gradient(90deg, #4f00bc 0%, #ffb347 100%);
+            color: white;
             border: none;
-            color: #fff;
-            font-size: 2.5rem;
+            border-radius: 9px;
+            padding: 13px 30px;
+            font-size: 1.25em;
             font-weight: bold;
             cursor: pointer;
-            z-index: 10000;
-            transition: color 0.2s;
+            margin-bottom: 7px;
+            letter-spacing: 1px;
+            width: 100%;
+            max-width: 280px;
+            transition: background 0.18s, box-shadow 0.18s;
+            box-shadow: 0 2px 8px #4f00bc44;
         }
-        .close-btn:hover {
-            color: #ff5252;
+        .fixture-name-btn:hover {
+            background: linear-gradient(90deg, #ffb347 0%, #4f00bc 100%);
+            box-shadow: 0 4px 24px #ffb34755;
+        }
+        .fixture-prediction-img {
+            display: none;
+            margin-top: 10px;
+            margin-bottom: 6px;
+            max-width: 325px;
+            width: 96%;
+            border-radius: 14px;
+            box-shadow: 0 2px 18px #0008;
         }
         @media (max-width: 600px) {
             .input-container {
@@ -330,16 +311,16 @@
             .profile-card {
                 padding: 16px 6px 10px 6px;
             }
-            .fixture-images-vertical {
+            .fixture-names-list {
                 gap: 10px;
             }
-            .fixture-images-vertical img {
+            .fixture-prediction-img {
                 max-width: 98vw;
             }
         }
     </style>
     <script>
-        // Demo users, add 'odds' array for each user.
+        // ----- YOUR EXISTING JS: Users, tipImages, odds, PIN logic -----
         const users = [
             { username: 'user1', pin: '1108', plan: 'Daily', expiryDate: new Date('2025-05-14'), img: 'user1.jpg', odds: [1.30, 1.20, 1.56] },
             { username: 'user1', pin: '0276', plan: 'Weekly', expiryDate: new Date('2025-05-14'), img: 'user2.jpg', odds: [2.00, 1.40, 2.50, 1.80] },
@@ -347,17 +328,12 @@
             { username: 'user2', pin: '3572', plan: 'Monthly', expiryDate: new Date('2025-06-03'), img: 'AddText_05-30-08.18.22.png', odds: [2.00, 1.50, 2.30, 1.80, 2.20] },
             { username: 'user3', pin: '1776', plan: 'Daily', expiryDate: new Date('2025-06-25'), img: 'user5.jpg', odds: [1.90, 1.60, 2.30,] }
         ];
-
-        // List the filenames of your tip images here.
-        // Place these images in your project directory or in a folder as needed.
         const tipImages = [
             'AddText_06-26-02.45.49.png',
             'AddText_06-26-02.41.24.png',
             'AddText_06-26-02.39.30.png'
             // Add more images as needed
         ];
-
-        // Expected and hide thresholds for each plan.
         const planExpectedOdds = {
             'Daily': 14.00,
             'Weekly': 25.00,
@@ -368,7 +344,6 @@
             'Weekly': 29.00,
             'Monthly': 56.00
         };
-
         let currentUser = null;
         let isExpired = false;
         let isOddExpired = false;
@@ -377,15 +352,12 @@
             const passwordInput = document.getElementById('passwordInput').value.replace(/\s+/g, '');
             const today = new Date();
             const user = users.find(user => user.pin === passwordInput);
-
             if (!user) {
                 alert('Incorrect PIN! Please try again.');
                 return;
             }
-
             currentUser = user;
             showProfileCard(user, today);
-
             document.getElementById('passwordPrompt').style.display = 'none';
             document.getElementById('profileCardSection').style.display = 'block';
             document.getElementById('fixturesSection').style.display = 'none';
@@ -394,16 +366,12 @@
         function showProfileCard(user, today) {
             document.getElementById('profileUserId').textContent = user.pin;
             document.getElementById('profilePlan').textContent = user.plan;
-
-            // Set profile image
             const avatar = document.getElementById('profileAvatar');
             if (user.img && user.img.trim() !== "") {
                 avatar.src = user.img;
             } else {
                 avatar.src = "-5890865169557472356_109.jpg";
             }
-
-            // Calculate odds
             const odds = user.odds || [];
             const plan = user.plan;
             const expectedOdd = planExpectedOdds[plan] || 0;
@@ -415,15 +383,12 @@
             isExpired = false;
             isOddExpired = false;
             let showWarning = false;
-
             if (totalOdd >= expectedOdd && totalOdd < hideOdd) {
                 showWarning = true;
             }
             if (totalOdd >= hideOdd) {
                 isOddExpired = true;
             }
-
-            // Date-based expiry fallback
             const expiredMsg = document.getElementById('expiredProfileMsg');
             const noteBelowProfile = document.getElementById('noteBelowProfile');
             const viewPredictionBtn = document.getElementById('viewPredictionBtn');
@@ -461,23 +426,53 @@
                 total = odds.reduce((acc, odd) => acc * odd, 1);
                 left = (expectedOdd - total) > 0 ? (expectedOdd - total) : 0;
             }
-            // Odds list string
             const oddsStr = odds.map(o => o.toFixed(2)).join(" × ");
-
             document.getElementById('oddsSection').style.display = isOddExpired ? 'none' : 'block';
             document.getElementById('oddsNote').innerHTML = `Expected Odd for <b>${plan}</b> plan: <span style="color:#ffd700;">${expectedOdd.toFixed(2)}</span>`;
             document.getElementById('oddsList').textContent = oddsStr ? `Current Odds: ${oddsStr}` : "No odds yet";
             document.getElementById('oddsTotal').textContent = `Total Odds: ${total.toFixed(2)}`;
             document.getElementById('oddsLeft').textContent = `Odd left to reach target: ${left.toFixed(2)}`;
-            document.getElementById('oddsExpiry').textContent = ``; // Removed any expiry date text
+            document.getElementById('oddsExpiry').textContent = ``;
         }
 
+        // --- FIXTURE NAME/IMAGE FUNCTIONALITY ---
         function showFixtures() {
             document.getElementById('profileCardSection').style.display = 'none';
             document.getElementById('fixturesSection').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
             document.getElementById('oddsSection').style.display = 'none';
-            renderFixtureImages();
+            renderFixtureNamesOnly();
+        }
+
+        function renderFixtureNamesOnly() {
+            const fixtureNamesList = document.getElementById('fixtureNamesList');
+            fixtureNamesList.innerHTML = '';
+            tipImages.forEach((src, idx) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.style.width = '100%';
+
+                // Name button
+                const nameBtn = document.createElement('button');
+                nameBtn.className = 'fixture-name-btn';
+                nameBtn.textContent = `Fixture ${idx + 1}`;
+                nameBtn.setAttribute('data-idx', idx);
+
+                // Prediction image
+                const img = document.createElement('img');
+                img.className = 'fixture-prediction-img';
+                img.src = src;
+                img.alt = `Fixture ${idx + 1} Prediction`;
+
+                // On name click: hide all images, show this one
+                nameBtn.addEventListener('click', function() {
+                    document.querySelectorAll('.fixture-prediction-img').forEach(im => im.style.display = 'none');
+                    img.style.display = 'block';
+                });
+
+                itemDiv.appendChild(nameBtn);
+                itemDiv.appendChild(img);
+                fixtureNamesList.appendChild(itemDiv);
+            });
         }
 
         function showProfile() {
@@ -489,50 +484,9 @@
             }
         }
 
-        // --- Fixture image rendering and lightbox logic ---
-        function renderFixtureImages() {
-            const fixtureContainer = document.getElementById('fixtureImagesVertical');
-            if (!fixtureContainer) return;
-            fixtureContainer.innerHTML = "";
-            tipImages.forEach((imgSrc, idx) => {
-                const img = document.createElement('img');
-                img.src = imgSrc;
-                img.alt = `Fixture Prediction ${idx + 1}`;
-                img.classList.add('tip-thumb');
-                img.setAttribute('data-index', idx);
-                img.addEventListener('click', () => openLightbox(idx));
-                fixtureContainer.appendChild(img);
-            });
-        }
-
-        // Lightbox open/close logic
-        function openLightbox(idx) {
-            const lightboxOverlay = document.getElementById('lightboxOverlay');
-            const lightboxImage = document.getElementById('lightboxImage');
-            lightboxImage.src = tipImages[idx];
-            lightboxOverlay.classList.add('active');
-        }
-        function closeLightbox() {
-            const lightboxOverlay = document.getElementById('lightboxOverlay');
-            const lightboxImage = document.getElementById('lightboxImage');
-            lightboxOverlay.classList.remove('active');
-            lightboxImage.src = '';
-        }
         document.addEventListener('DOMContentLoaded', function () {
-            // Unlock with Enter key
             document.getElementById('passwordInput').addEventListener('keydown', function(e) {
                 if (e.key === "Enter") unlockSite();
-            });
-
-            // Lightbox close events
-            document.querySelector('.close-btn').addEventListener('click', closeLightbox);
-            document.getElementById('lightboxOverlay').addEventListener('click', function(e) {
-                if (e.target === this) closeLightbox();
-            });
-            document.addEventListener('keydown', function(e) {
-                if (e.key === "Escape" && document.getElementById('lightboxOverlay').classList.contains('active')) {
-                    closeLightbox();
-                }
             });
         });
     </script>
@@ -552,7 +506,6 @@
 
     <div id="profileCardSection" class="hidden" style="display:none;">
         <div class="profile-card" id="profileCard">
-            <!-- Avatar will be changed by JS -->
             <img src="-5890865169557472356_109.jpg" alt="Profile Avatar" class="profile-avatar" id="profileAvatar">
             <h2>Empire Member</h2>
             <div class="profile-details">
@@ -567,7 +520,6 @@
         <div id="noteBelowProfile" class="note-below-profile" style="display:none;">
             <span>Note: <b>View Prediction</b> below user's Profile</span>
         </div>
-        <!-- Odds Section -->
         <div id="oddsSection" class="odds-section" style="display:none;">
             <span class="note" id="oddsNote"></span>
             <div class="odds-list" id="oddsList"></div>
@@ -592,22 +544,15 @@
                 <p>Your trusted guide for the latest soccer match predictions</p>
             </div>
         </header>
-        <!-- ADD THIS NOTE: -->
         <div style="text-align:center; margin: 18px 0 4px 0;">
-            <span style="font-weight:bold; color:#FFD700; font-size:1.1em;">Tap on the fixture to view</span>
+            <span style="font-weight:bold; color:#FFD700; font-size:1.1em;">Tap on the fixture name to view its prediction</span>
         </div>
-        <!-- Fixture prediction images below, vertical layout -->
-        <div class="fixture-images-vertical" id="fixtureImagesVertical">
-            <!-- Images will be injected by JS from tipImages -->
+        <div class="fixture-names-list" id="fixtureNamesList">
+            <!-- Names and images injected by JS -->
         </div>
         <div class="footer">
             <p>&copy; 2025 Empire Tips. All rights reserved.</p>
         </div>
-    </div>
-    <!-- Lightbox Overlay for enlarged image view -->
-    <div id="lightboxOverlay">
-        <button class="close-btn" aria-label="Close">&times;</button>
-        <img src="" alt="Large tip preview" id="lightboxImage">
     </div>
 </body>
 </html>
