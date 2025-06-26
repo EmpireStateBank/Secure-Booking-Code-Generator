@@ -276,6 +276,49 @@
             width: 100%;
             border-radius: 18px;
             box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.18s, box-shadow 0.18s;
+        }
+        .fixture-images-vertical img:hover {
+            transform: scale(1.045);
+            box-shadow: 0 6px 48px #4f00bc99;
+        }
+        /* Lightbox overlay */
+        #lightboxOverlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.82);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #lightboxOverlay.active {
+            display: flex;
+        }
+        #lightboxOverlay img {
+            max-width: 90vw;
+            max-height: 84vh;
+            border-radius: 18px;
+            box-shadow: 0 0 60px #000a;
+            background: #fff;
+            padding: 6px;
+        }
+        .close-btn {
+            position: absolute;
+            top: 28px;
+            right: 44px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10000;
+            transition: color 0.2s;
+        }
+        .close-btn:hover {
+            color: #ff5252;
         }
         @media (max-width: 600px) {
             .input-container {
@@ -303,6 +346,14 @@
             { username: 'user2', pin: '1777', plan: 'Daily', expiryDate: new Date('2025-05-14'), img: 'user3.jpg', odds: [1.90, 1.60, 2.30, 1.80, 2.00] },
             { username: 'user2', pin: '3572', plan: 'Monthly', expiryDate: new Date('2025-06-03'), img: 'AddText_05-30-08.18.22.png', odds: [2.00, 1.50, 2.30, 1.80, 2.20] },
             { username: 'user3', pin: '1776', plan: 'Daily', expiryDate: new Date('2025-06-25'), img: 'user5.jpg', odds: [1.90, 1.60, 2.30,] }
+        ];
+
+        // List the filenames of your tip images here.
+        // Place these images in your project directory or in a folder as needed.
+        const tipImages = [
+            'AddText_06-04-06.07.37.png',
+            'AddText_06-04-06.12.00.png'
+            // Add more images as needed
         ];
 
         // Expected and hide thresholds for each plan.
@@ -342,7 +393,6 @@
         function showProfileCard(user, today) {
             document.getElementById('profileUserId').textContent = user.pin;
             document.getElementById('profilePlan').textContent = user.plan;
-            // Removed the expiry date label here
 
             // Set profile image
             const avatar = document.getElementById('profileAvatar');
@@ -426,6 +476,7 @@
             document.getElementById('fixturesSection').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
             document.getElementById('oddsSection').style.display = 'none';
+            renderFixtureImages();
         }
 
         function showProfile() {
@@ -436,6 +487,53 @@
                 renderOddsSection(currentUser);
             }
         }
+
+        // --- Fixture image rendering and lightbox logic ---
+        function renderFixtureImages() {
+            const fixtureContainer = document.getElementById('fixtureImagesVertical');
+            if (!fixtureContainer) return;
+            fixtureContainer.innerHTML = "";
+            tipImages.forEach((imgSrc, idx) => {
+                const img = document.createElement('img');
+                img.src = imgSrc;
+                img.alt = `Fixture Prediction ${idx + 1}`;
+                img.classList.add('tip-thumb');
+                img.setAttribute('data-index', idx);
+                img.addEventListener('click', () => openLightbox(idx));
+                fixtureContainer.appendChild(img);
+            });
+        }
+
+        // Lightbox open/close logic
+        function openLightbox(idx) {
+            const lightboxOverlay = document.getElementById('lightboxOverlay');
+            const lightboxImage = document.getElementById('lightboxImage');
+            lightboxImage.src = tipImages[idx];
+            lightboxOverlay.classList.add('active');
+        }
+        function closeLightbox() {
+            const lightboxOverlay = document.getElementById('lightboxOverlay');
+            const lightboxImage = document.getElementById('lightboxImage');
+            lightboxOverlay.classList.remove('active');
+            lightboxImage.src = '';
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            // Unlock with Enter key
+            document.getElementById('passwordInput').addEventListener('keydown', function(e) {
+                if (e.key === "Enter") unlockSite();
+            });
+
+            // Lightbox close events
+            document.querySelector('.close-btn').addEventListener('click', closeLightbox);
+            document.getElementById('lightboxOverlay').addEventListener('click', function(e) {
+                if (e.target === this) closeLightbox();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === "Escape" && document.getElementById('lightboxOverlay').classList.contains('active')) {
+                    closeLightbox();
+                }
+            });
+        });
     </script>
 </head>
 <body>
@@ -459,7 +557,6 @@
             <div class="profile-details">
                 <p><span class="profile-label">User ID:</span> <span class="profile-value" id="profileUserId"></span></p>
                 <p><span class="profile-label">Subscription Plan:</span> <span class="profile-value" id="profilePlan"></span></p>
-                <!-- Removed Expiry Date label row -->
             </div>
             <span id="expiredProfileMsg" class="expired-label" style="display:none;">
                 Your subscription has expired!<br>
@@ -469,7 +566,6 @@
         <div id="noteBelowProfile" class="note-below-profile" style="display:none;">
             <span>Note: <b>View Prediction</b> below user's Profile</span>
         </div>
-
         <!-- Odds Section -->
         <div id="oddsSection" class="odds-section" style="display:none;">
             <span class="note" id="oddsNote"></span>
@@ -479,7 +575,6 @@
             <div class="odds-expiry" id="oddsExpiry"></div>
             <span id="oddWarningMsg" class="warning-label" style="display:none;"></span>
         </div>
-
         <div style="text-align:center;">
             <button id="viewPredictionBtn" class="toggle-button" onclick="showFixtures()" style="display:none;">View Prediction</button>
         </div>
@@ -497,14 +592,17 @@
             </div>
         </header>
         <!-- Fixture prediction images below, vertical layout -->
-        <div class="fixture-images-vertical">
-            <img src="AddText_06-04-06.07.37.png" alt="Fixture Prediction 1">
-            <img src="AddText_06-04-06.12.00.png" alt="Fixture Prediction 2">
-            <!-- Add more images if needed, each will be stacked below the previous one -->
+        <div class="fixture-images-vertical" id="fixtureImagesVertical">
+            <!-- Images will be injected by JS from tipImages -->
         </div>
         <div class="footer">
             <p>&copy; 2025 Empire Tips. All rights reserved.</p>
         </div>
+    </div>
+    <!-- Lightbox Overlay for enlarged image view -->
+    <div id="lightboxOverlay">
+        <button class="close-btn" aria-label="Close">&times;</button>
+        <img src="" alt="Large tip preview" id="lightboxImage">
     </div>
 </body>
 </html>
