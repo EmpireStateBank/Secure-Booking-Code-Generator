@@ -72,8 +72,6 @@
       text-shadow: 0 2px 14px #0007;
       z-index: 2;
     }
-
-    /* Modern Plan Card Style - Beautiful Black Glassy Cards */
     .plan-list {
       display: flex;
       flex-direction: row;
@@ -170,7 +168,6 @@
         width: 100%;
       }
     }
-
     .login-footer {
       color: #aaa;
       font-size: 0.95em;
@@ -189,7 +186,6 @@
       min-height: 1.5em;
       text-align: center;
     }
-    /* PIN Modal */
     .pin-modal-bg {
       display: none;
       position: fixed;
@@ -293,7 +289,6 @@
       margin-bottom: 0;
       min-height: 1.5em;
     }
-    /* Dashboard/Profile card */
     #profileCardSection {
       min-height: 100vh;
       width: 100vw;
@@ -361,7 +356,6 @@
       outline: none;
     }
     .logout-link:hover { color:#ffb347; }
-    /* Odd movement modal */
     #oddModal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.55); justify-content: center; align-items: center; }
     #oddModal .odd-modal-content { background: #2c003e; color: #fff; padding: 18px 12px 14px 12px; border-radius: 11px; box-shadow: 0 4px 18px #4f00bc44; min-width: 200px; max-width: 97vw; max-height: 75vh; overflow-y: auto; position: relative; }
     #oddModal .odd-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
@@ -382,7 +376,7 @@
     }
   </style>
   <script>
-    // Users database (simulate) - removed user image fields
+    // Users database (simulate)
     const users = [
       { username: 'user1', pin: '1108', plan: 'Daily', odds: [1.30, 1.20, 1.56], status: ['win', 'lost', 'win'] },
       { username: 'user1', pin: '0276', plan: 'Weekly', odds: [2.00, 1.40, 2.50, 1.80], status: ['win', 'win', 'lost', 'win'] },
@@ -390,9 +384,9 @@
       { username: 'user2', pin: '3572', plan: 'Monthly', odds: [2.00, 1.50, 2.30, 1.80, 2.20, 1.70, 1.30], status: ['win', 'win', 'win', 'win', 'win', 'win', 'win'] },
       { username: 'user3', pin: '1776', plan: 'Daily', odds: [1.90, 1.60, 2.30], status: ['win', 'win', 'lost'] }
     ];
-    // Plan definitions (Daily uses a working image)
+    // Daily: Emoji soccer ball
     const plans = [
-      { name: 'Daily', img: 'AddText_07-06-09.42.56.png', color: '#4f00bc' },
+      { name: 'Daily', img: 'https://img.icons8.com/emoji/96/soccer-ball-emoji.png', color: '#4f00bc' },
       { name: 'Weekly', img: 'https://img.icons8.com/ios-filled/100/ffd700/trophy.png', color: '#ffd700' },
       { name: 'Monthly', img: 'https://img.icons8.com/ios-filled/100/ff4d4d/star.png', color: '#ff4d4d' }
     ];
@@ -407,13 +401,11 @@
     const SUBSCRIBE_LINK = "https://paystack.com/pay/azohnqhgu-";
     let selectedPlan = null;
     let currentUser = null;
-
-    // Modern Plan Card Rendering
     function renderPlans() {
       const planDetails = {
         "Daily": {
           desc: "Perfect for a quick win, low cost.",
-          icon: "https://img.icons8.com/fluency/96/soccer-ball.png"
+          icon: "https://img.icons8.com/emoji/96/soccer-ball-emoji.png"
         },
         "Weekly": {
           desc: "Best value for regular punters.",
@@ -441,7 +433,6 @@
         list.appendChild(div);
       });
     }
-
     function openPinModal(plan) {
       selectedPlan = plan;
       document.getElementById('pinInput').value = '';
@@ -450,13 +441,11 @@
       document.getElementById('pinModal').classList.add('active');
       setTimeout(() => {
         document.getElementById('pinInput').focus();
-      }, 350); // Slightly longer delay for mobile
+      }, 350);
     }
-
     function closePinModal() {
       document.getElementById('pinModal').classList.remove('active');
     }
-
     function loginWithPin() {
       const pin = document.getElementById('pinInput').value.trim();
       const plan = selectedPlan ? selectedPlan.name : '';
@@ -473,7 +462,6 @@
       document.getElementById('pinModal').classList.remove('active');
       document.getElementById('profileCardSection').style.display = 'flex';
     }
-
     function pinInputKeydown(e) {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -481,7 +469,6 @@
       }
       if (e.key === "Escape") closePinModal();
     }
-
     function logout() {
       currentUser = null;
       selectedPlan = null;
@@ -491,38 +478,24 @@
       document.getElementById('pinInput').value = '';
       document.getElementById('pinError').textContent = '';
     }
-
-    // Helper to get plan icon by plan name
     function getPlanIcon(planName) {
       const plan = plans.find(p => p.name === planName);
-      // fallback to a soccer ball icon if not found
       return plan
         ? plan.img
-        : "https://img.icons8.com/fluency/96/soccer-ball.png";
+        : "https://img.icons8.com/emoji/96/soccer-ball-emoji.png";
     }
-
     function showDashboard(user) {
-      // Show plan image as avatar
       document.getElementById('profileAvatar').src = getPlanIcon(user.plan);
-
-      // Show PIN instead of username
       document.getElementById('dashUsername').textContent = `PIN: ${user.pin}`;
-
-      // Plan
       document.getElementById('dashPlan').textContent = user.plan;
-
-      // Odd metrics
       const odds = user.odds || [];
       const expectedOdd = planExpectedOdds[user.plan] || 0;
       let total = 1;
       if (odds.length > 0) total = odds.reduce((acc, odd) => acc * odd, 1);
       const left = Math.max(expectedOdd - total, 0);
-
       document.getElementById('expectedOddVal').textContent = expectedOdd.toFixed(2);
       document.getElementById('totalOddVal').textContent = total.toFixed(2);
       document.getElementById('remainingOddVal').textContent = left.toFixed(2);
-
-      // Show/hide booking code and subscribe
       const bookingSection = document.querySelector('.booking-code-section');
       const subscribeSection = document.querySelector('.subscribe-section');
       if (total >= expectedOdd) {
@@ -535,11 +508,8 @@
       document.getElementById('bookingCodeValue').value = BOOKING_CODE;
       document.getElementById('sportybetLink').href = SPORTYBET_LINK;
       document.querySelector('.subscribe-btn').href = SUBSCRIBE_LINK;
-
-      // Odd movement
       document.querySelector('.odd-movement-btn').onclick = showOddModal;
     }
-
     function copyBookingCode() {
       const input = document.getElementById('bookingCodeValue');
       input.select();
@@ -550,8 +520,6 @@
         document.getElementById('copiedNote').style.display = 'none';
       }, 1200);
     }
-
-    // Odd movement modal logic
     function showOddModal() {
       const user = currentUser;
       const odds = user.odds || [];
@@ -576,16 +544,13 @@
       });
       modal.style.display = 'flex';
     }
-
     function closeOddModal() {
       document.getElementById('oddModal').style.display = 'none';
     }
-
     document.addEventListener('DOMContentLoaded', function () {
       renderPlans();
       document.getElementById('copyBookingBtn').onclick = copyBookingCode;
       document.getElementById('oddModalClose').onclick = closeOddModal;
-      // Keyboard/modal scroll for PIN input
       var pinInput = document.getElementById('pinInput');
       var pinModal = document.getElementById('pinModal');
       pinInput.addEventListener('focus', function() {
@@ -608,7 +573,6 @@
       </div>
     </div>
   </div>
-
   <!-- PIN Modal -->
   <div id="pinModal" class="pin-modal-bg" tabindex="-1" onclick="if(event.target===this)closePinModal()">
     <form class="pin-modal" onsubmit="return false;">
@@ -621,7 +585,6 @@
       <div style="height:18vh;"></div>
     </form>
   </div>
-
   <!-- Profile/Dashboard -->
   <div id="profileCardSection">
     <div class="dashboard-card">
@@ -665,7 +628,6 @@
       </div>
     </div>
   </div>
-
   <!-- Odd Movement Modal -->
   <div id="oddModal">
     <div class="odd-modal-content">
@@ -682,7 +644,6 @@
           </tr>
         </thead>
         <tbody id="oddTableBody">
-          <!-- Odds will be rendered here -->
         </tbody>
       </table>
     </div>
