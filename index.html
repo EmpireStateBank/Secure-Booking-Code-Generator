@@ -1,301 +1,691 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="format-detection" content="telephone=no">
-    <title>Soccer Tips</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #181818 0%, #2c003e 100%); color: #f1f1f1; margin: 0; padding: 0; min-height: 100vh; }
-        .footer { text-align: center; margin-top: 32px; padding: 16px; background: rgba(32, 0, 64, 0.6); border-top-left-radius: 24px; border-top-right-radius: 24px; color: #a0a0a0; }
-        #passwordPrompt { display: flex; align-items: center; justify-content: center; height: 100vh; background: linear-gradient(115deg, #1a0036 0%, #000 100%); }
-        .hidden { display: none; }
-        .input-container { text-align: center; padding: 32px 24px 30px 24px; border-radius: 16px; background: rgba(34, 34, 40, 0.95); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-        .input-container h2 { margin-bottom: 10px; color: #ffb347; text-shadow: 0 1px 8px #7200b3bb; }
-        .input-container h3 { margin-bottom: 20px; color: #a0a0a0; }
-        .pin-input { display: inline-block; width: 220px; position: relative; }
-        .pin-input input { width: 100%; height: 50px; font-size: 26px; text-align: center; letter-spacing: 15px; border: 2px solid #ffb347; border-radius: 8px; outline: none; padding: 0 15px; box-sizing: border-box; background-color: #181818; color: #fff; transition: border-color 0.3s, box-shadow 0.3s; box-shadow: 0 2px 8px #4f00bc22; }
-        .pin-input input:focus { border-color: #7200b3; box-shadow: 0 4px 12px #4f00bc44; }
-        .pin-input input::placeholder { color: #777; }
-        .submit-button, .toggle-button { padding: 12px 28px; font-size: 20px; margin-top: 26px; background: linear-gradient(90deg, #ffb347 0%, #4f00bc 100%); color: white; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 8px #4f00bc44; font-weight: bold; letter-spacing: 1px; transition: background 0.2s, box-shadow 0.2s; display: inline-block; }
-        .submit-button:hover, .toggle-button:hover { background: linear-gradient(90deg, #4f00bc 0%, #ffb347 100%); box-shadow: 0 4px 16px #ffb34744; }
-        .logo { max-width: 84px; margin-bottom: 20px; border-radius: 16px; box-shadow: 0 4px 24px #4f00bc55; }
-        .profile-card { background: linear-gradient(135deg, #1e003a 0%, #007bff 90%); padding: 34px 26px 26px 26px; margin: 32px auto 16px auto; border-radius: 24px; box-shadow: 0 8px 40px rgba(0,0,0,0.35), 0 2px 6px #4f00bc44; max-width: 370px; display: flex; flex-direction: column; align-items: center; position: relative; color: #fff; overflow: hidden; }
-        .profile-avatar { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; border: 4px solid #ffb347; margin-bottom: 18px; box-shadow: 0 0 24px #ffb34799, 0 6px 24px #4f00bc44; background: #fff; }
-        .profile-card h2 { margin: 0 0 10px 0; color: #ffb347; font-size: 2em; letter-spacing: 2px; text-shadow: 0 1px 10px #7200b3bb; }
-        .profile-details { width: 100%; text-align: left; margin-top: 10px; }
-        .profile-details p { margin: 9px 0; font-size: 1.15em; }
-        .profile-label { font-weight: bold; color: #ffd700; }
-        .profile-value { color: #fff; margin-left: 8px; }
-        .expired-label { color: #ff4d4d; background: #2b0518; padding: 7px 14px; margin: 15px 0 0 0; border-radius: 14px; font-weight: bold; font-size: 17px; text-align: center; }
-        .note-below-profile { text-align: center; margin-top: 18px; margin-bottom: 2px; font-size: 17px; color: #ffb347; }
-        .toggle-button { margin-top: 10px; margin-bottom: 10px; }
-        .odds-section { background: rgba(24, 20, 40, 0.92); border-radius: 12px; box-shadow: 0 2px 18px #0006; margin: 20px auto 0 auto; padding: 18px 20px 14px 20px; max-width: 380px; color: #fff; text-align: center; }
-        .odds-section .note { color: #ffb347; font-size: 1.1em; font-weight: bold; margin-bottom: 8px; display: block; }
-        .odds-section .odds-list { margin: 12px 0 0 0; font-size: 1.16em; color: #a0ffa0; }
-        .odds-section .odds-total { color: #ffd700; font-size: 1.2em; margin: 6px 0 0 0; font-weight: bold; }
-        .odds-section .odds-progress { margin-top: 10px; color: #bbb; font-size: 1em; }
-        .odds-section .odds-expiry { margin-top: 10px; color: #ffb347; font-size: 0.98em; }
-        .warning-label { color: #f6b800; background: #2b2b05; padding: 7px 14px; margin: 10px 0 0 0; border-radius: 14px; font-weight: bold; font-size: 17px; text-align: center; display: block; }
-        #bookingCodeModal { display: none; position: fixed; z-index: 2100; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
-        #bookingCodeModal .popup-content.new-layout { background: #fff; color: #222; padding: 42px 26px 34px 26px; border-radius: 18px; box-shadow: 0 2px 38px #4f00bc44; min-width: 320px; max-width: 94vw; text-align: center; position: relative; display: flex; flex-direction: column; align-items: stretch; }
-        #bookingCodeModal .close-booking-modal { position: absolute; top: 15px; right: 20px; font-size: 30px; color: #888; cursor: pointer; font-weight: bold; }
-        #bookingCodeModal .bc-header { display: flex; align-items: center; gap: 20px; margin-bottom: 18px; text-align: left; }
-        #bookingCodeModal .bc-header .bc-icon { width: 54px; height: 54px; flex-shrink: 0; }
-        #bookingCodeModal h2 { color: #4f00bc; margin: 0 0 2px 0; font-size: 1.55em; font-weight: 700; }
-        #bookingCodeModal .bc-note { color: #7b47a1; font-size: 1.02em; margin-top: 3px; font-weight: 500; }
-        #bookingCodeModal .bc-odd-row { display: flex; justify-content: center; align-items: center; margin: 16px 0 10px 0; font-size: 1.18em; font-weight: 500; }
-        #bookingCodeModal .bc-odd-label { color: #444; margin-right: 8px; }
-        #bookingCodeModal .bc-odd-value { color: #ffb347; background: #f6f3fd; border-radius: 7px; padding: 2px 14px; font-size: 1.18em; letter-spacing: 1px; box-shadow: 0 0 2px #4f00bc33; }
-        #bookingCodeModal .bc-code-row { display: flex; align-items: center; justify-content: center; margin-top: 8px; gap: 8px; }
-        #bookingCodeModal .booking-code-input { font-size: 1.22em; padding: 9px 16px; border-radius: 9px; border: 1px solid #ddd; width: 148px; text-align: center; background: #f6f6fa; color: #333; font-weight: 600; letter-spacing: 1px; }
-        #bookingCodeModal .copy-booking-btn { background: #f6f3fd; border: none; margin-left: 0; border-radius: 7px; box-shadow: 0 0 2px #4f00bc22; cursor: pointer; padding: 7px 10px 5px 10px; transition: background 0.15s; outline: none; display: flex; align-items: center; }
-        #bookingCodeModal .copy-booking-btn:hover { background: #f9e7c7; }
-        #bookingCodeModal .copy-booking-btn img { width: 26px; height: 26px; }
-        #bookingCodeModal .bc-copied-note { color: #19b66e; margin-top: 13px; display: none; font-size: 1.08em; font-weight: 500; }
-        #bookingCodeModal .sportybet-notice { margin-top: 18px; font-weight: bold; font-size: 1.08em; letter-spacing: 0.2px; }
-        #bookingCodeModal .sportybet-notice a { color: #4f00bc; text-decoration: underline; }
-        @media (max-width: 600px) {
-            #bookingCodeModal .popup-content.new-layout { min-width: 0; width: 96vw; padding: 22px 2vw 18px 2vw; }
-            #bookingCodeModal .bc-header .bc-icon { width: 38px; height: 38px; }
-            #bookingCodeModal h2 { font-size: 1.07em; }
-            #bookingCodeModal .bc-odd-row { font-size: 0.98em; }
-        }
-    </style>
-    <script>
-        // --- Manually set the booking code and total odd here ---
-        const BOOKING_CODE = "empirebot_06july20053";
-        const BOOKING_CODE_TOTAL_ODD = "2.10";
+  <meta charset="UTF-8">
+  <title>Soccer Tips Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <style>
+    html, body { height: 100%; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1e003a 0%, #007bff 100%);
+      color: #f1f1f1;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      box-sizing: border-box;
+      letter-spacing: 0.01em;
+    }
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(140deg, #1e003a 0%, #26007a 70%, #007bff 120%);
+    }
+    .login-card {
+      background: rgba(34,28,56,0.99);
+      border-radius: 30px;
+      box-shadow: 0 10px 36px 0 #14002a44, 0 2px 4px 0 #000c;
+      width: 98vw;
+      max-width: 390px;
+      padding: 38px 18px 30px 18px;
+      margin: 0 auto;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      border: 2.5px solid #2f00bc55;
+      overflow: hidden;
+    }
+    .login-card::before {
+      content: "";
+      position: absolute;
+      top: -20%; left: -20%; width: 140%; height: 60px;
+      background: linear-gradient(90deg, #4f00bc 30%, #ffd700 70%, #ff4d4d 100%);
+      filter: blur(22px);
+      opacity: 0.2;
+      z-index: 1;
+      pointer-events: none;
+      border-radius: 80px;
+      animation: moveGlow 7s linear infinite alternate;
+    }
+    @keyframes moveGlow {
+      0% { left: -20%; }
+      100% { left: 0%; }
+    }
+    .login-logo {
+      width: 70px; height: 70px;
+      object-fit: cover;
+      border-radius: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 20px #4f00bc77;
+      border: 2.5px solid #ffd700;
+      background: #fff;
+      z-index: 2;
+    }
+    .login-card h2 {
+      color: #ffd700;
+      font-size: 1.60em;
+      margin: 0 0 20px 0;
+      letter-spacing: 0.3px;
+      font-weight: bold;
+      text-shadow: 0 2px 14px #0007;
+      z-index: 2;
+    }
 
-        const users = [
-            { username: 'user1', pin: '1108', plan: 'Daily', expiryDate: new Date('2025-05-14'), img: 'user1.jpg', odds: [1.30, 1.20, 1.56] },
-            { username: 'user1', pin: '0276', plan: 'Weekly', expiryDate: new Date('2025-05-14'), img: 'user2.jpg', odds: [2.00, 1.40, 2.50, 1.80] },
-            { username: 'user2', pin: '2004', plan: 'Weekly', expiryDate: new Date('2025-05-14'), img: 'user3.jpg', odds: [1.70, 1.30, 2.10] },
-            { username: 'user2', pin: '3572', plan: 'Monthly', expiryDate: new Date('2025-06-03'), img: 'AddText_05-30-08.18.22.png', odds: [2.00, 1.50, 2.30, 1.80, 2.20, 1.70, 1.30] },
-            { username: 'user3', pin: '1776', plan: 'Daily', expiryDate: new Date('2025-06-25'), img: 'user5.jpg', odds: [1.90, 1.60, 2.30,] }
-        ];
-        const planExpectedOdds = {
-            'Daily': 14.00,
-            'Weekly': 25.00,
-            'Monthly': 50.00
-        };
-        const planHideOdds = {
-            'Daily': 18.00,
-            'Weekly': 29.00,
-            'Monthly': 56.00
-        };
-        let currentUser = null;
-        let isExpired = false;
-        let isOddExpired = false;
+    /* Modern Plan Card Style - Beautiful Black Glassy Cards */
+    .plan-list {
+      display: flex;
+      flex-direction: row;
+      gap: 22px;
+      width: 100%;
+      justify-content: center;
+      margin: 22px 0 0 0;
+      z-index: 2;
+    }
+    .plan-card {
+      background: linear-gradient(135deg, #111015 70%, #22223c 100%);
+      border-radius: 22px;
+      box-shadow: 0 6px 32px #4f00bc22, 0 2px 8px #000b;
+      border: 2.5px solid #23233f;
+      transition: border 0.23s, box-shadow 0.20s, transform 0.14s, background 0.21s;
+      min-width: 90px;
+      max-width: 120px;
+      flex: 1 1 0px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      padding: 18px 7px 15px 7px;
+      position: relative;
+      outline: none;
+      justify-content: flex-start;
+      overflow: visible;
+      isolation: isolate;
+      z-index: 2;
+    }
+    .plan-card.selected,
+    .plan-card:hover,
+    .plan-card:focus {
+      border: 2.5px solid #ffd700;
+      box-shadow: 0 16px 50px #ffd70055, 0 2px 16px #4f00bc55;
+      background: linear-gradient(120deg, #191925 70%, #292b55 100%);
+      transform: translateY(-3px) scale(1.07);
+    }
+    .plan-card .plan-icon {
+      width: 46px;
+      height: 46px;
+      margin-bottom: 13px;
+      margin-top: 3px;
+      filter: drop-shadow(0 2px 10px #ffd70044) brightness(1.08);
+      border-radius: 50%;
+      background: #fff8;
+      padding: 2.5px;
+      border: 1.5px solid #ffd700;
+    }
+    .plan-card .plan-title {
+      font-size: 1.13em;
+      font-weight: 800;
+      color: #ffd700;
+      margin-bottom: 7px;
+      letter-spacing: 0.4px;
+      text-shadow: 0 2px 9px #0005;
+      text-align: center;
+    }
+    .plan-card .plan-description {
+      font-size: 0.97em;
+      color: #c0bfff;
+      font-weight: 500;
+      margin-bottom: 0;
+      text-align: center;
+      line-height: 1.22;
+      min-height: 34px;
+      max-width: 107px;
+      text-shadow: 0 1px 7px #0006;
+      letter-spacing: 0.02em;
+    }
+    .plan-card .plan-badge {
+      display: inline-block;
+      margin-top: 8px;
+      background: linear-gradient(90deg,#ffd700 0%,#ff4d4d 100%);
+      color: #1a1628;
+      font-weight: bold;
+      font-size: 0.88em;
+      padding: 3px 13px 3px 13px;
+      border-radius: 11px;
+      letter-spacing: 0.11em;
+      box-shadow: 0 2px 8px #ffd70033;
+      text-shadow: none;
+    }
+    @media (max-width: 600px) {
+      .plan-list {
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+        align-items: center;
+      }
+      .plan-card {
+        max-width: 99vw;
+        min-width: 0;
+        width: 100%;
+      }
+    }
 
-        function unlockSite() {
-            const passwordInput = document.getElementById('passwordInput').value.replace(/\s+/g, '');
-            const today = new Date();
-            const user = users.find(user => user.pin === passwordInput);
-            if (!user) {
-                alert('Incorrect PIN! Please try again.');
-                return;
-            }
-            currentUser = user;
-            showProfileCard(user, today);
-            document.getElementById('passwordPrompt').style.display = 'none';
-            document.getElementById('profileCardSection').style.display = 'block';
-            document.getElementById('fixturesSection').style.display = 'none';
-        }
+    .login-footer {
+      color: #aaa;
+      font-size: 0.95em;
+      position: absolute;
+      left: 0; right: 0; bottom: 12px;
+      text-align: center;
+      opacity: 0.92;
+      z-index: 2;
+      letter-spacing: 0.08em;
+    }
+    .login-error, .pin-error {
+      color: #ff4d4d;
+      margin-top: 16px;
+      font-weight: bold;
+      font-size: 1em;
+      min-height: 1.5em;
+      text-align: center;
+    }
+    /* PIN Modal */
+    .pin-modal-bg {
+      display: none;
+      position: fixed;
+      left:0; top:0; width:100vw; height:100vh;
+      background: rgba(0,0,0,0.55);
+      z-index: 5000;
+      align-items: flex-end !important;
+      transition: background 0.18s;
+    }
+    .pin-modal-bg.active { display: flex !important; }
+    @media (min-width: 600px) {
+      .pin-modal-bg {
+        align-items: center !important;
+      }
+    }
+    .pin-modal {
+      background: #1a1628;
+      border-radius: 17px 17px 0 0;
+      box-shadow: 0 8px 32px #0008;
+      padding: 28px 22px 23px 22px;
+      min-width: 0;
+      width: 100vw;
+      max-width: 400px;
+      position: relative;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: modalpop 0.18s cubic-bezier(.77,-0.02,.46,1.06);
+      margin-bottom: env(safe-area-inset-bottom, 0);
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+    @keyframes modalpop {
+      0% { transform: scale(0.92); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .pin-modal-close {
+      position: absolute;
+      top: 13px; right: 19px;
+      background: none;
+      border: none;
+      color: #ffb347;
+      font-size: 1.6em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.1s;
+    }
+    .pin-modal-close:hover { color: #fff; }
+    .pin-modal-title {
+      color: #ffd700;
+      font-size: 1.19em;
+      font-weight: bold;
+      margin-bottom: 9px;
+    }
+    .pin-modal-plan {
+      font-size: 1em;
+      color: #4f00bc;
+      margin-bottom: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1px;
+    }
+    .pin-modal input[type="password"] {
+      width: 85%;
+      font-size: 1em;
+      padding: 11px;
+      margin: 10px 0 10px 0;
+      border: 2px solid #ffb347;
+      border-radius: 9px;
+      background: #221c38;
+      color: #fff;
+      outline: none;
+      letter-spacing: 8px;
+      text-align: center;
+      box-sizing: border-box;
+      font-weight: bold;
+    }
+    .pin-modal input[type="password"]:focus {
+      border-color: #4f00bc;
+      box-shadow: 0 0 12px #4f00bc44;
+    }
+    .pin-modal-btn {
+      padding: 9px 29px;
+      color: #fff;
+      background: linear-gradient(90deg, #ffb347 0%, #4f00bc 100%);
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: background 0.16s;
+      box-shadow: 0 2px 8px #4f00bc24;
+    }
+    .pin-modal-btn:hover, .pin-modal-btn:focus {
+      background: linear-gradient(90deg, #4f00bc 0%, #ffb347 100%);
+      color: #222;
+    }
+    .pin-error {
+      margin-top: 10px;
+      margin-bottom: 0;
+      min-height: 1.5em;
+    }
+    /* Dashboard/Profile card */
+    #profileCardSection {
+      min-height: 100vh;
+      width: 100vw;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background: linear-gradient(135deg, #1e003a 0%, #007bff 100%);
+    }
+    .dashboard-card {
+      background: rgba(34,28,56,0.98);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.38);
+      max-width: 350px;
+      width:94vw;
+      padding: 24px 13px 21px 13px;
+      margin: 24px auto 0 auto;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .profile-avatar { width: 46px; height: 46px; border-radius: 13px; object-fit: cover; border: 2px solid #ffb347; margin-bottom: 9px; margin-top: 2px;}
+    .user-info-badges { display: flex; gap: 12px; margin: 12px 0 12px 0;}
+    .user-badge { background: #222; color: #ffd700; border-radius: 7px; padding: 3px 12px; font-size: 0.93em; font-weight: 700; border: 1.3px solid #ffb347;}
+    .metrics-group { width:100%; margin: 11px 0 10px 0; }
+    .metric-box { background: #1a1628; border-radius: 7px; padding: 6px 12px; font-size: 1em; color: #ffd700; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;}
+    .metric-label { color: #aaa; font-weight: 500; }
+    .metric-value { font-weight: bold; letter-spacing: 1px; }
+    .booking-code-section { background: #f6f3fd; border-radius: 7px; margin: 13px 0 8px 0; padding: 7px 8px 5px 8px; color: #2c003e; box-shadow: 0 2px 8px #4f00bc1a; text-align: center; }
+    .booking-label { font-size: 0.98em; color: #4f00bc; font-weight: 600; }
+    .booking-code-value { font-family: 'Fira Mono', 'Consolas', monospace; font-size: 0.93em; background: #fff; border-radius: 7px; padding: 5px 12px; margin: 6px 0; color: #222; font-weight: bold;}
+    .copy-btn { margin-left: 4px; background: #4f00bc; color: #fff; border: none; padding: 5px 11px; border-radius: 6px; font-size: 0.95em; cursor: pointer; font-weight: 600;}
+    .copy-btn:hover { background: #ffb347; color: #2c003e; }
+    .copied-note { color: #19b66e; margin-left: 6px; font-size: 0.93em; font-weight: 500; display: none;}
+    .sportybet-notice { margin: 6px 0 0 0; font-weight: bold; font-size: 0.98em; display: flex; align-items: center; justify-content: center;}
+    .sportybet-notice img { width: 21px; margin-right: 4px; }
+    .sportybet-notice a { color: #4f00bc; text-decoration: underline; font-weight: bold; font-size: 0.98em;}
+    .odd-movement-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 15px; border: none; border-radius: 22px; font-size: 0.97em; font-weight: 600; color: #fff; background: linear-gradient(90deg, #ffb347 0%, #4f00bc 100%); cursor: pointer; margin: 10px auto 0 auto; transition: background 0.17s, box-shadow 0.17s, transform 0.11s; letter-spacing: 0.4px;}
+    .odd-movement-btn img { width: 17px; height: 17px; }
+    .subscribe-section { display: none; margin: 10px 0 5px 0; text-align: center; }
+    .subscribe-expired-label { display: inline-block; background: #2c003e; color: #ff4d4d; border-radius: 8px; padding: 4px 11px 4px 11px; font-size: 0.9em; font-weight: bold; margin-bottom: 5px; }
+    .subscribe-btn { display: inline-block; margin-top: 5px; padding: 6px 20px; font-size: 0.9em; border-radius: 6px; border: none; background: linear-gradient(90deg, #ffb347 0%, #4f00bc 100%); color: #fff; font-weight: 700; box-shadow: 0 2px 8px #4f00bc1a; cursor: pointer; letter-spacing: 0.5px; transition: background 0.16s;}
+    .subscribe-btn:hover { background: linear-gradient(90deg, #4f00bc 0%, #ffb347 100%); color: #2c003e;}
+    .logout-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 9px 0 5px 0;
+      margin-top: 18px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 2px 10px #4f00bc10;
+    }
+    .logout-link {
+      color:#4f00bc;
+      font-weight:600;
+      cursor:pointer;
+      font-size: 1.01em;
+      padding: 0 0 0 0;
+      background: none;
+      border: none;
+      text-decoration: none;
+      transition: color 0.16s;
+      outline: none;
+    }
+    .logout-link:hover { color:#ffb347; }
+    /* Odd movement modal */
+    #oddModal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.55); justify-content: center; align-items: center; }
+    #oddModal .odd-modal-content { background: #2c003e; color: #fff; padding: 18px 12px 14px 12px; border-radius: 11px; box-shadow: 0 4px 18px #4f00bc44; min-width: 200px; max-width: 97vw; max-height: 75vh; overflow-y: auto; position: relative; }
+    #oddModal .odd-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    #oddModal .odd-modal-title { font-size: 1em; font-weight: bold; color: #ffd700; }
+    #oddModal .odd-modal-close { font-size: 24px; color: #ffb347; background: none; border: none; cursor: pointer; font-weight: bold; line-height: 1;}
+    #oddModal .odd-modal-close:hover { color: #fff; }
+    #oddModal .odd-table { width: 100%; border-collapse: collapse; background: #200136; margin-top: 6px; }
+    #oddModal .odd-table th, #oddModal .odd-table td { padding: 7px 5px; text-align: center; }
+    #oddModal .odd-table th { background: #4f00bc; color: #ffd700; font-size: 1em; border-radius: 6px 6px 0 0; }
+    #oddModal .odd-table td { font-size: 1em; font-weight: 600; }
+    #oddModal .odd-table td.status { font-size: 1.13em; }
+    #oddModal .odd-table tr:last-child { border-bottom: none; }
+    @media (max-width: 420px) {
+      .login-card, .dashboard-card, .pin-modal {padding: 16px 2vw 18px 2vw; max-width: 99vw;}
+      .plan-option { font-size: 1em; }
+      .login-logo { width: 52px; height: 52px; }
+      .pin-modal input[type="password"]{width:95%;}
+    }
+  </style>
+  <script>
+    // Users database (simulate) - removed user image fields
+    const users = [
+      { username: 'user1', pin: '1108', plan: 'Daily', odds: [1.30, 1.20, 1.56], status: ['win', 'lost', 'win'] },
+      { username: 'user1', pin: '0276', plan: 'Weekly', odds: [2.00, 1.40, 2.50, 1.80], status: ['win', 'win', 'lost', 'win'] },
+      { username: 'user2', pin: '2004', plan: 'Weekly', odds: [1.70, 1.30, 2.10], status: ['lost', 'win', 'win'] },
+      { username: 'user2', pin: '3572', plan: 'Monthly', odds: [2.00, 1.50, 2.30, 1.80, 2.20, 1.70, 1.30], status: ['win', 'lost', 'win', 'lost', 'win', 'win', 'lost'] },
+      { username: 'user3', pin: '1776', plan: 'Daily', odds: [1.90, 1.60, 2.30], status: ['win', 'win', 'lost'] }
+    ];
+    // Plan definitions (Daily uses a working image)
+    const plans = [
+      { name: 'Daily', img: 'https://img.icons8.com/fluency/96/soccer-ball.png', color: '#4f00bc' },
+      { name: 'Weekly', img: 'https://img.icons8.com/ios-filled/100/ffd700/trophy.png', color: '#ffd700' },
+      { name: 'Monthly', img: 'https://img.icons8.com/ios-filled/100/ff4d4d/star.png', color: '#ff4d4d' }
+    ];
+    const planBadges = {
+      Daily: "POPULAR",
+      Weekly: "BEST VALUE",
+      Monthly: "PREMIUM"
+    };
+    const planExpectedOdds = {'Daily':14.00, 'Weekly':25.00, 'Monthly':50.00};
+    const BOOKING_CODE = "empirebot_06july20053";
+    const SPORTYBET_LINK = "https://www.sportybet.com/ng/";
+    const SUBSCRIBE_LINK = "https://paystack.com/pay/azohnqhgu-";
+    let selectedPlan = null;
+    let currentUser = null;
 
-        function showProfileCard(user, today) {
-            document.getElementById('profileUserId').textContent = user.pin;
-            document.getElementById('profilePlan').textContent = user.plan;
-            const avatar = document.getElementById('profileAvatar');
-            if (user.img && user.img.trim() !== "") {
-                avatar.src = user.img;
-            } else {
-                avatar.src = "-5890865169557472356_109.jpg";
-            }
-            const odds = user.odds || [];
-            const plan = user.plan;
-            const expectedOdd = planExpectedOdds[plan] || 0;
-            const hideOdd = planHideOdds[plan] || 0;
-            let totalOdd = 1;
-            if (odds.length > 0) {
-                totalOdd = odds.reduce((acc, odd) => acc * odd, 1);
-            }
-            isExpired = false;
-            isOddExpired = false;
-            let showWarning = false;
-            if (totalOdd >= expectedOdd && totalOdd < hideOdd) {
-                showWarning = true;
-            }
-            if (totalOdd >= hideOdd) {
-                isOddExpired = true;
-            }
-            const expiredMsg = document.getElementById('expiredProfileMsg');
-            const noteBelowProfile = document.getElementById('noteBelowProfile');
-            const viewPredictionBtn = document.getElementById('viewPredictionBtn');
-            const warningMsg = document.getElementById('oddWarningMsg');
-            if (isOddExpired) {
-                expiredMsg.style.display = 'block';
-                noteBelowProfile.style.display = 'none';
-                viewPredictionBtn.style.display = 'none';
-                document.getElementById('oddsSection').style.display = 'none';
-                warningMsg.style.display = 'none';
-            } else if (showWarning) {
-                expiredMsg.style.display = 'none';
-                noteBelowProfile.style.display = 'block';
-                viewPredictionBtn.style.display = 'inline-block';
-                document.getElementById('oddsSection').style.display = 'block';
-                warningMsg.style.display = 'block';
-                warningMsg.textContent = `You have reached the expected odd (${expectedOdd.toFixed(2)}). Your Subscription will expire soon!`;
-            } else {
-                expiredMsg.style.display = 'none';
-                noteBelowProfile.style.display = 'block';
-                viewPredictionBtn.style.display = 'inline-block';
-                document.getElementById('oddsSection').style.display = 'block';
-                warningMsg.style.display = 'none';
-            }
-            renderOddsSection(user);
+    // Modern Plan Card Rendering
+    function renderPlans() {
+      const planDetails = {
+        "Daily": {
+          desc: "Perfect for a quick win, low cost.",
+          icon: "https://img.icons8.com/fluency/96/soccer-ball.png"
+        },
+        "Weekly": {
+          desc: "Best value for regular punters.",
+          icon: "https://img.icons8.com/ios-filled/100/ffd700/trophy.png"
+        },
+        "Monthly": {
+          desc: "For serious players, major savings.",
+          icon: "https://img.icons8.com/ios-filled/100/ff4d4d/star.png"
         }
+      };
+      const list = document.getElementById('planList');
+      list.innerHTML = '';
+      plans.forEach(plan => {
+        const div = document.createElement('div');
+        div.className = 'plan-card';
+        div.tabIndex = 0;
+        div.onclick = () => openPinModal(plan);
+        div.onkeypress = (e) => { if(e.key === "Enter" || e.key === " ") openPinModal(plan); };
+        div.innerHTML = `
+          <img class="plan-icon" src="${planDetails[plan.name].icon}" alt="">
+          <div class="plan-title">${plan.name}</div>
+          <div class="plan-description">${planDetails[plan.name].desc}</div>
+          <span class="plan-badge">${planBadges[plan.name] || ""}</span>
+        `;
+        list.appendChild(div);
+      });
+    }
 
-        function renderOddsSection(user) {
-            const odds = user.odds || [];
-            const plan = user.plan;
-            const expectedOdd = planExpectedOdds[plan] || 0;
-            let total = 1;
-            let left = expectedOdd;
-            if (odds.length > 0) {
-                total = odds.reduce((acc, odd) => acc * odd, 1);
-                left = (expectedOdd - total) > 0 ? (expectedOdd - total) : 0;
-            }
-            const oddsStr = odds.map(o => o.toFixed(2)).join(" × ");
-            document.getElementById('oddsSection').style.display = isOddExpired ? 'none' : 'block';
-            document.getElementById('oddsNote').innerHTML = `Expected Odd for <b>${plan}</b> plan: <span style="color:#ffd700;">${expectedOdd.toFixed(2)}</span>`;
-            document.getElementById('oddsList').textContent = oddsStr ? `Current Odds: ${oddsStr}` : "No odds yet";
-            document.getElementById('oddsTotal').textContent = `Total Odds: ${total.toFixed(2)}`;
-            document.getElementById('oddsLeft').textContent = `Odd left to reach target: ${left.toFixed(2)}`;
-            document.getElementById('oddsExpiry').textContent = ``;
-        }
+    function openPinModal(plan) {
+      selectedPlan = plan;
+      document.getElementById('pinInput').value = '';
+      document.getElementById('pinError').textContent = '';
+      document.getElementById('pinModalPlan').textContent = plan.name + ' Plan';
+      document.getElementById('pinModal').classList.add('active');
+      setTimeout(() => {
+        document.getElementById('pinInput').focus();
+      }, 350); // Slightly longer delay for mobile
+    }
 
-        function showFixtures() {
-            showBookingCodeModal();
-        }
+    function closePinModal() {
+      document.getElementById('pinModal').classList.remove('active');
+    }
 
-        // --- BOOKING CODE POPUP (manual values) ---
-        function showBookingCodeModal() {
-            const modal = document.getElementById('bookingCodeModal');
-            modal.style.display = 'flex';
-            document.getElementById('bookingCodeInput').value = BOOKING_CODE;
-            document.getElementById('bookingCodeTotalOdd').textContent = BOOKING_CODE_TOTAL_ODD;
-        }
-        function closeBookingCodeModal() {
-            document.getElementById('bookingCodeModal').style.display = 'none';
-            document.getElementById('bookingCopiedNote').style.display = 'none';
-        }
-        function copyBookingCode() {
-            const input = document.getElementById('bookingCodeInput');
-            input.select();
-            input.setSelectionRange(0, 99999);
-            document.execCommand('copy');
-            document.getElementById('bookingCopiedNote').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('bookingCopiedNote').style.display = 'none';
-            }, 1200);
-        }
+    function loginWithPin() {
+      const pin = document.getElementById('pinInput').value.trim();
+      const plan = selectedPlan ? selectedPlan.name : '';
+      const user = users.find(u => u.pin === pin && u.plan === plan);
+      if (!user) {
+        document.getElementById('pinError').textContent = "Incorrect PIN for this plan. Try again!";
+        document.getElementById('pinInput').value = '';
+        document.getElementById('pinInput').focus();
+        return;
+      }
+      currentUser = user;
+      showDashboard(user);
+      document.getElementById('loginContainer').style.display = 'none';
+      document.getElementById('pinModal').classList.remove('active');
+      document.getElementById('profileCardSection').style.display = 'flex';
+    }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('passwordInput').addEventListener('keydown', function(e) {
-                if (e.key === "Enter") unlockSite();
-            });
-            document.getElementById('closeBookingModal').onclick = closeBookingCodeModal;
-            document.getElementById('copyBookingBtn').onclick = copyBookingCode;
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    if (document.getElementById('bookingCodeModal').style.display === 'flex') closeBookingCodeModal();
-                }
-            });
-        });
+    function pinInputKeydown(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        return false;
+      }
+      if (e.key === "Escape") closePinModal();
+    }
 
-        function showProfile() {
-            document.getElementById('fixturesSection').style.display = 'none';
-            document.getElementById('profileCardSection').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            if (currentUser && !isExpired && !isOddExpired) {
-                renderOddsSection(currentUser);
-            }
-        }
-    </script>
+    function logout() {
+      currentUser = null;
+      selectedPlan = null;
+      document.getElementById('profileCardSection').style.display = 'none';
+      document.getElementById('loginContainer').style.display = 'flex';
+      document.getElementById('pinModal').classList.remove('active');
+      document.getElementById('pinInput').value = '';
+      document.getElementById('pinError').textContent = '';
+    }
+
+    // Helper to get plan icon by plan name
+    function getPlanIcon(planName) {
+      const plan = plans.find(p => p.name === planName);
+      // fallback to a soccer ball icon if not found
+      return plan
+        ? plan.img
+        : "https://img.icons8.com/fluency/96/soccer-ball.png";
+    }
+
+    function showDashboard(user) {
+      // Show plan image as avatar
+      document.getElementById('profileAvatar').src = getPlanIcon(user.plan);
+
+      // Show PIN instead of username
+      document.getElementById('dashUsername').textContent = `PIN: ${user.pin}`;
+
+      // Plan
+      document.getElementById('dashPlan').textContent = user.plan;
+
+      // Odd metrics
+      const odds = user.odds || [];
+      const expectedOdd = planExpectedOdds[user.plan] || 0;
+      let total = 1;
+      if (odds.length > 0) total = odds.reduce((acc, odd) => acc * odd, 1);
+      const left = Math.max(expectedOdd - total, 0);
+
+      document.getElementById('expectedOddVal').textContent = expectedOdd.toFixed(2);
+      document.getElementById('totalOddVal').textContent = total.toFixed(2);
+      document.getElementById('remainingOddVal').textContent = left.toFixed(2);
+
+      // Show/hide booking code and subscribe
+      const bookingSection = document.querySelector('.booking-code-section');
+      const subscribeSection = document.querySelector('.subscribe-section');
+      if (total >= expectedOdd) {
+        bookingSection.style.display = 'none';
+        subscribeSection.style.display = 'block';
+      } else {
+        bookingSection.style.display = 'block';
+        subscribeSection.style.display = 'none';
+      }
+      document.getElementById('bookingCodeValue').value = BOOKING_CODE;
+      document.getElementById('sportybetLink').href = SPORTYBET_LINK;
+      document.querySelector('.subscribe-btn').href = SUBSCRIBE_LINK;
+
+      // Odd movement
+      document.querySelector('.odd-movement-btn').onclick = showOddModal;
+    }
+
+    function copyBookingCode() {
+      const input = document.getElementById('bookingCodeValue');
+      input.select();
+      input.setSelectionRange(0, 99999);
+      document.execCommand('copy');
+      document.getElementById('copiedNote').style.display = 'inline-block';
+      setTimeout(() => {
+        document.getElementById('copiedNote').style.display = 'none';
+      }, 1200);
+    }
+
+    // Odd movement modal logic
+    function showOddModal() {
+      const user = currentUser;
+      const odds = user.odds || [];
+      const statuses = user.status || [];
+      const modal = document.getElementById('oddModal');
+      const tbody = document.getElementById('oddTableBody');
+      tbody.innerHTML = '';
+      odds.forEach((o, i) => {
+        let icon = statuses[i] === 'win' ? '✅' : (statuses[i] === 'lost' ? '❌' : '');
+        const tr = document.createElement('tr');
+        const tdIndex = document.createElement('td');
+        const tdOdd = document.createElement('td');
+        const tdStatus = document.createElement('td');
+        tdIndex.textContent = (i+1);
+        tdOdd.textContent = o.toFixed(2);
+        tdStatus.className = "status";
+        tdStatus.textContent = icon;
+        tr.appendChild(tdIndex);
+        tr.appendChild(tdOdd);
+        tr.appendChild(tdStatus);
+        tbody.appendChild(tr);
+      });
+      modal.style.display = 'flex';
+    }
+
+    function closeOddModal() {
+      document.getElementById('oddModal').style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      renderPlans();
+      document.getElementById('copyBookingBtn').onclick = copyBookingCode;
+      document.getElementById('oddModalClose').onclick = closeOddModal;
+      // Keyboard/modal scroll for PIN input
+      var pinInput = document.getElementById('pinInput');
+      var pinModal = document.getElementById('pinModal');
+      pinInput.addEventListener('focus', function() {
+        setTimeout(function() {
+          pinModal.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }, 250);
+      });
+    });
+  </script>
 </head>
 <body>
-    <div id="passwordPrompt">
-        <div class="input-container">
-            <img src="-5890865169557472356_109.jpg" alt="Logo" class="logo">
-            <h2>Welcome to Empire Tips</h2>
-            <h3>Please enter your PIN below to access the best soccer tips</h3>
-            <div class="pin-input">
-                <input type="password" id="passwordInput" maxlength="4" placeholder="••••" inputmode="numeric" pattern="[0-9]*">
-            </div>
-            <button onclick="unlockSite()" class="submit-button">Submit</button>
-        </div>
+  <!-- Login Surface -->
+  <div id="loginContainer" class="login-container">
+    <div class="login-card">
+      <img src="-5890865169557472356_109.jpg" alt="Logo" class="login-logo">
+      <h2>Choose your Subscription Plan</h2>
+      <div class="plan-list" id="planList"></div>
+      <div class="login-footer">
+        <span>Empire Soccer Tips &copy; 2025</span>
+      </div>
     </div>
+  </div>
 
-    <div id="profileCardSection" class="hidden" style="display:none;">
-        <div class="profile-card" id="profileCard">
-            <img src="-5890865169557472356_109.jpg" alt="Profile Avatar" class="profile-avatar" id="profileAvatar">
-            <h2>Empire Member</h2>
-            <div class="profile-details">
-                <p><span class="profile-label">User ID:</span> <span class="profile-value" id="profileUserId"></span></p>
-                <p><span class="profile-label">Subscription Plan:</span> <span class="profile-value" id="profilePlan"></span></p>
-            </div>
-            <span id="expiredProfileMsg" class="expired-label" style="display:none;">
-                Your subscription has expired!<br>
-                <a href="https://paystack.com/pay/azohnqhgu-" target="_blank" style="color:#ffb347;text-decoration:underline;">SUBSCRIBE NOW</a>
-            </span>
-        </div>
-        <div id="noteBelowProfile" class="note-below-profile" style="display:none;">
-            <span>Note: <b>View Prediction</b> below user's Profile</span>
-        </div>
-        <div id="oddsSection" class="odds-section" style="display:none;">
-            <span class="note" id="oddsNote"></span>
-            <div class="odds-list" id="oddsList"></div>
-            <div class="odds-total" id="oddsTotal"></div>
-            <div class="odds-progress" id="oddsLeft"></div>
-            <div class="odds-expiry" id="oddsExpiry"></div>
-            <span id="oddWarningMsg" class="warning-label" style="display:none;"></span>
-        </div>
-        <div style="text-align:center;">
-            <button id="viewPredictionBtn" class="toggle-button" onclick="showFixtures()" style="display:none;">View Prediction</button>
-        </div>
-    </div>
+  <!-- PIN Modal -->
+  <div id="pinModal" class="pin-modal-bg" tabindex="-1" onclick="if(event.target===this)closePinModal()">
+    <form class="pin-modal" onsubmit="return false;">
+      <button type="button" class="pin-modal-close" onclick="closePinModal()" title="Close">&times;</button>
+      <div class="pin-modal-title">Enter your PIN</div>
+      <div class="pin-modal-plan" id="pinModalPlan">Plan</div>
+      <input id="pinInput" type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="4-digit PIN" onkeydown="pinInputKeydown(event)">
+      <button type="button" class="pin-modal-btn" onclick="loginWithPin()" style="margin-top:12px;">Proceed</button>
+      <div class="pin-error" id="pinError"></div>
+      <div style="height:18vh;"></div>
+    </form>
+  </div>
 
-    <!-- Booking Code Popup Modal - NEW LAYOUT -->
-    <div id="bookingCodeModal">
-        <div class="popup-content new-layout">
-            <span class="close-booking-modal" id="closeBookingModal">&times;</span>
-            <div class="bc-header">
-                <img src="https://img.icons8.com/ios-filled/50/4f00bc/trophy.png" alt="Trophy" class="bc-icon" />
-                <div>
-                    <h2>Booking Code For the Day</h2>
-                    <div class="bc-note">Copy this code and use it to book your ticket instantly.</div>
-                </div>
-            </div>
-            <div class="bc-odd-row">
-                <span class="bc-odd-label">Total odd:</span>
-                <span class="bc-odd-value" id="bookingCodeTotalOdd">--</span>
-            </div>
-            <div class="bc-code-row">
-                <input id="bookingCodeInput" class="booking-code-input" value="empirebot_30jun2025" readonly>
-                <button id="copyBookingBtn" class="copy-booking-btn" title="Copy">
-                    <img src="https://img.icons8.com/material-rounded/28/4f00bc/copy.png" alt="Copy">
-                </button>
-            </div>
-            <div id="bookingCopiedNote" class="bc-copied-note">Copied!</div>
-            <div class="sportybet-notice">
-                <a 
-                  href="https://www.sportybet.com/ng/"
-                  target="_blank"
-                  rel="noopener"
-                >View on Sportybet</a>
-            </div>
+  <!-- Profile/Dashboard -->
+  <div id="profileCardSection">
+    <div class="dashboard-card">
+      <img src="-5890865169557472356_109.jpg" alt="Profile Avatar" class="profile-avatar" id="profileAvatar">
+      <div style="font-size:1.22em;font-weight:600;color:#fff;margin-bottom:8px;text-align:center;">
+        <span id="dashUsername">-</span>
+      </div>
+      <div class="user-info-badges">
+        <div class="user-badge"><span>Plan: </span><span id="dashPlan">-</span></div>
+      </div>
+      <div class="metrics-group">
+        <div class="metric-box"><span class="metric-label">Expected Odd:</span><span class="metric-value" id="expectedOddVal">-</span></div>
+        <div class="metric-box"><span class="metric-label">Total Odd:</span><span class="metric-value" id="totalOddVal">-</span></div>
+        <div class="metric-box"><span class="metric-label">Remaining Odd:</span><span class="metric-value" id="remainingOddVal">-</span></div>
+      </div>
+      <div class="booking-code-section">
+        <span class="booking-label">Booking Code:</span><br>
+        <input id="bookingCodeValue" class="booking-code-value" value="" readonly>
+        <button id="copyBookingBtn" class="copy-btn" title="Copy">Copy</button>
+        <span id="copiedNote" class="copied-note">Copied!</span>
+        <div class="sportybet-notice">
+          <img src="https://img.icons8.com/ios-filled/50/4f00bc/trophy.png" alt="Trophy">
+          <a id="sportybetLink" href="#" target="_blank" rel="noopener">View on Sportybet</a>
         </div>
+      </div>
+      <div class="subscribe-section">
+        <div class="subscribe-expired-label">
+          Your subscription has expired.
+        </div>
+        <br>
+        <a href="#" target="_blank" class="subscribe-btn">Subscribe</a>
+      </div>
+      <div style="text-align:center;">
+        <button class="odd-movement-btn">
+          <img src="https://img.icons8.com/fluency-systems-regular/48/ffffff/activity-history.png" alt="Odd Movement">
+          Odd movement
+        </button>
+      </div>
+      <div class="logout-box">
+        <a href="#" class="logout-link" onclick="logout();return false;">&larr; Logout</a>
+      </div>
     </div>
+  </div>
+
+  <!-- Odd Movement Modal -->
+  <div id="oddModal">
+    <div class="odd-modal-content">
+      <div class="odd-modal-header">
+        <span class="odd-modal-title">Odd Movement</span>
+        <button class="odd-modal-close" id="oddModalClose" title="Close">&times;</button>
+      </div>
+      <table class="odd-table">
+        <thead>
+          <tr>
+            <th style="width: 30px;">#</th>
+            <th>Odd</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="oddTableBody">
+          <!-- Odds will be rendered here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
 </body>
 </html>
