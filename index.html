@@ -225,47 +225,6 @@
       font-weight: bold;
       margin-left: 2px;
     }
-    /* Sportybet popup overlay styles */
-    #sportybetPopupOverlay {
-      position:fixed;
-      top:0; left:0;
-      width:100vw; height:100vh;
-      background:rgba(30,0,60,0.29);
-      z-index:1000;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    #sportybetPopupOverlay .sportybet-popup-content {
-      background:#fff;
-      border-radius:14px;
-      box-shadow:0 2px 24px #4f00bc44;
-      padding:0;
-      max-width:420px;
-      width:92vw;
-      height:480px;
-      position:relative;
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-    }
-    #sportybetPopupClose {
-      border:none;
-      position:absolute;
-      top:7px;
-      right:12px;
-      background:transparent;
-      font-size:1.6em;
-      color:#4f00bc;
-      cursor:pointer;
-      z-index:2;
-    }
-    #sportybetPopupOverlay iframe {
-      width:100%;
-      height:100%;
-      border:0;
-      border-radius:14px 14px 0 0;
-    }
     .pin-modal-bg {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -504,10 +463,7 @@
       }
       // Set the booking code per user's plan
       document.getElementById('bookingCodeValue').value = BOOKING_CODES[user.plan] || '';
-      document.getElementById('sportybetLink').onclick = function(e) {
-        e.preventDefault();
-        openSportybetPopup();
-      };
+      // The sportybet link is now a normal anchor tag, no popup/modal logic
       document.querySelector('.subscribe-btn').href = SUBSCRIBE_LINK;
       document.querySelector('.odd-movement-btn').onclick = showOddModal;
     }
@@ -553,30 +509,6 @@
     }
     function closeOddModal() {
       document.getElementById('oddModal').style.display = 'none';
-    }
-
-    // Sportybet popup logic
-    function openSportybetPopup() {
-      let popup = document.getElementById('sportybetPopup');
-      if (!popup) {
-        popup = document.createElement('div');
-        popup.id = 'sportybetPopup';
-        popup.innerHTML = `
-          <div id="sportybetPopupOverlay">
-            <div class="sportybet-popup-content">
-              <button id="sportybetPopupClose">&times;</button>
-              <iframe src="${SPORTYBET_LINK}" allowfullscreen></iframe>
-            </div>
-          </div>
-        `;
-        document.body.appendChild(popup);
-        document.getElementById('sportybetPopupClose').onclick = function() {
-          popup.remove();
-        };
-        document.getElementById('sportybetPopupOverlay').onclick = function(e) {
-          if (e.target === this) popup.remove();
-        };
-      }
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -645,7 +577,7 @@
         <span class="booking-label">Booking Code:</span><br>
         <input id="bookingCodeValue" class="booking-code-value" value="" readonly>
         <button id="copyBookingBtn" class="copy-btn" title="Copy">Copy</button>
-        <a id="sportybetLink" href="https://www.sportybet.com/ng/" class="copy-btn" style="margin-left:7px;">View on Sportybet</a>
+        <a id="sportybetLink" href="https://www.sportybet.com/ng/lite/betslip?fromUrl=%2Fng%2Flite" class="copy-btn" style="margin-left:7px;" target="_blank" rel="noopener noreferrer">View on Sportybet</a>
         <span id="copiedNote" class="copied-note" style="display:none;">Copied!</span>
       </div>
       <div style="margin-top:18px;">
