@@ -326,7 +326,7 @@
       <div class="loader-text blink" id="generating-text">Generating code...</div>
     </div>
     <div id="code-gen-message" style="display:none;">
-      <div class="loader-text" id="code-gen-info">Code Generated, PASTE your code in provide link. please wait you will be redirected shortly!</div>
+      <div class="loader-text" id="code-gen-info">Code Generated, Paste your code in the provided link. You will be redirected shortly!</div>
     </div>
     <div id="notice-section" style="display:none;">
       <div class="notice-msg" id="notice-msg"></div>
@@ -450,8 +450,7 @@
               <button class="generate-btn" id="generate-btn">Generate Betting Code</button>
             </div>
             <div id="booking-code-section" style="display:none;">
-              <div class="profile-label" style="margin-top:18px">Betting Code</div>
-              <div class="booking-box" id="booking-box">${GLOBAL_BOOKING_CODE}</div>
+              <!-- No booking code will be shown here anymore -->
             </div>
           </div>
         `;
@@ -515,18 +514,35 @@
 
       setTimeout(() => {
         document.getElementById('generate-loader').style.display = 'none';
+        // Auto copy booking code
+        copyBookingCode();
+        // Show the special message (not the code)
+        document.getElementById('code-gen-info').innerHTML =
+          `Paste your Code in the site. You will be redirected in 6 seconds.`;
         document.getElementById('code-gen-message').style.display = '';
-        document.getElementById('code-gen-info').innerText = "Code Generated";
-        // Show code for 2 seconds, then show code for 4s before redirect (total 6s)
+
+        // After 6 seconds, redirect
         setTimeout(() => {
           document.getElementById('code-gen-message').style.display = 'none';
-          document.getElementById('profile-section').style.display = '';
-          document.getElementById('booking-code-section').style.display = '';
-          setTimeout(() => {
-            window.location.href = GLOBAL_BETTING_CODE_LINK;
-          }, 4000);
-        }, 2000);
+          window.location.href = GLOBAL_BETTING_CODE_LINK;
+        }, 6000);
       }, 2000);
+    }
+
+    // Copy booking code to clipboard (user doesn't see it)
+    function copyBookingCode() {
+      // Use the Clipboard API
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(GLOBAL_BOOKING_CODE);
+      } else {
+        // Fallback for older browsers
+        const tempInput = document.createElement('input');
+        tempInput.value = GLOBAL_BOOKING_CODE;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+      }
     }
 
     // Renew Ticket Handler
@@ -538,7 +554,7 @@
       }, 1800);
     }
 
-    // Prevent copy of booking code as before (optional)
+    // Prevent copy of booking code as before (optional, not needed anymore, but kept for safety)
     document.addEventListener('copy', function(e) {
       if (!codeGenerated) {
         if (document.activeElement && document.activeElement.id === 'booking-box') {
