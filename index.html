@@ -2,612 +2,558 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Soccer Tips Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>EmpireBet Rollover</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts for style -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700&display=swap" rel="stylesheet">
   <style>
-    html, body { height: 100%; margin: 0; padding: 0; }
     body {
+      background: radial-gradient(circle at 70% 10%, #3a86ff 0%, #03071e 40%, #03071e 100%);
       min-height: 100vh;
-      background: linear-gradient(135deg, #1e003a 0%, #007bff 100%);
-      color: #f1f1f1;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      box-sizing: border-box;
-      letter-spacing: 0.01em;
-    }
-    .login-container {
-      min-height: 100vh;
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(140deg, #1e003a 0%, #26007a 70%, #007bff 120%);
+      color: #f1faee;
     }
-    .login-card {
-      background: rgba(34,28,56,0.99);
-      border-radius: 22px;
-      box-shadow: 0 8px 44px #4f00bc60, 0 2px 8px #000c;
-      padding: 36px 23px 33px 23px;
-      min-width: 315px;
-      max-width: 95vw;
-      position: relative;
-      margin: 0 10px;
-      width: 370px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 22px;
-      z-index: 2;
-    }
-    .plan-list {
-      display: flex;
-      flex-direction: row;
-      gap: 16px;
-      justify-content: center;
-      margin: 22px 0 0 0;
-      z-index: 2;
-    }
-    .plan-card {
-      background: linear-gradient(135deg, #111015 70%, #22223c 100%);
-      border-radius: 22px;
-      box-shadow: 0 6px 32px #4f00bc22, 0 2px 8px #000b;
-      border: 2.5px solid #23233f;
-      transition: border 0.23s, box-shadow 0.20s, transform 0.14s, background 0.21s;
-      min-width: 90px;
-      max-width: 120px;
-      flex: 1 1 0px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      padding: 18px 7px 15px 7px;
-      position: relative;
-      outline: none;
-      justify-content: flex-start;
-      overflow: visible;
-      isolation: isolate;
-      z-index: 2;
-    }
-    .plan-card.selected,
-    .plan-card:hover,
-    .plan-card:focus {
-      border: 2.5px solid #ffd700;
-      box-shadow: 0 16px 50px #ffd70055, 0 2px 16px #4f00bc55;
-      background: linear-gradient(120deg, #191925 70%, #292b55 100%);
-      transform: translateY(-3px) scale(1.07);
-    }
-    .plan-card .plan-icon {
-      width: 46px;
-      height: 46px;
-      margin-bottom: 13px;
-      margin-top: 3px;
-      filter: drop-shadow(0 2px 10px #ffd70044) brightness(1.08);
-      border-radius: 50%;
-      background: #fff8;
-      padding: 2.5px;
-      border: 1.5px solid #ffd700;
-    }
-    .plan-card .plan-title {
-      font-size: 1.13em;
-      font-weight: 800;
-      color: #ffd700;
-      margin-bottom: 7px;
-      letter-spacing: 0.4px;
-      text-shadow: 0 2px 9px #0005;
-      text-align: center;
-    }
-    .plan-card .plan-description {
-      font-size: 0.97em;
-      color: #c0bfff;
-      font-weight: 500;
-      margin-bottom: 0;
-      text-align: center;
-      line-height: 1.22;
-      min-height: 34px;
-      max-width: 107px;
-      text-shadow: 0 1px 7px #0006;
-      letter-spacing: 0.02em;
-    }
-    .plan-card .plan-badge {
-      display: inline-block;
-      margin-top: 8px;
-      background: linear-gradient(90deg,#ffd700 0%,#ff4d4d 100%);
-      color: #1a1628;
-      font-weight: bold;
-      font-size: 0.88em;
-      padding: 3px 13px 3px 13px;
-      border-radius: 11px;
-      letter-spacing: 0.11em;
-      box-shadow: 0 2px 8px #ffd70033;
-      text-shadow: none;
-    }
-    @media (max-width: 600px) {
-      .plan-list {
-        flex-direction: column;
-        gap: 16px;
-        width: 100%;
-        align-items: center;
-      }
-      .plan-card {
-        max-width: 99vw;
-        min-width: 0;
-        width: 100%;
-      }
-    }
-    .login-footer {
-      color: #aaa;
-      font-size: 0.95em;
-      position: absolute;
-      left: 0; right: 0; bottom: 12px;
-      text-align: center;
-      opacity: 0.92;
-      z-index: 2;
-      letter-spacing: 0.08em;
-    }
-    .login-error, .pin-error {
-      color: #ff4d4d;
-      margin-top: 16px;
-      font-weight: bold;
-      font-size: 1em;
-      min-height: 1.5em;
-      text-align: center;
-    }
-    .profile-avatar {
-      width: 54px; height: 54px; border-radius: 50%; margin-top: 3px; margin-bottom: 6px; border: 2px solid #ffd700;
-      box-shadow: 0 4px 14px #4f00bc33;
-      background: #fff;
-      object-fit: cover;
-    }
-    .dashboard-card {
-      background: linear-gradient(120deg,#231e36 0%,#2a2159 100%);
-      border-radius: 19px;
-      box-shadow: 0 8px 40px #4f00bc36, 0 2px 8px #000a;
-      padding: 28px 18px 20px 18px;
+    .container {
+      background: linear-gradient(135deg, #03071e 80%, #3a86ff44 100%);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px 4px #000c, 0 2px 8px 0 #023e8a55;
+      padding: 44px 32px 36px 32px;
       max-width: 370px;
-      margin: 40px auto 0 auto;
-      width: 94vw;
+      width: 98vw;
+      text-align: center;
+      border: 2.5px solid #4361ee;
       position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 11;
+      backdrop-filter: blur(1.5px);
     }
-    .user-info-badges {
-      display: flex;
-      flex-direction: row;
-      gap: 12px;
-      margin-bottom: 7px;
-      margin-top: 5px;
-    }
-    .user-badge {
-      background: linear-gradient(90deg,#ffd700 0%,#ffb347 100%);
-      color: #4f00bc;
-      font-weight: bold;
-      font-size: 0.99em;
-      padding: 2.5px 15px;
-      border-radius: 12px;
-      letter-spacing: 0.05em;
-      margin-bottom: 7px;
+    h1 {
       margin-top: 0;
-      box-shadow: 0 2px 8px #ffd70022;
+      font-size: 2.4em;
+      letter-spacing: 1.5px;
+      color: #ffd60a;
+      font-weight: 900;
+      margin-bottom: 18px;
+      text-shadow: 0 1px 12px #4361ee99, 0 0px 10px #ffd60a33;
     }
-    .metrics-group { width:100%; margin: 11px 0 10px 0; }
-    .metric-box { background: #1a1628; border-radius: 7px; padding: 6px 12px; font-size: 1em; color: #ffd700; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;}
-    .metric-label { color: #aaa; font-weight: 500; }
-    .metric-value { font-weight: bold; letter-spacing: 1px; }
-    .booking-code-section { background: #f6f3fd; border-radius: 7px; margin: 13px 0 8px 0; padding: 7px 8px 5px 8px; color: #2c003e; box-shadow: 0 2px 8px #4f00bc1a; text-align: center; }
-    .booking-label { font-size: 0.98em; color: #4f00bc; font-weight: 600; }
-    .booking-code-value { font-family: 'Fira Mono', 'Consolas', monospace; font-size: 0.93em; background: #fff; border-radius: 7px; padding: 5px 12px; margin: 6px 0; color: #222; font-weight: bold;}
-    .copy-btn { margin-left: 4px; background: #4f00bc; color: #fff; border: none; padding: 5px 11px; border-radius: 6px; font-size: 0.95em; cursor: pointer; font-weight: 600;}
-    .copy-btn:hover { background: #ffb347; color: #2c003e; }
-    .copied-note { color: #19b66e; margin-left: 6px; font-size: 0.93em; font-weight: 500; display: none;}
-    /* Redesigned Booking upload time indicator */
-    .booking-upload-indicator {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(90deg, #4f00bc 0%, #007bff 100%);
-      color: #fff;
-      border-radius: 18px;
-      padding: 7px 16px 7px 12px;
-      font-size: 1.03em;
-      font-weight: 600;
+    .input-pin {
+      margin: 30px 0 10px 0;
+    }
+    input[type="password"] {
+      width: 130px;
+      font-size: 2.1em;
+      letter-spacing: 22px;
+      padding: 12px 10px;
+      text-align: center;
+      border-radius: 12px;
+      border: 2.5px solid #4361ee;
+      background: #011627;
+      color: #ffd60a;
+      outline: none;
       margin-bottom: 10px;
-      box-shadow: 0 2px 8px #4f00bc23;
-      gap: 8px;
+      box-shadow: 0 1px 9px #000, 0 0px 2px #4361ee33;
+      transition: border 0.3s;
     }
-    .booking-upload-icon img {
+    input[type="password"]:focus {
+      border: 2.5px solid #ffd60a;
+      background: #1e293b;
+    }
+    input[type="password"]::-webkit-input-placeholder {
+      color: #8ecae6;
+      letter-spacing: 2px;
+    }
+    button {
+      background: linear-gradient(87deg, #3a86ff 0%, #ffd60a 85%, #ffd60a 100%);
+      color: #011627;
+      border: none;
+      border-radius: 10px;
+      padding: 13px 32px;
+      font-size: 1.13em;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 2px 8px #023e8a55;
+      transition: background 0.18s, box-shadow 0.18s;
+      letter-spacing: 1px;
+    }
+    button:active {
+      background: linear-gradient(90deg, #ffd60a 0%, #3a86ff 100%);
+      box-shadow: 0 1px 4px #023e8a77;
+    }
+    .loader {
+      margin: 40px auto 0 auto;
+      border: 7px solid #3a86ff33;
+      border-top: 7px solid #ffd60a;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      animation: spin 1s linear infinite;
       display: block;
-      width: 20px;
-      height: 20px;
-      filter: drop-shadow(0 0 4px #ffd70077);
+      box-shadow: 0 2px 8px #023e8a33;
     }
-    .booking-upload-text strong {
-      color: #ffd700;
-      font-weight: bold;
-      margin-left: 2px;
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
     }
-    .pin-modal-bg {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(17, 0, 34, 0.36);
-      z-index: 100;
-      display: none;
-      align-items: flex-end;
-      justify-content: center;
+    .blink {
+      animation: blinkText 0.7s steps(1, end) 8;
     }
-    .pin-modal-bg.active {
-      display: flex;
+    @keyframes blinkText {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0; }
     }
-    .pin-modal {
-      background: #22203a;
-      border-radius: 18px 18px 0 0;
-      box-shadow: 0 -4px 22px #4f00bc22;
-      padding: 31px 18px 18px 18px;
-      max-width: 370px;
-      width: 99vw;
-      min-height: 215px;
-      margin-bottom: 0;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 101;
-      animation: pinModalShow 0.18s;
-    }
-    @keyframes pinModalShow {
-      from { transform: translateY(100%);}
-      to   { transform: translateY(0);}
-    }
-    .pin-modal-close {
-      position: absolute;
-      top: 13px; right: 18px;
-      font-size: 1.6em;
-      background: none; border: none; color: #fff; cursor: pointer;
-      font-weight: bold;
-    }
-    .pin-modal-title {
-      font-size: 1.12em;
+    .error-msg {
+      color: #ff477e;
+      background: rgba(255,71,126,0.12);
+      padding: 11px 0;
+      margin: 15px 0 0 0;
+      border-radius: 8px;
       font-weight: 700;
-      color: #ffd700;
-      margin-bottom: 8px;
-      text-align: center;
-      letter-spacing: 0.04em;
+      letter-spacing: 1px;
+      animation: shake 0.2s 2;
     }
-    .pin-modal-plan {
-      font-size: 1em;
-      color: #b6b0ff;
+    @keyframes shake {
+      0% { transform: translateX(0);}
+      25% { transform: translateX(-3px);}
+      50% { transform: translateX(3px);}
+      75% { transform: translateX(-3px);}
+      100% { transform: translateX(0);}
+    }
+    .profile-section {
+      padding: 0 8px 0 8px;
+    }
+    .profile-label {
+      color: #ffd60a;
+      font-size: 1.11em;
+      margin-top: 20px;
+      margin-bottom: 6px;
       font-weight: 600;
-      margin-bottom: 22px;
-      text-align: center;
+      letter-spacing: 1px;
+      text-shadow: 0 1px 8px #ffd60a33;
     }
-    .pin-modal input[type="password"] {
-      font-size: 1.14em;
-      font-family: 'Fira Mono', 'Consolas', monospace;
-      padding: 8px 14px;
-      border-radius: 9px;
-      border: 1.5px solid #ffd700;
-      color: #2c003e;
-      background: #fff;
-      margin-bottom: 8px;
-      width:95%;
-      text-align: center;
-      letter-spacing: 0.35em;
-      box-shadow: 0 2px 9px #ffd70023;
+    .profile-pin {
+      background: #011627;
+      color: #ffd60a;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 1.25em;
+      display: inline-block;
+      margin-bottom: 24px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      border: 1.5px solid #ffd60a;
+      box-shadow: 0 1px 9px #3a86ff33, 0 0px 2px #ffd60a33;
     }
-    .pin-modal-btn {
-      background: linear-gradient(90deg, #ffd700 0%, #ffb347 100%);
-      color: #4f00bc;
+    .profile-expiry {
+      margin-top: 10px;
+      font-size: 1em;
+      color: #3a86ff;
+      background: #011627;
+      padding: 7px 13px;
+      border-radius: 6px;
+      display: inline-block;
+      font-weight: 700;
+      border: 1.5px solid #3a86ff;
+      box-shadow: 0 1px 7px #011627, 0 0px 2px #3a86ff22;
+      margin-bottom: 10px;
+    }
+    .ticket-section {
+      margin-top: 22px;
+      padding: 18px 12px 22px 12px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #4361ee22 0%, #ffd60a11 100%);
+      box-shadow: 0 2px 15px #4361ee22;
+      position: relative;
+      border: 1.5px solid #4361ee66;
+    }
+    .ticket-section .title {
+      color: #ffd60a;
+      font-size: 1.16em;
+      letter-spacing: 1.7px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-shadow: 0 1px 7px #ffd60a33;
+    }
+    .ticket-id-box {
+      background: #3a86ff22;
+      color: #3a86ff;
+      padding: 12px 14px;
+      font-size: 1.15em;
+      border-radius: 8px;
+      letter-spacing: 2px;
+      margin-bottom: 18px;
+      font-family: 'Montserrat', monospace;
+      display: inline-block;
+      font-weight: 700;
+      border: 1.5px dashed #3a86ff;
+      user-select: text;
+      box-shadow: 0 1px 7px #023e8a33;
+    }
+    .booking-box {
+      background: #ffd60a11;
+      color: #ffd60a;
+      padding: 15px 10px;
+      font-size: 1.18em;
+      border-radius: 8px;
+      word-break: break-all;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      position: relative;
+      font-family: 'Montserrat', monospace;
+      border: 2px dashed #ffd60a;
+      box-shadow: 0 0 12px #ffd60a33;
+      transition: box-shadow 0.2s;
+      display: inline-block;
+      min-width: 120px;
+      font-weight: 700;
+      text-shadow: 0 1px 8px #ffd60a44;
+    }
+    .copy-btn, .generate-btn {
+      display: block;
+      width: 100%;
+      margin-top: 8px;
+      border-radius: 8px;
+      background: linear-gradient(87deg, #3a86ff 0%, #ffd60a 85%, #ffd60a 100%);
+      color: #011627;
       font-weight: bold;
       border: none;
-      padding: 9px 28px;
-      border-radius: 9px;
-      font-size: 1.09em;
+      padding: 13px 0;
       cursor: pointer;
-      margin-top: 3px;
-      letter-spacing: 0.09em;
-      box-shadow: 0 2px 13px #ffd70033;
-      transition: background 0.18s, color 0.13s;
+      font-size: 1.07em;
+      transition: background 0.18s;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px #023e8a55;
     }
-    .pin-modal-btn:hover {
-      background: linear-gradient(90deg, #4f00bc 0%, #007bff 100%);
+    .copy-btn:active, .generate-btn:active {
+      background: linear-gradient(90deg, #ffd60a 0%, #3a86ff 100%);
+    }
+    .expire-notice {
+      color: #ff477e;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-top: 17px;
+      margin-bottom: 27px;
+      animation: blinkNotice 1s steps(1, end) infinite;
+      text-shadow: 0 1px 8px #ff477e44;
+    }
+    .notice-msg {
+      color: #ff477e;
+      background: #ff477e16;
+      border: 1.5px solid #ff477e;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1.13em;
+      margin-top: 25px;
+      margin-bottom: 18px;
+      padding: 15px 10px;
+      box-shadow: 0 1px 8px #ff477e22;
+      animation: blinkNotice 1s steps(1, end) infinite;
+    }
+    @keyframes blinkNotice {
+      0%,100% { opacity: 1;}
+      50% { opacity: 0;}
+    }
+    .renew-btn {
+      background: linear-gradient(90deg, #ff477e 60%, #4361ee 100%);
       color: #fff;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      padding: 13px 0;
+      width: 100%;
+      font-size: 1.11em;
+      margin-top: 20px;
+      box-shadow: 0 2px 8px #ff477e44;
+      cursor: pointer;
+      transition: background 0.18s;
+      letter-spacing: 1px;
     }
-    /* Odd Modal override: dark background */
-    #oddModal .odd-modal-content {
-      background: #111015 !important;
-      color: #fff !important;
+    .renew-btn:active {
+      background: linear-gradient(90deg, #4361ee 60%, #ff477e 100%);
     }
-    #oddModal table {
-      color: #fff !important;
+    .loader-text {
+      color: #ffd60a;
+      font-size: 1.13em;
+      font-weight: 600;
+      margin-top: 27px;
+      letter-spacing: 1px;
+      text-align: center;
+      min-height: 35px;
+      text-shadow: 0 1px 8px #ffd60a44;
+    }
+    #code-gen-message .loader-text {
+      color: #3a86ff;
+      font-size: 1.17em;
+      text-shadow: 0 1px 8px #3a86ff44;
+    }
+    .branding {
+      margin-top: 18px;
+      color: #3a86ff;
+      font-size: 0.93em;
+      letter-spacing: 1.2px;
+      font-weight: 500;
+      opacity: 0.8;
+      text-shadow: 0 1px 8px #3a86ff44;
+      user-select: none;
+    }
+    @media (max-width: 480px) {
+      .container { padding: 21px 2vw;}
+      h1 { font-size: 1.4em;}
+      input[type="password"] { width: 90px; font-size: 1.4em;}
     }
   </style>
+</head>
+<body>
+  <div class="container" id="main-container">
+    <h1>EmpireBet Rollover</h1>
+    <div id="login-form">
+      <div class="input-pin">
+        <input type="password" id="pin-input" pattern="\d*" inputmode="numeric"
+          maxlength="4" placeholder="PIN" autocomplete="off"/>
+      </div>
+      <button onclick="onLogin()">Open Profile</button>
+      <div id="login-error" class="error-msg" style="display:none;"></div>
+    </div>
+    <div id="loader-section" style="display:none;">
+      <div class="loader"></div>
+      <div class="loader-text blink" id="loader-text">Opening Profile</div>
+    </div>
+    <div id="profile-section" style="display:none;"></div>
+    <div id="generate-loader" style="display:none;">
+      <div class="loader"></div>
+      <div class="loader-text blink" id="generating-text">Generating code...</div>
+    </div>
+    <div id="code-gen-message" style="display:none;">
+      <div class="loader-text" id="code-gen-info">Code Generated, please wait you will be redirected shortly!</div>
+    </div>
+    <div id="notice-section" style="display:none;">
+      <div class="notice-msg" id="notice-msg"></div>
+    </div>
+    <div id="renew-loader" style="display:none;">
+      <div class="loader"></div>
+      <div class="loader-text blink">You will be redirected shortly...</div>
+    </div>
+    <div class="branding">EmpireBet &copy; 2025</div>
+  </div>
   <script>
-    // Users database (simulate)
+    // All users have the same booking code now
+    const GLOBAL_BOOKING_CODE = "BOOK-2025-POWERWIN";
+    // This is the link users are redirected to after generating the betting code
+    const GLOBAL_BETTING_CODE_LINK = "https://empirebet.com/betting-code-success";
+    
+    // Set up users and their Ticket IDs (admin provides)
     const users = [
-      { username: 'user1', pin: '1108', plan: 'Daily', odds: [1.30, 1.20, 1.56], status: ['win', 'lost', 'win'] },
-      { username: 'user1', pin: '0276', plan: 'Weekly', odds: [2.00, 1.40, 2.50, 1.80], status: ['win', 'win', 'lost', 'win'] },
-      { username: 'user2', pin: '2004', plan: 'Weekly', odds: [3.15, 2.10], status: ['win', '?'] },
-      { username: 'user2', pin: '3572', plan: 'Monthly', odds: [3.15, 2.10], status: ['win', '?'] },
-      { username: 'user3', pin: '1776', plan: 'Daily', odds: [1.90, 1.60, 2.30], status: ['win', 'win', 'lost'] }
+      {
+        pin: "2004",
+        expiry: "2025-08-31",
+        ticketId: "EMPIRE-007-PUCD",
+        renewLink: "https://empirebet.com/renew"
+      },
+      {
+        pin: "3572",
+        expiry: "2025-08-31",
+        ticketId: "EMPIRE-009-ROYZ",
+        renewLink: "https://empirebet.com/renew"
+      },
+      {
+        pin: "2468",
+        expiry: "2025-08-30",
+        ticketId: "EMPIRE-101-FGHI",
+        renewLink: "https://empirebet.com/renew"
+      }
+      // Add more users as needed
     ];
-    // Daily: Emoji soccer ball
-    const plans = [
-      { name: 'Daily', img: 'https://img.icons8.com/emoji/96/soccer-ball-emoji.png', color: '#4f00bc' },
-      { name: 'Weekly', img: 'https://img.icons8.com/ios-filled/100/ffd700/trophy.png', color: '#ffd700' },
-      { name: 'Monthly', img: 'https://img.icons8.com/ios-filled/100/ff4d4d/star.png', color: '#ff4d4d' }
-    ];
-    const planBadges = {
-      Daily: "POPULAR",
-      Weekly: "BEST VALUE",
-      Monthly: "PREMIUM"
-    };
-    const planExpectedOdds = {'Daily':14.00, 'Weekly':25.00, 'Monthly':50.00};
 
-    // Unique booking codes for each plan
-    const BOOKING_CODES = {
-      'Daily': 'empirebot_dailyplan',
-      'Weekly': 'empirebot_week5012',
-      'Monthly': 'empirebot_monthlyplan'
-    };
+    function formatDate(dateStr) {
+      let d = new Date(dateStr);
+      return d.toLocaleDateString(undefined, {month: 'short', day: 'numeric', year: 'numeric'});
+    }
 
-    const SPORTYBET_LINK = "https://www.sportybet.com/ng/lite/betslip?fromUrl=%2Fng%2Flite";
-    const SUBSCRIBE_LINK = "https://paystack.com/pay/azohnqhgu-";
-    // This is the fixed time indicator shown to users!
-    const BOOKING_UPLOAD_TIME_INDICATOR = "10:20";
-    let selectedPlan = null;
+    // Get today's date in YYYY-MM-DD
+    function today() {
+      const d = new Date();
+      return d.toISOString().split('T')[0];
+    }
+
+    // PIN to User
+    function findUserByPIN(pin) {
+      return users.find(u => u.pin === pin);
+    }
+
+    // Restrict input to only numbers, up to 4 digits
+    document.getElementById('pin-input').addEventListener('input', function(e) {
+      this.value = this.value.replace(/\D/g, '').slice(0, 4);
+    });
+
     let currentUser = null;
-    function renderPlans() {
-      const planDetails = {
-        "Daily": {
-          desc: "Perfect for a quick win, low cost.",
-          icon: "https://img.icons8.com/emoji/96/soccer-ball-emoji.png"
-        },
-        "Weekly": {
-          desc: "Best value for regular punters.",
-          icon: "https://img.icons8.com/ios-filled/100/ffd700/trophy.png"
-        },
-        "Monthly": {
-          desc: "For serious players, major savings.",
-          icon: "https://img.icons8.com/ios-filled/100/ff4d4d/star.png"
-        }
-      };
-      const list = document.getElementById('planList');
-      list.innerHTML = '';
-      plans.forEach(plan => {
-        const div = document.createElement('div');
-        div.className = 'plan-card';
-        div.tabIndex = 0;
-        div.onclick = () => openPinModal(plan);
-        div.onkeypress = (e) => { if(e.key === "Enter" || e.key === " ") openPinModal(plan); };
-        div.innerHTML = `
-          <img class="plan-icon" src="${planDetails[plan.name].icon}" alt="">
-          <div class="plan-title">${plan.name}</div>
-          <div class="plan-description">${planDetails[plan.name].desc}</div>
-          <span class="plan-badge">${planBadges[plan.name] || ""}</span>
-        `;
-        list.appendChild(div);
-      });
-    }
-    function openPinModal(plan) {
-      selectedPlan = plan;
-      document.getElementById('pinInput').value = '';
-      document.getElementById('pinError').textContent = '';
-      document.getElementById('pinModalPlan').textContent = plan.name + ' Plan';
-      document.getElementById('pinModal').classList.add('active');
-      setTimeout(() => {
-        document.getElementById('pinInput').focus();
-      }, 350);
-    }
-    function closePinModal() {
-      document.getElementById('pinModal').classList.remove('active');
-    }
-    function loginWithPin() {
-      const pin = document.getElementById('pinInput').value.trim();
-      const plan = selectedPlan ? selectedPlan.name : '';
-      const user = users.find(u => u.pin === pin && u.plan === plan);
+    let codeGenerated = false;
+
+    // Login handler
+    function onLogin() {
+      const pin = document.getElementById('pin-input').value;
+      document.getElementById('login-error').style.display = 'none';
+      if (pin.length !== 4) {
+        showError("Please enter your 4-digit PIN.");
+        return;
+      }
+      const user = findUserByPIN(pin);
       if (!user) {
-        document.getElementById('pinError').textContent = "Incorrect PIN for this plan. Try again!";
-        document.getElementById('pinInput').value = '';
-        document.getElementById('pinInput').focus();
+        showError("Access denied! The PIN you entered is not correct.");
         return;
       }
       currentUser = user;
-      showDashboard(user);
-      document.getElementById('loginContainer').style.display = 'none';
-      document.getElementById('pinModal').classList.remove('active');
-      document.getElementById('profileCardSection').style.display = 'flex';
+      showLoader();
     }
-    function pinInputKeydown(e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        return false;
-      }
-      if (e.key === "Escape") closePinModal();
-    }
-    function logout() {
-      currentUser = null;
-      selectedPlan = null;
-      document.getElementById('profileCardSection').style.display = 'none';
-      document.getElementById('loginContainer').style.display = 'flex';
-      document.getElementById('pinModal').classList.remove('active');
-      document.getElementById('pinInput').value = '';
-      document.getElementById('pinError').textContent = '';
-    }
-    function getPlanIcon(planName) {
-      const plan = plans.find(p => p.name === planName);
-      return plan
-        ? plan.img
-        : "https://img.icons8.com/emoji/96/soccer-ball-emoji.png";
-    }
-    function showDashboard(user) {
-      document.getElementById('profileAvatar').src = getPlanIcon(user.plan);
-      document.getElementById('dashUsername').textContent = `PIN: ${user.pin}`;
-      document.getElementById('dashPlan').textContent = user.plan;
-      const odds = user.odds || [];
-      const expectedOdd = planExpectedOdds[user.plan] || 0;
-      let total = 1;
-      if (odds.length > 0) total = odds.reduce((acc, odd) => acc * odd, 1);
 
-      const left = Math.max(expectedOdd - total, 0);
-      document.getElementById('expectedOddVal').textContent = expectedOdd.toFixed(2);
-      document.getElementById('totalOddVal').textContent = total.toFixed(2);
-      document.getElementById('remainingOddVal').textContent = left.toFixed(2);
+    function showError(msg) {
+      let el = document.getElementById('login-error');
+      el.innerText = msg;
+      el.style.display = '';
+    }
 
-      const bookingSection = document.querySelector('.booking-code-section');
-      const subscribeSection = document.querySelector('.subscribe-section');
-      if (total >= expectedOdd) {
-        bookingSection.style.display = 'none';
-        subscribeSection.style.display = 'block';
+    // Show loader for 4 blinks then show profile
+    function showLoader() {
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('profile-section').style.display = 'none';
+      document.getElementById('loader-section').style.display = '';
+      let blinkCount = 0;
+      let loaderText = document.getElementById('loader-text');
+      loaderText.classList.add('blink');
+      const loaderInt = setInterval(() => {
+        blinkCount++;
+        if (blinkCount >= 4) {
+          clearInterval(loaderInt);
+          loaderText.classList.remove('blink');
+          showProfile();
+        }
+      }, 700);
+    }
+
+    // Profile rendering
+    function showProfile() {
+      document.getElementById('loader-section').style.display = 'none';
+      document.getElementById('notice-section').style.display = 'none';
+      const expired = today() > currentUser.expiry;
+      let html = `<div class="profile-section">`;
+
+      if (!expired) {
+        html += `
+          <div class="profile-label">Your PIN</div>
+          <div class="profile-pin">${currentUser.pin}</div>
+          <div class="profile-expiry">Expires: ${formatDate(currentUser.expiry)}</div>
+          <div class="ticket-section">
+            <div class="title">Your Ticket ID For The Month</div>
+            <div class="ticket-id-box" id="ticket-id-box">${currentUser.ticketId}</div>
+            <div style="margin-top: 16px;">
+              <button class="generate-btn" id="generate-btn">Generate Betting Code</button>
+            </div>
+            <div id="booking-code-section" style="display:none;">
+              <div class="profile-label" style="margin-top:18px">Betting Code</div>
+              <div class="booking-box" id="booking-box">${GLOBAL_BOOKING_CODE}</div>
+            </div>
+          </div>
+        `;
       } else {
-        bookingSection.style.display = 'block';
-        subscribeSection.style.display = 'none';
+        html += `
+          <div class="expire-notice">
+            Your Ticket Has Expired<br>
+            Resubscribe to gain back access
+          </div>
+          <button class="renew-btn" id="renew-btn">Renew Ticket</button>
+        `;
       }
-      // Set the booking code per user's plan
-      document.getElementById('bookingCodeValue').value = BOOKING_CODES[user.plan] || '';
-      // The sportybet link is now a normal anchor tag, no popup/modal logic
-      document.querySelector('.subscribe-btn').href = SUBSCRIBE_LINK;
-      document.querySelector('.odd-movement-btn').onclick = showOddModal;
-    }
-    function copyBookingCode() {
-      const input = document.getElementById('bookingCodeValue');
-      input.select();
-      input.setSelectionRange(0, 99999);
-      document.execCommand('copy');
-      document.getElementById('copiedNote').style.display = 'inline-block';
-      setTimeout(() => {
-        document.getElementById('copiedNote').style.display = 'none';
-      }, 1200);
-    }
-    function showOddModal() {
-      const user = currentUser;
-      const odds = user.odds || [];
-      const statuses = user.status || [];
-      const modal = document.getElementById('oddModal');
-      const tbody = document.getElementById('oddTableBody');
-      tbody.innerHTML = '';
-      odds.forEach((o, i) => {
-        let icon = statuses[i] === 'win' ? '✅' : (statuses[i] === 'lost' ? '❌' : '');
-        const tr = document.createElement('tr');
-        const tdIndex = document.createElement('td');
-        const tdOdd = document.createElement('td');
-        const tdStatus = document.createElement('td');
-        tdIndex.textContent = (i+1);
-        tdOdd.textContent = o.toFixed(2);
-        tdStatus.className = "status";
-        tdStatus.textContent = icon;
-        tr.appendChild(tdIndex);
-        tr.appendChild(tdOdd);
-        tr.appendChild(tdStatus);
-        tbody.appendChild(tr);
-      });
-      // Set dark background for modal
-      const modalContent = modal.querySelector("div");
-      if(modalContent) {
-        modalContent.style.background = "#111015";
-        modalContent.style.color = "#fff";
+
+      html += `</div>`;
+
+      document.getElementById('profile-section').innerHTML = html;
+      document.getElementById('profile-section').style.display = '';
+
+      if (!expired) {
+        document.getElementById('generate-btn').addEventListener('click', onGenerateBettingCode);
+      } else {
+        document.getElementById('renew-btn').onclick = onRenewTicket;
       }
-      modal.style.display = 'flex';
-    }
-    function closeOddModal() {
-      document.getElementById('oddModal').style.display = 'none';
+      codeGenerated = false;
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-      renderPlans();
-      document.getElementById('copyBookingBtn').onclick = copyBookingCode;
-      document.getElementById('oddModalClose').onclick = closeOddModal;
-      var pinInput = document.getElementById('pinInput');
-      var pinModal = document.getElementById('pinModal');
-      pinInput.addEventListener('focus', function() {
-        setTimeout(function() {
-          pinModal.scrollIntoView({ behavior: 'smooth', block: 'end' });
-        }, 250);
-      });
+    // Betting code generation process with time restriction
+    function onGenerateBettingCode() {
+      // Time range: 10:00 (AM) to 20:00 (8:00 PM)
+      const now = new Date();
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+
+      // Time boundaries in minutes since midnight
+      const minMinutes = 10 * 60; // 10:00 AM
+      const maxMinutes = 20 * 60; // 8:00 PM
+      const nowMinutes = currentHour * 60 + currentMinute;
+
+      // If not in the valid range, show notice
+      if (nowMinutes < minMinutes || nowMinutes >= maxMinutes) {
+        let msg = "";
+        if (nowMinutes < minMinutes) {
+          // Before 10:00 AM
+          msg = `You can only generate the betting code from <b>10:00 AM</b> up to <b>8:00 PM</b> daily.<br>Please try again at <span style="color:#3a86ff"><b>10:00 AM</b></span>.`;
+        } else {
+          // After 8:00 PM
+          msg = `Betting code generation has closed for today.<br>Please try again tomorrow from <span style="color:#3a86ff"><b>10:00 AM</b></span> up to <span style="color:#3a86ff"><b>8:00 PM</b></span>.`;
+        }
+        document.getElementById('profile-section').style.display = 'none';
+        document.getElementById('notice-msg').innerHTML = msg;
+        document.getElementById('notice-section').style.display = '';
+        return;
+      }
+
+      if (codeGenerated) return;
+      codeGenerated = true;
+      document.getElementById('profile-section').style.display = 'none';
+      document.getElementById('notice-section').style.display = 'none';
+      document.getElementById('generate-loader').style.display = '';
+      document.getElementById('generating-text').innerText = "Generating code...";
+
+      setTimeout(() => {
+        document.getElementById('generate-loader').style.display = 'none';
+        document.getElementById('code-gen-message').style.display = '';
+        document.getElementById('code-gen-info').innerText = "Code Generated";
+        // Show code for 2 seconds, then show code for 4s before redirect (total 6s)
+        setTimeout(() => {
+          document.getElementById('code-gen-message').style.display = 'none';
+          document.getElementById('profile-section').style.display = '';
+          document.getElementById('booking-code-section').style.display = '';
+          setTimeout(() => {
+            window.location.href = GLOBAL_BETTING_CODE_LINK;
+          }, 4000);
+        }, 2000);
+      }, 2000);
+    }
+
+    // Renew Ticket Handler
+    function onRenewTicket() {
+      document.getElementById('profile-section').style.display = 'none';
+      document.getElementById('renew-loader').style.display = '';
+      setTimeout(() => {
+        window.location.href = currentUser.renewLink;
+      }, 1800);
+    }
+
+    // Prevent copy of booking code as before (optional)
+    document.addEventListener('copy', function(e) {
+      if (!codeGenerated) {
+        if (document.activeElement && document.activeElement.id === 'booking-box') {
+          e.preventDefault();
+          alert("You must generate the betting code first!");
+        }
+      }
+    });
+
+    document.addEventListener('contextmenu', function(e) {
+      if (e.target && e.target.id === 'booking-box' && !codeGenerated) {
+        e.preventDefault();
+        alert("You need to generate the betting code first.");
+      }
     });
   </script>
-</head>
-<body>
-  <!-- Login Surface -->
-  <div id="loginContainer" class="login-container">
-    <div class="login-card">
-      <img src="-5890865169557472356_109.jpg" alt="Logo" class="login-logo">
-      <h2>Choose your Subscription Plan</h2>
-      <div class="plan-list" id="planList"></div>
-      <div class="login-footer">
-        <span>Empire Soccer Tips &copy; 2025</span>
-      </div>
-    </div>
-  </div>
-  <!-- PIN Modal -->
-  <div id="pinModal" class="pin-modal-bg" tabindex="-1" onclick="if(event.target===this)closePinModal()">
-    <form class="pin-modal" onsubmit="return false;">
-      <button type="button" class="pin-modal-close" onclick="closePinModal()" title="Close">&times;</button>
-      <div class="pin-modal-title">Enter your PIN</div>
-      <div class="pin-modal-plan" id="pinModalPlan">Plan</div>
-      <input id="pinInput" type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="4-digit PIN" onkeydown="pinInputKeydown(event)">
-      <button type="button" class="pin-modal-btn" onclick="loginWithPin()" style="margin-top:12px;">Proceed</button>
-      <div class="pin-error" id="pinError"></div>
-      <div style="height:18vh;"></div>
-    </form>
-  </div>
-  <!-- Profile/Dashboard -->
-  <div id="profileCardSection" style="display:none">
-    <div class="dashboard-card">
-      <img src="-5890865169557472356_109.jpg" alt="Profile Avatar" class="profile-avatar" id="profileAvatar">
-      <div style="font-size:1.22em;font-weight:600;color:#fff;margin-bottom:8px;text-align:center;">
-        <span id="dashUsername">-</span>
-      </div>
-      <div class="user-info-badges">
-        <div class="user-badge"><span>Plan: </span><span id="dashPlan">-</span></div>
-      </div>
-      <div class="metrics-group">
-        <div class="metric-box"><span class="metric-label">Expected Odd:</span><span class="metric-value" id="expectedOddVal">-</span></div>
-        <div class="metric-box"><span class="metric-label">Total Odd:</span><span class="metric-value" id="totalOddVal">-</span></div>
-        <div class="metric-box"><span class="metric-label">Remaining Odd:</span><span class="metric-value" id="remainingOddVal">-</span></div>
-      </div>
-      <div class="booking-code-section">
-        <!-- Redesigned Booking upload time indicator -->
-        <div class="booking-upload-indicator">
-          <span class="booking-upload-icon">
-            <img src="https://img.icons8.com/ios-filled/20/fff/clock--v1.png" alt="Clock" />
-          </span>
-          <span class="booking-upload-text">
-            New Fixtures Are Uploaded By <strong>11:00</strong>
-          </span>
-        </div>
-        <span class="booking-label">Booking Code:</span><br>
-        <input id="bookingCodeValue" class="booking-code-value" value="" readonly>
-        <button id="copyBookingBtn" class="copy-btn" title="Copy">Copy</button>
-        <a id="sportybetLink" href="https://www.sportybet.com/ng/m/code-hub/load-code?source=home" class="copy-btn" style="margin-left:7px;" target="_blank" rel="noopener noreferrer">View on Sportybet</a>
-        <span id="copiedNote" class="copied-note" style="display:none;">Booking code are change every Sundays!</span>
-      </div>
-      <div style="margin-top:18px;">
-        <button class="odd-movement-btn" style="background:#ffd700;border:none;color:#4f00bc;padding:8px 25px;border-radius:8px;font-weight:700;font-size:1em;cursor:pointer;box-shadow:0 2px 9px #4f00bc22;margin-bottom:7px;">Odd Movement</button>
-        <button onclick="logout()" style="background:#ff4d4d;border:none;color:#fff;padding:8px 25px;border-radius:8px;font-weight:700;font-size:1em;cursor:pointer;box-shaow:0 3px 13px #4f00bc22;margin-left:7px;">Logout</button>
-      </div>
-      <div class="subscribe-section" style="display:none;text-align:center;">
-        <div style="margin-top:14px;margin-bottom:7px;">
-          <span style="color:#ff4d4d;font-weight:600;">You have reached the expected odd for this plan.</span>
-        </div>
-        <a class="subscribe-btn" href="#" style="background:#4f00bc;color:#ffd700;padding:10px 34px;border-radius:9px;font-weight:700;text-decoration:none;font-size:1.1em;box-shadow:0 2px 9px #4f00bc22;">Upgrade/Subscribe More</a>
-      </div>
-    </div>
-    <!-- Odd Modal -->
-    <div id="oddModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:1003;background:rgba(34,0,40,0.38);align-items:center;justify-content:center;">
-      <div class="odd-modal-content" style="background:#111015;border-radius:16px;box-shadow:0 2px 24px #4f00bc44;padding:15px 19px 14px 19px;max-width:370px;width:97vw;position:relative;color:#fff;">
-        <button id="oddModalClose" style="border:none;position:absolute;top:10px;right:13px;background:transparent;font-size:1.3em;color:#ffd700;cursor:pointer;z-index:2;">&times;</button>
-        <div style="font-weight:700;font-size:1.15em;color:#ffd700;margin-bottom:9px;">Odd Movement</div>
-        <table style="width:100%;border-collapse:collapse;color:#fff;">
-          <thead>
-            <tr style="background:#ffd70022;">
-              <th>#</th>
-              <th>Odd</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="oddTableBody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
 </body>
 </html>
