@@ -1,575 +1,653 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>EmpireBet Rollover</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google Fonts for style -->
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      background: radial-gradient(circle at 70% 10%, #3a86ff 0%, #03071e 40%, #03071e 100%);
-      min-height: 100vh;
-      margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #f1faee;
-    }
-    .container {
-      background: linear-gradient(135deg, #03071e 80%, #3a86ff44 100%);
-      border-radius: 20px;
-      box-shadow: 0 10px 40px 4px #000c, 0 2px 8px 0 #023e8a55;
-      padding: 44px 32px 36px 32px;
-      max-width: 370px;
-      width: 98vw;
-      text-align: center;
-      border: 2.5px solid #4361ee;
-      position: relative;
-      backdrop-filter: blur(1.5px);
-    }
-    h1 {
-      margin-top: 0;
-      font-size: 2.4em;
-      letter-spacing: 1.5px;
-      color: #ffd60a;
-      font-weight: 900;
-      margin-bottom: 18px;
-      text-shadow: 0 1px 12px #4361ee99, 0 0px 10px #ffd60a33;
-    }
-    .input-pin {
-      margin: 30px 0 10px 0;
-    }
-    input[type="password"] {
-      width: 130px;
-      font-size: 2.1em;
-      letter-spacing: 22px;
-      padding: 12px 10px;
-      text-align: center;
-      border-radius: 12px;
-      border: 2.5px solid #4361ee;
-      background: #011627;
-      color: #ffd60a;
-      outline: none;
-      margin-bottom: 10px;
-      box-shadow: 0 1px 9px #000, 0 0px 2px #4361ee33;
-      transition: border 0.3s;
-    }
-    input[type="password"]:focus {
-      border: 2.5px solid #ffd60a;
-      background: #1e293b;
-    }
-    input[type="password"]::-webkit-input-placeholder {
-      color: #8ecae6;
-      letter-spacing: 2px;
-    }
-    button {
-      background: linear-gradient(87deg, #3a86ff 0%, #ffd60a 85%, #ffd60a 100%);
-      color: #011627;
-      border: none;
-      border-radius: 10px;
-      padding: 13px 32px;
-      font-size: 1.13em;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      box-shadow: 0 2px 8px #023e8a55;
-      transition: background 0.18s, box-shadow 0.18s;
-      letter-spacing: 1px;
-    }
-    button:active {
-      background: linear-gradient(90deg, #ffd60a 0%, #3a86ff 100%);
-      box-shadow: 0 1px 4px #023e8a77;
-    }
-    .loader {
-      margin: 40px auto 0 auto;
-      border: 7px solid #3a86ff33;
-      border-top: 7px solid #ffd60a;
-      border-radius: 50%;
-      width: 56px;
-      height: 56px;
-      animation: spin 1s linear infinite;
-      display: block;
-      box-shadow: 0 2px 8px #023e8a33;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(360deg);}
-    }
-    .blink {
-      animation: blinkText 0.7s steps(1, end) 8;
-    }
-    @keyframes blinkText {
-      0%,100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-    .error-msg {
-      color: #ff477e;
-      background: rgba(255,71,126,0.12);
-      padding: 11px 0;
-      margin: 15px 0 0 0;
-      border-radius: 8px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      animation: shake 0.2s 2;
-    }
-    @keyframes shake {
-      0% { transform: translateX(0);}
-      25% { transform: translateX(-3px);}
-      50% { transform: translateX(3px);}
-      75% { transform: translateX(-3px);}
-      100% { transform: translateX(0);}
-    }
-    .profile-section {
-      padding: 0 8px 0 8px;
-    }
-    .profile-label {
-      color: #ffd60a;
-      font-size: 1.11em;
-      margin-top: 20px;
-      margin-bottom: 6px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-shadow: 0 1px 8px #ffd60a33;
-    }
-    .profile-pin {
-      background: #011627;
-      color: #ffd60a;
-      padding: 8px 18px;
-      border-radius: 8px;
-      font-size: 1.25em;
-      display: inline-block;
-      margin-bottom: 24px;
-      font-weight: bold;
-      letter-spacing: 4px;
-      border: 1.5px solid #ffd60a;
-      box-shadow: 0 1px 9px #3a86ff33, 0 0px 2px #ffd60a33;
-    }
-    .profile-expiry {
-      margin-top: 10px;
-      font-size: 1em;
-      color: #3a86ff;
-      background: #011627;
-      padding: 7px 13px;
-      border-radius: 6px;
-      display: inline-block;
-      font-weight: 700;
-      border: 1.5px solid #3a86ff;
-      box-shadow: 0 1px 7px #011627, 0 0px 2px #3a86ff22;
-      margin-bottom: 10px;
-    }
-    .ticket-section {
-      margin-top: 22px;
-      padding: 18px 12px 22px 12px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #4361ee22 0%, #ffd60a11 100%);
-      box-shadow: 0 2px 15px #4361ee22;
-      position: relative;
-      border: 1.5px solid #4361ee66;
-    }
-    .ticket-section .title {
-      color: #ffd60a;
-      font-size: 1.16em;
-      letter-spacing: 1.7px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      text-shadow: 0 1px 7px #ffd60a33;
-    }
-    .ticket-id-box {
-      background: #3a86ff22;
-      color: #3a86ff;
-      padding: 12px 14px;
-      font-size: 1.15em;
-      border-radius: 8px;
-      letter-spacing: 2px;
-      margin-bottom: 18px;
-      font-family: 'Montserrat', monospace;
-      display: inline-block;
-      font-weight: 700;
-      border: 1.5px dashed #3a86ff;
-      user-select: text;
-      box-shadow: 0 1px 7px #023e8a33;
-    }
-    .booking-box {
-      background: #ffd60a11;
-      color: #ffd60a;
-      padding: 15px 10px;
-      font-size: 1.18em;
-      border-radius: 8px;
-      word-break: break-all;
-      letter-spacing: 2px;
-      margin-bottom: 12px;
-      position: relative;
-      font-family: 'Montserrat', monospace;
-      border: 2px dashed #ffd60a;
-      box-shadow: 0 0 12px #ffd60a33;
-      transition: box-shadow 0.2s;
-      display: inline-block;
-      min-width: 120px;
-      font-weight: 700;
-      text-shadow: 0 1px 8px #ffd60a44;
-    }
-    .copy-btn, .generate-btn {
-      display: block;
-      width: 100%;
-      margin-top: 8px;
-      border-radius: 8px;
-      background: linear-gradient(87deg, #3a86ff 0%, #ffd60a 85%, #ffd60a 100%);
-      color: #011627;
-      font-weight: bold;
-      border: none;
-      padding: 13px 0;
-      cursor: pointer;
-      font-size: 1.07em;
-      transition: background 0.18s;
-      letter-spacing: 1px;
-      box-shadow: 0 2px 8px #023e8a55;
-    }
-    .copy-btn:active, .generate-btn:active {
-      background: linear-gradient(90deg, #ffd60a 0%, #3a86ff 100%);
-    }
-    .expire-notice {
-      color: #ff477e;
-      font-size: 1.2em;
-      font-weight: bold;
-      margin-top: 17px;
-      margin-bottom: 27px;
-      animation: blinkNotice 1s steps(1, end) infinite;
-      text-shadow: 0 1px 8px #ff477e44;
-    }
-    .notice-msg {
-      color: #ff477e;
-      background: #ff477e16;
-      border: 1.5px solid #ff477e;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 1.13em;
-      margin-top: 25px;
-      margin-bottom: 18px;
-      padding: 15px 10px;
-      box-shadow: 0 1px 8px #ff477e22;
-      animation: blinkNotice 1s steps(1, end) infinite;
-    }
-    @keyframes blinkNotice {
-      0%,100% { opacity: 1;}
-      50% { opacity: 0;}
-    }
-    .renew-btn {
-      background: linear-gradient(90deg, #ff477e 60%, #4361ee 100%);
-      color: #fff;
-      font-weight: bold;
-      border: none;
-      border-radius: 10px;
-      padding: 13px 0;
-      width: 100%;
-      font-size: 1.11em;
-      margin-top: 20px;
-      box-shadow: 0 2px 8px #ff477e44;
-      cursor: pointer;
-      transition: background 0.18s;
-      letter-spacing: 1px;
-    }
-    .renew-btn:active {
-      background: linear-gradient(90deg, #4361ee 60%, #ff477e 100%);
-    }
-    .loader-text {
-      color: #ffd60a;
-      font-size: 1.13em;
-      font-weight: 600;
-      margin-top: 27px;
-      letter-spacing: 1px;
-      text-align: center;
-      min-height: 35px;
-      text-shadow: 0 1px 8px #ffd60a44;
-    }
-    #code-gen-message .loader-text {
-      color: #3a86ff;
-      font-size: 1.17em;
-      text-shadow: 0 1px 8px #3a86ff44;
-    }
-    .branding {
-      margin-top: 18px;
-      color: #3a86ff;
-      font-size: 0.93em;
-      letter-spacing: 1.2px;
-      font-weight: 500;
-      opacity: 0.8;
-      text-shadow: 0 1px 8px #3a86ff44;
-      user-select: none;
-    }
-    @media (max-width: 480px) {
-      .container { padding: 21px 2vw;}
-      h1 { font-size: 1.4em;}
-      input[type="password"] { width: 90px; font-size: 1.4em;}
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>EmpireBet Tips</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary: #00e676;
+            --accent: #ffea00;
+            --danger: #ff5252;
+            --card-bg: #191c22;
+            --frame-bg: #21242b;
+            --text-main: #f1f1f1;
+            --text-muted: #b0b6c1;
+            --btn-bg: #00e676;
+            --btn-txt: #191c22;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #111317;
+            min-height: 100vh;
+            color: var(--text-main);
+        }
+        #main-content {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #loader-container, #note, #pin-input-section, #profile-section, #tips-frame-overlay, #access-denied {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #loader-container {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(10,12,18,0.97);
+            z-index: 10000;
+        }
+        .empire-loader {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 8px solid #21242b;
+            border-top: 8px solid var(--primary);
+            box-sizing: border-box;
+            margin: 20px auto;
+            animation: spin 1s linear infinite;
+            background: url('your-image-url.png') center center/cover no-repeat;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg);}
+            100% { transform: rotate(360deg);}
+        }
+        #note {
+            margin-top: 10px;
+            font-size: 1.2rem;
+            color: var(--accent);
+            text-align: center;
+            background: #181b23;
+            border: 1px solid #383b44;
+            border-radius: 8px;
+            padding: 16px;
+            max-width: 95vw;
+            font-weight: 500;
+            box-shadow: 0 2px 10px #0008;
+        }
+        #pin-input-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 32px 18px 28px 18px;
+            box-shadow: 0 2px 24px #0007;
+            text-align: center;
+            margin-top: 18vh;
+            min-width: 270px;
+        }
+        #pin-input-section label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 1.13rem;
+            color: var(--text-muted);
+        }
+        #pin-input-section input[type="tel"] {
+            padding: 10px 12px;
+            font-size: 1.24rem;
+            border: 1.5px solid #30333b;
+            background: #23242d;
+            color: var(--text-main);
+            border-radius: 6px;
+            margin-bottom: 14px;
+            width: 110px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            outline: none;
+            letter-spacing: 8px;
+            text-align: center;
+            transition: border 0.2s;
+        }
+        #pin-input-section input[type="tel"]:focus {
+            border: 1.5px solid var(--primary);
+        }
+        #pin-input-section button {
+            background: var(--btn-bg);
+            color: var(--btn-txt);
+            border: none;
+            border-radius: 6px;
+            padding: 12px 28px;
+            font-size: 1.07rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 4px;
+            transition: background 0.2s;
+        }
+        #pin-input-section button:hover {
+            background: #18ff96;
+        }
+        #pin-input-section .error {
+            color: var(--danger);
+            margin-top: 10px;
+            font-size: 1.03rem;
+            font-weight: 500;
+        }
+        #profile-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 32px 14vw 28px 14vw;
+            box-shadow: 0 2px 24px #0007;
+            text-align: center;
+            margin-top: 8vh;
+            max-width: 410px;
+            min-width: 260px;
+        }
+        #profile-section h2 {
+            margin-top: 0;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+            font-size: 2rem;
+        }
+        #profile-section .profile-data {
+            margin: 22px 0;
+        }
+        .profile-label {
+            color: var(--text-muted);
+        }
+        #profile-section .expire-note {
+            color: var(--danger);
+            font-weight: 600;
+            margin-top: 12px;
+            font-size: 1.15rem;
+        }
+        #profile-section .renew-btn {
+            margin-top: 17px;
+            background: var(--accent);
+            color: #181b23;
+            border: none;
+            border-radius: 6px;
+            padding: 11px 26px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        #profile-section .renew-btn:hover,
+        #access-denied .renew-btn:hover {
+            background: #fff700;
+        }
+        #profile-section .renew-info {
+            font-size: .98rem;
+            margin-top: 10px;
+            color: var(--text-muted);
+        }
+        #profile-section .generate-btn {
+            margin-top: 20px;
+            background: var(--btn-bg);
+            color: var(--btn-txt);
+            border: none;
+            border-radius: 6px;
+            padding: 12px 26px;
+            font-size: 1.12rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #profile-section .generate-btn:hover {
+            background: #19ff94;
+        }
+        #profile-section .expires-label {
+            color: var(--text-muted);
+            font-size: 0.97rem;
+        }
+        #access-denied {
+            margin-top: 15vh;
+            font-size: 1.21rem;
+            color: var(--danger);
+            background: #1b1e27;
+            border: 1.5px solid #ff525233;
+            border-radius: 12px;
+            padding: 30px 8vw 24px 8vw;
+            max-width: 400px;
+            text-align: center;
+            font-weight: 500;
+            box-shadow: 0 2px 12px #0004;
+        }
+        #access-denied .renew-btn {
+            margin-top: 18px;
+            background: var(--accent);
+            color: #181b23;
+            border: none;
+            border-radius: 6px;
+            padding: 11px 26px;
+            font-size: 1.07rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        #tips-frame-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(10,12,18,0.78);
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #tips-frame {
+            background: var(--frame-bg);
+            border-radius: 16px;
+            width: 96vw;
+            max-width: 430px;
+            height: 69vh;
+            min-height: 340px;
+            box-shadow: 0 8px 36px #0008;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            border: 2.5px solid var(--primary);
+        }
+        #tips-frame-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0e1710;
+            color: var(--primary);
+            padding: 12px 22px;
+            font-weight: 600;
+            font-size: 1.09rem;
+            letter-spacing: 0.5px;
+        }
+        #tips-frame-header .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        #tips-frame-header .close-btn:hover {
+            color: var(--danger);
+        }
+        #tips-frame-content {
+            flex: 1;
+            padding: 16px 22px 16px 22px;
+            overflow-y: auto;
+        }
+        .betting-tips-list {
+            font-size: 1.12rem;
+            margin-bottom: 10px;
+            padding-left: 0;
+            list-style: none;
+        }
+        .betting-tips-list li {
+            margin-bottom: 10px;
+            background: #1d211c;
+            padding: 10px 12px;
+            border-radius: 7px;
+            font-weight: 500;
+            box-shadow: 0 1px 5px #0004;
+        }
+        .game-league {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.08rem;
+        }
+        .game-match {
+            margin-left: 6px;
+        }
+        .pick-label {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .tip-date {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        #renew-msg-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(10,12,18,0.86);
+            z-index: 20000;
+            align-items: center;
+            justify-content: center;
+        }
+        #renew-msg-box {
+            background: #191c22;
+            border-radius: 14px;
+            color: var(--text-main);
+            box-shadow: 0 4px 32px #0009;
+            padding: 34px 26px 28px 26px;
+            text-align: center;
+            max-width: 90vw;
+            min-width: 250px;
+            font-size: 1.18rem;
+            border: 2px solid var(--primary);
+        }
+        #renew-msg-box .modal-btn {
+            margin-top: 22px;
+            background: var(--btn-bg);
+            color: var(--btn-txt);
+            border: none;
+            border-radius: 6px;
+            padding: 11px 28px;
+            font-size: 1.04rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        #renew-msg-box .modal-btn:hover {
+            background: #18ff96;
+        }
+        @media (max-width: 600px) {
+            #profile-section, #access-denied {
+                padding: 16px 2vw;
+                min-width: unset;
+            }
+            #tips-frame {
+                width: 99vw;
+                max-width: 100vw;
+                height: 74vh;
+                padding: 0 0.5vw;
+            }
+            #renew-msg-box {
+                padding: 22px 8vw 20px 8vw;
+            }
+        }
+        #internal-loader {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(10,12,18,0.94);
+            z-index: 10300;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #internal-loader-note {
+            margin-top: 18px;
+            font-size: 1.17rem;
+            color: var(--accent);
+        }
+    </style>
 </head>
 <body>
-  <div class="container" id="main-container">
-    <h1>EmpireBet Rollover</h1>
-    <div id="login-form">
-      <div class="input-pin">
-        <input type="password" id="pin-input" pattern="\d*" inputmode="numeric"
-          maxlength="4" placeholder="PIN" autocomplete="off"/>
-      </div>
-      <button onclick="onLogin()">Open Profile</button>
-      <div id="login-error" class="error-msg" style="display:none;"></div>
+<div id="main-content">
+    <!-- Loader -->
+    <div id="loader-container">
+        <div class="empire-loader"></div>
+        <div id="note">EmpireBet, your trusted guide for Football Betting Tips.</div>
     </div>
-    <div id="loader-section" style="display:none;">
-      <div class="loader"></div>
-      <div class="loader-text blink" id="loader-text">Opening Profile</div>
+    <!-- PIN Input -->
+    <div id="pin-input-section">
+        <form id="pin-form" autocomplete="off">
+            <label for="pin">Enter your 4-digit PIN to proceed:</label>
+            <input type="tel" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" minlength="4" id="pin" required placeholder="PIN" autocomplete="one-time-code">
+            <br>
+            <button type="submit">Login</button>
+            <div class="error" id="pin-error"></div>
+        </form>
     </div>
-    <div id="profile-section" style="display:none;"></div>
-    <div id="generate-loader" style="display:none;">
-      <div class="loader"></div>
-      <div class="loader-text blink" id="generating-text">Generating code...</div>
+    <!-- Profile Section -->
+    <div id="profile-section">
+        <h2>EmpireBet Profile</h2>
+        <div class="profile-data">
+            <div><span class="profile-label">PIN:</span> <span id="profile-pin"></span></div>
+            <div><span class="profile-label">Ticket ID:</span> <span id="profile-ticket"></span></div>
+            <div>
+                <span class="expires-label">Ticket Expires:</span> <span id="profile-expiry"></span>
+            </div>
+        </div>
+        <div id="profile-expired" style="display:none;">
+            <div class="expire-note">Your Ticket has expired!</div>
+            <div class="renew-info">Renew now to continue enjoying betting tips.</div>
+            <a href="#" class="renew-btn" id="renew-btn-profile">Renew Ticket</a>
+        </div>
+        <button class="generate-btn" id="generate-tips-btn" style="display:none;">Generate Betting Tips</button>
     </div>
-    <div id="code-gen-message" style="display:none;">
-      <div class="loader-text" id="code-gen-info">Code Generated, Paste your code in the provided link. You will be redirected shortly!</div>
+    <!-- Access Denied -->
+    <div id="access-denied">
+        <div>
+            Access Denied.<br>
+            Your Ticket has expired.<br>
+            Please renew your Ticket to continue accessing this month's betting tips.
+        </div>
+        <a href="#" class="renew-btn" id="renew-btn-denied">Renew Ticket</a>
     </div>
-    <div id="notice-section" style="display:none;">
-      <div class="notice-msg" id="notice-msg"></div>
+</div>
+<!-- Tips Frame Overlay -->
+<div id="tips-frame-overlay">
+    <div id="tips-frame">
+        <div id="tips-frame-header">
+            <span>Betting Tips</span>
+            <button class="close-btn" id="close-tips-frame">&times;</button>
+        </div>
+        <div id="tips-frame-content">
+            <!-- Tips will be inserted here -->
+        </div>
     </div>
-    <div id="renew-loader" style="display:none;">
-      <div class="loader"></div>
-      <div class="loader-text blink">You will be redirected shortly...</div>
+</div>
+<!-- Loader for internal actions -->
+<div id="internal-loader">
+    <div class="empire-loader"></div>
+    <div id="internal-loader-note"></div>
+</div>
+<!-- Renew Modal -->
+<div id="renew-msg-modal">
+    <div id="renew-msg-box">
+        <div id="renew-msg-text"></div>
+        <button class="modal-btn" id="renew-modal-btn">Proceed</button>
     </div>
-    <div class="branding">EmpireBet &copy; 2025</div>
-  </div>
-  <script>
-    // All users have the same booking code now
-    const GLOBAL_BOOKING_CODE = "empirebot_augustxx355";
-    // This is the link users are redirected to after generating the betting code
-    const GLOBAL_BETTING_CODE_LINK = "https://www.sportybet.com/ng/m/code-hub/load-code?source=home";
-    
-    // Set up users and their Ticket IDs (admin provides)
-    const users = [
-      {
-        pin: "2004",
-        expiry: "2025-08-31",
-        ticketId: "EMPIRE-007-PUCD",
-        renewLink: "https://paystack.shop/pay/qamw5-f3cr"
-      },
-      {
-        pin: "3572",
-        expiry: "2025-08-31",
-        ticketId: "EMPIRE-009-ROYZ",
-        renewLink: "https://paystack.shop/pay/qamw5-f3cr"
-      },
-      {
-        pin: "2468",
-        expiry: "2025-07-30",
-        ticketId: "EMPIRE-101-FGHI",
-        renewLink: "https://paystack.shop/pay/qamw5-f3cr"
-      }
-      // Add more users as needed
-    ];
+</div>
+<script>
+    // === CONFIGURATION ===
+    // Put your loader image url here:
+    const LOADER_IMAGE_URL = 'your-image-url.png'; // (required: replace with your image url)
+    // Allowed users - 4 digit PINs only
+    const USERS = {
+        // pin: { ticketId, expiry: Date String (ISO, at 00:00 of expiration date), renewLink }
+        '3572': {
+            ticketId: 'BOThhog-August-2025',
+            expiry: '2025-08-30T00:00:00',
+            renewLink: 'https://paystack.com/pay/empire-renew'
+        },
+        '2016': {
+            ticketId: 'BOTxgfd-August-2025',
+            expiry: '2025-10-01T00:00:00',
+            renewLink: 'https://paystack.com/pay/empire-renew'
+        },
+        '3921': {
+            ticketId: 'BOTfdtg-August-2025',
+            expiry: '2025-09-27T00:00:00',
+            renewLink: 'https://paystack.com/pay/empire-renew'
+        }
+    };
+    // ===============
 
-    function formatDate(dateStr) {
-      let d = new Date(dateStr);
-      return d.toLocaleDateString(undefined, {month: 'short', day: 'numeric', year: 'numeric'});
-    }
-
-    // Get today's date in YYYY-MM-DD
-    function today() {
-      const d = new Date();
-      return d.toISOString().split('T')[0];
-    }
-
-    // PIN to User
-    function findUserByPIN(pin) {
-      return users.find(u => u.pin === pin);
-    }
-
-    // Restrict input to only numbers, up to 4 digits
-    document.getElementById('pin-input').addEventListener('input', function(e) {
-      this.value = this.value.replace(/\D/g, '').slice(0, 4);
+    // Set loader image everywhere
+    document.querySelectorAll('.empire-loader').forEach(el => {
+        el.style.backgroundImage = `url('${LOADER_IMAGE_URL}')`;
     });
 
-    let currentUser = null;
-    let codeGenerated = false;
+    // Show loader when page loads
+    document.getElementById('loader-container').style.display = 'flex';
+    document.getElementById('note').style.display = 'block';
 
-    // Login handler
-    function onLogin() {
-      const pin = document.getElementById('pin-input').value;
-      document.getElementById('login-error').style.display = 'none';
-      if (pin.length !== 4) {
-        showError("Please enter your 4-digit PIN.");
-        return;
-      }
-      const user = findUserByPIN(pin);
-      if (!user) {
-        showError("Access denied! The PIN you entered is not correct.");
-        return;
-      }
-      currentUser = user;
-      showLoader();
-    }
+    // Hide everything else
+    hideAllExcept('loader-container');
 
-    function showError(msg) {
-      let el = document.getElementById('login-error');
-      el.innerText = msg;
-      el.style.display = '';
-    }
+    setTimeout(() => {
+        hideAllExcept('pin-input-section');
+    }, 6000);
 
-    // Show loader for 4 blinks then show profile
-    function showLoader() {
-      document.getElementById('login-form').style.display = 'none';
-      document.getElementById('profile-section').style.display = 'none';
-      document.getElementById('loader-section').style.display = '';
-      let blinkCount = 0;
-      let loaderText = document.getElementById('loader-text');
-      loaderText.classList.add('blink');
-      const loaderInt = setInterval(() => {
-        blinkCount++;
-        if (blinkCount >= 4) {
-          clearInterval(loaderInt);
-          loaderText.classList.remove('blink');
-          showProfile();
-        }
-      }, 700);
-    }
-
-    // Profile rendering
-    function showProfile() {
-      document.getElementById('loader-section').style.display = 'none';
-      document.getElementById('notice-section').style.display = 'none';
-      const expired = today() > currentUser.expiry;
-      let html = `<div class="profile-section">`;
-
-      if (!expired) {
-        html += `
-          <div class="profile-label">Your PIN</div>
-          <div class="profile-pin">${currentUser.pin}</div>
-          <div class="profile-expiry">Expires: ${formatDate(currentUser.expiry)}</div>
-          <div class="ticket-section">
-            <div class="title">Your Ticket ID For The Month</div>
-            <div class="ticket-id-box" id="ticket-id-box">${currentUser.ticketId}</div>
-            <div style="margin-top: 16px;">
-              <button class="generate-btn" id="generate-btn">Generate Betting Code</button>
-            </div>
-            <div id="booking-code-section" style="display:none;">
-              <!-- No booking code will be shown here anymore -->
-            </div>
-          </div>
-        `;
-      } else {
-        html += `
-          <div class="expire-notice">
-            Your Ticket Has Expired. Payment getway is open every 1st day of the Month.<br>
-            Resubscribe to gain back access
-          </div>
-          <button class="renew-btn" id="renew-btn">Renew Ticket</button>
-        `;
-      }
-
-      html += `</div>`;
-
-      document.getElementById('profile-section').innerHTML = html;
-      document.getElementById('profile-section').style.display = '';
-
-      if (!expired) {
-        document.getElementById('generate-btn').addEventListener('click', onGenerateBettingCode);
-      } else {
-        document.getElementById('renew-btn').onclick = onRenewTicket;
-      }
-      codeGenerated = false;
-    }
-
-    // Betting code generation process with time restriction
-    function onGenerateBettingCode() {
-      // Time range: 10:00 (AM) to 20:00 (8:00 PM)
-      const now = new Date();
-      const currentHour = now.getHours();
-      const currentMinute = now.getMinutes();
-
-      // Time boundaries in minutes since midnight
-      const minMinutes = 10 * 60; // 10:00 AM
-      const maxMinutes = 20 * 60; // 8:00 PM
-      const nowMinutes = currentHour * 60 + currentMinute;
-
-      // If not in the valid range, show notice
-      if (nowMinutes < minMinutes || nowMinutes >= maxMinutes) {
-        let msg = "";
-        if (nowMinutes < minMinutes) {
-          // Before 10:00 AM
-          msg = `You can only generate the betting code from <b>10:00 AM</b> up to <b>8:00 PM</b> daily.<br>Please try again at <span style="color:#3a86ff"><b>10:00 AM</b></span>.`;
-        } else {
-          // After 8:00 PM
-          msg = `Betting code generation has closed for today.<br>Please try again tomorrow from <span style="color:#3a86ff"><b>10:00 AM</b></span> up to <span style="color:#3a86ff"><b>8:00 PM</b></span>.`;
-        }
-        document.getElementById('profile-section').style.display = 'none';
-        document.getElementById('notice-msg').innerHTML = msg;
-        document.getElementById('notice-section').style.display = '';
-        return;
-      }
-
-      if (codeGenerated) return;
-      codeGenerated = true;
-      document.getElementById('profile-section').style.display = 'none';
-      document.getElementById('notice-section').style.display = 'none';
-      document.getElementById('generate-loader').style.display = '';
-      document.getElementById('generating-text').innerText = "Generating code...";
-
-      setTimeout(() => {
-        document.getElementById('generate-loader').style.display = 'none';
-        // Auto copy booking code
-        copyBookingCode();
-        // Show the special message (not the code)
-        document.getElementById('code-gen-info').innerHTML =
-          `Paste your Code in the site. You will be redirected in 6 seconds.`;
-        document.getElementById('code-gen-message').style.display = '';
-
-        // After 6 seconds, redirect
-        setTimeout(() => {
-          document.getElementById('code-gen-message').style.display = 'none';
-          window.location.href = GLOBAL_BETTING_CODE_LINK;
-        }, 6000);
-      }, 2000);
-    }
-
-    // Copy booking code to clipboard (user doesn't see it)
-    function copyBookingCode() {
-      // Use the Clipboard API
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(GLOBAL_BOOKING_CODE);
-      } else {
-        // Fallback for older browsers
-        const tempInput = document.createElement('input');
-        tempInput.value = GLOBAL_BOOKING_CODE;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempInput);
-      }
-    }
-
-    // Renew Ticket Handler
-    function onRenewTicket() {
-      document.getElementById('profile-section').style.display = 'none';
-      document.getElementById('renew-loader').style.display = '';
-      setTimeout(() => {
-        window.location.href = currentUser.renewLink;
-      }, 1800);
-    }
-
-    // Prevent copy of booking code as before (optional, not needed anymore, but kept for safety)
-    document.addEventListener('copy', function(e) {
-      if (!codeGenerated) {
-        if (document.activeElement && document.activeElement.id === 'booking-box') {
-          e.preventDefault();
-          alert("You must generate the betting code first!");
-        }
-      }
-    });
-
-    document.addEventListener('contextmenu', function(e) {
-      if (e.target && e.target.id === 'booking-box' && !codeGenerated) {
+    // PIN Login logic
+    let loggedInPin = null;
+    document.getElementById('pin-form').onsubmit = function(e) {
         e.preventDefault();
-        alert("You need to generate the betting code first.");
-      }
+        const pinInput = document.getElementById('pin');
+        const pin = pinInput.value.trim();
+        // Validate: must be 4 digit numeric
+        if (!/^\d{4}$/.test(pin)) {
+            document.getElementById('pin-error').innerText = 'PIN must be 4 digits.';
+            pinInput.focus();
+            return;
+        }
+        if (!USERS[pin]) {
+            document.getElementById('pin-error').innerText = 'Invalid PIN. Please try again.';
+            pinInput.focus();
+            return;
+        }
+        document.getElementById('pin-error').innerText = '';
+        showInternalLoader('Logging in...');
+        setTimeout(() => {
+            hideInternalLoader();
+            loggedInPin = pin;
+            if (isExpiredAtMidnight(USERS[pin].expiry)) {
+                showAccessDenied(pin);
+            } else {
+                showProfile(pin);
+            }
+        }, 2200);
+    };
+
+    function showProfile(pin) {
+        hideAllExcept('profile-section');
+        document.getElementById('profile-pin').innerText = pin;
+        document.getElementById('profile-ticket').innerText = USERS[pin].ticketId;
+        document.getElementById('profile-expiry').innerText = formatDate(USERS[pin].expiry);
+
+        const expired = isExpiredAtMidnight(USERS[pin].expiry);
+        document.getElementById('profile-expired').style.display = expired ? 'block' : 'none';
+        document.getElementById('generate-tips-btn').style.display = expired ? 'none' : 'inline-block';
+
+        // Attach renewal handler for profile section
+        document.getElementById('renew-btn-profile').onclick = function(e) {
+            e.preventDefault();
+            showRenewModal(USERS[pin].renewLink);
+        };
+    }
+
+    function showAccessDenied(pin) {
+        hideAllExcept('access-denied');
+        // Always show the Renew button when expired, attach the link
+        document.getElementById('renew-btn-denied').onclick = function(e) {
+            e.preventDefault();
+            showRenewModal(USERS[pin].renewLink);
+        };
+    }
+
+    // Renew Modal functions
+    function showRenewModal(renewLink) {
+        // Custom statement: "Please fill in your correct details."
+        document.getElementById('renew-msg-text').innerText = "Please fill in your correct details.";
+        document.getElementById('renew-msg-modal').style.display = 'flex';
+        document.getElementById('renew-modal-btn').onclick = function() {
+            document.getElementById('renew-msg-modal').style.display = 'none';
+            // Immediately redirect to the link
+            window.location.href = renewLink;
+        };
+    }
+
+    // Generate Betting Tips
+    document.getElementById('generate-tips-btn').onclick = function() {
+        showInternalLoader('Generating Tips...');
+        setTimeout(() => {
+            hideInternalLoader();
+            showTipsFrame();
+        }, 6000);
+    };
+
+    // Tips Overlay Logic
+    document.getElementById('tips-frame-overlay').style.display = 'none';
+    document.getElementById('close-tips-frame').onclick = function() {
+        document.getElementById('tips-frame-overlay').style.display = 'none';
+    };
+
+    function showTipsFrame() {
+        document.getElementById('tips-frame-content').innerHTML = getBettingTipsHtml();
+        document.getElementById('tips-frame-overlay').style.display = 'flex';
+    }
+
+    // Hide all except the given id
+    function hideAllExcept(id) {
+        ['loader-container', 'pin-input-section', 'profile-section', 'access-denied'].forEach(function(sec) {
+            document.getElementById(sec).style.display = (sec === id) ? ((id === 'loader-container') ? 'flex' : 'block') : 'none';
+        });
+        document.getElementById('tips-frame-overlay').style.display = 'none';
+        document.getElementById('internal-loader').style.display = 'none';
+        document.getElementById('renew-msg-modal').style.display = 'none';
+    }
+
+    function showInternalLoader(note) {
+        document.getElementById('internal-loader-note').innerText = note || '';
+        document.getElementById('internal-loader').style.display = 'flex';
+        document.getElementById('main-content').style.opacity = 0.4;
+    }
+    function hideInternalLoader() {
+        document.getElementById('internal-loader').style.display = 'none';
+        document.getElementById('main-content').style.opacity = 1;
+    }
+
+    // Format as DD-MM-YYYY
+    function formatDate(iso) {
+        const d = new Date(iso);
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        return `${dd}-${mm}-${yyyy}`;
+    }
+    // Expiration takes effect at 00:00 of expiration date (not after that)
+    function isExpiredAtMidnight(iso) {
+        const now = new Date();
+        const expDate = new Date(iso);
+        return now >= expDate;
+    }
+
+    // Betting Tips HTML & Layout
+    function getBettingTipsHtml() {
+        const now = new Date();
+        const dd = String(now.getDate()).padStart(2, '0');
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const yyyy = now.getFullYear();
+        const displayDate = `${dd}-${mm}-${yyyy}`;
+        return `
+            <div style="font-weight:600;font-size:1.07rem;margin-bottom:12px;">
+                <span class="tip-date">Betting Tips for 👉 ${displayDate}</span>
+            </div>
+            <ul class="betting-tips-list">
+                <li>
+                    <div class="game-league">ENGLAND - PREMIER LEAGUE</div>
+                    <div class="game-match">Chelsea <span style="color:#eee">🆚</span> Wolves <span class="pick-label">Pick: 1</span></div>
+                    <div class="game-match">Everton <span style="color:#eee">🆚</span> Arsenal <span class="pick-label">Pick: X2</span></div>
+                </li>
+                <li>
+                    <div class="game-league">CHINA - SUPER LEAGUE</div>
+                    <div class="game-match">Fenenbacan <span style="color:#eee">🆚</span> Levrmton Town <span class="pick-label">Pick: ov2.5</span></div>
+                </li>
+            </ul>
+            <div style="font-size:0.97rem;color:#ffe066;margin-top:6px;">
+                <em>Scroll inside this frame to view all betting tips and picks.</em>
+            </div>
+        `;
+    }
+
+    // Hide loader if user goes back
+    window.onpopstate = function() {
+        hideInternalLoader();
+        hideAllExcept('pin-input-section');
+    };
+
+    // Immediately restrict access if expired and logged in (show Access Denied with renew)
+    setInterval(() => {
+        if (loggedInPin && USERS[loggedInPin] && isExpiredAtMidnight(USERS[loggedInPin].expiry)) {
+            showAccessDenied(loggedInPin);
+        }
+    }, 15000);
+
+    // Only allow number input and prevent non-numeric input
+    document.getElementById('pin').addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g,'').slice(0,4);
     });
-  </script>
+</script>
 </body>
 </html>
