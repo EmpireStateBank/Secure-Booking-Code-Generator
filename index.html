@@ -52,7 +52,7 @@
             box-sizing: border-box;
             margin: 20px auto;
             animation: spin 1s linear infinite;
-            background: url('your-image-url.png') center center/cover no-repeat;
+            background: url('AddText_07-29-05.39.03.png') center center/cover no-repeat;
         }
         @keyframes spin {
             0% { transform: rotate(0deg);}
@@ -296,6 +296,12 @@
         .game-match {
             margin-left: 6px;
         }
+        .game-time {
+            color: #6fffd6;
+            font-size: 0.98rem;
+            margin-left: 7px;
+            font-weight: 500;
+        }
         .pick-label {
             color: var(--accent);
             font-weight: 600;
@@ -303,6 +309,81 @@
         .tip-date {
             color: var(--accent);
             font-weight: 600;
+        }
+        .booking-section {
+            display: flex;
+            align-items: center;
+            margin-top: 18px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .booking-code-label {
+            color: #ffe066;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 1.07rem;
+            letter-spacing: 0.5px;
+            margin-right: 8px;
+        }
+        .booking-code-box {
+            background: #202d24;
+            color: #ffe066;
+            border-radius: 7px;
+            padding: 8px 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 1.3px;
+            box-shadow: 0 2px 8px #0003;
+            user-select: none;
+            -webkit-user-select: none;
+            pointer-events: none; /* disables copy */
+            position: relative;
+            margin-right: 4px;
+        }
+        .booking-actions {
+            display: flex;
+            align-items: center;
+        }
+        .copy-link-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 5px;
+            cursor: pointer;
+            color: var(--accent);
+            background: #232d1e;
+            border-radius: 50%;
+            font-size: 1.36rem;
+            width: 32px;
+            height: 32px;
+            transition: background 0.16s, color 0.16s;
+            text-decoration: none;
+            border: 2px solid var(--primary);
+        }
+        .copy-link-icon:hover {
+            background: var(--primary);
+            color: #161b12;
+            border-color: #fff700;
+        }
+        @media (max-width: 600px) {
+            #profile-section, #access-denied {
+                padding: 16px 2vw;
+                min-width: unset;
+            }
+            #tips-frame {
+                width: 99vw;
+                max-width: 100vw;
+                height: 74vh;
+                padding: 0 0.5vw;
+            }
+            #renew-msg-box {
+                padding: 22px 8vw 20px 8vw;
+            }
+            .booking-section {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 7px;
+            }
         }
         #renew-msg-modal {
             display: none;
@@ -338,21 +419,6 @@
         }
         #renew-msg-box .modal-btn:hover {
             background: #18ff96;
-        }
-        @media (max-width: 600px) {
-            #profile-section, #access-denied {
-                padding: 16px 2vw;
-                min-width: unset;
-            }
-            #tips-frame {
-                width: 99vw;
-                max-width: 100vw;
-                height: 74vh;
-                padding: 0 0.5vw;
-            }
-            #renew-msg-box {
-                padding: 22px 8vw 20px 8vw;
-            }
         }
         #internal-loader {
             display: none;
@@ -441,8 +507,7 @@
 </div>
 <script>
     // === CONFIGURATION ===
-    // Put your loader image url here:
-    const LOADER_IMAGE_URL = 'AddText_07-29-05.39.03.png'; // (required: replace with your image url)
+    const LOADER_IMAGE_URL = 'AddText_07-29-05.39.03.png'; // Loader image url
     // Allowed users - 4 digit PINs only
     const USERS = {
         // pin: { ticketId, expiry: Date String (ISO, at 00:00 of expiration date), renewLink }
@@ -462,6 +527,11 @@
             renewLink: 'https://paystack.com/pay/empire-renew'
         }
     };
+
+    // --- SPORTYBET BOOKING CODE & LINK (edit as needed) ---
+    const SPORTYBET_BOOKING_CODE = "5A7B8C9"; // Change to your actual booking code
+    const SPORTYBET_URL = "https://www.sportybet.com/ng/sportybook/";
+
     // ===============
 
     // Set loader image everywhere
@@ -520,7 +590,6 @@
         document.getElementById('profile-expired').style.display = expired ? 'block' : 'none';
         document.getElementById('generate-tips-btn').style.display = expired ? 'none' : 'inline-block';
 
-        // Attach renewal handler for profile section
         document.getElementById('renew-btn-profile').onclick = function(e) {
             e.preventDefault();
             showRenewModal(USERS[pin].renewLink);
@@ -529,26 +598,21 @@
 
     function showAccessDenied(pin) {
         hideAllExcept('access-denied');
-        // Always show the Renew button when expired, attach the link
         document.getElementById('renew-btn-denied').onclick = function(e) {
             e.preventDefault();
             showRenewModal(USERS[pin].renewLink);
         };
     }
 
-    // Renew Modal functions
     function showRenewModal(renewLink) {
-        // Custom statement: "Please fill in your correct details."
         document.getElementById('renew-msg-text').innerText = "Please fill in your correct details.";
         document.getElementById('renew-msg-modal').style.display = 'flex';
         document.getElementById('renew-modal-btn').onclick = function() {
             document.getElementById('renew-msg-modal').style.display = 'none';
-            // Immediately redirect to the link
             window.location.href = renewLink;
         };
     }
 
-    // Generate Betting Tips
     document.getElementById('generate-tips-btn').onclick = function() {
         showInternalLoader('Generating Tips...');
         setTimeout(() => {
@@ -557,7 +621,6 @@
         }, 6000);
     };
 
-    // Tips Overlay Logic
     document.getElementById('tips-frame-overlay').style.display = 'none';
     document.getElementById('close-tips-frame').onclick = function() {
         document.getElementById('tips-frame-overlay').style.display = 'none';
@@ -566,9 +629,16 @@
     function showTipsFrame() {
         document.getElementById('tips-frame-content').innerHTML = getBettingTipsHtml();
         document.getElementById('tips-frame-overlay').style.display = 'flex';
+        // Attach copy & go handler for booking code icon
+        const copyIcon = document.getElementById('copy-booking-code-icon');
+        if (copyIcon) {
+            copyIcon.onclick = function(e) {
+                e.preventDefault();
+                copyBookingCodeAndOpenSportybet();
+            };
+        }
     }
 
-    // Hide all except the given id
     function hideAllExcept(id) {
         ['loader-container', 'pin-input-section', 'profile-section', 'access-denied'].forEach(function(sec) {
             document.getElementById(sec).style.display = (sec === id) ? ((id === 'loader-container') ? 'flex' : 'block') : 'none';
@@ -588,7 +658,6 @@
         document.getElementById('main-content').style.opacity = 1;
     }
 
-    // Format as DD-MM-YYYY
     function formatDate(iso) {
         const d = new Date(iso);
         const dd = String(d.getDate()).padStart(2, '0');
@@ -596,64 +665,130 @@
         const yyyy = d.getFullYear();
         return `${dd}-${mm}-${yyyy}`;
     }
-    // Expiration takes effect at 00:00 of expiration date (not after that)
     function isExpiredAtMidnight(iso) {
         const now = new Date();
         const expDate = new Date(iso);
         return now >= expDate;
     }
 
-    // Betting Tips HTML & Layout
+    // Copy booking code and go to Sportybet
+    function copyBookingCodeAndOpenSportybet() {
+        if (navigator && navigator.clipboard) {
+            navigator.clipboard.writeText(SPORTYBET_BOOKING_CODE).then(function() {
+                window.open(SPORTYBET_URL, "_blank");
+            }, function(err) {
+                alert("Copy failed, please copy manually: " + SPORTYBET_BOOKING_CODE);
+                window.open(SPORTYBET_URL, "_blank");
+            });
+        } else {
+            // Fallback old browsers
+            const tempInput = document.createElement("input");
+            tempInput.style.position = "absolute";
+            tempInput.style.opacity = "0";
+            tempInput.value = SPORTYBET_BOOKING_CODE;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+                window.open(SPORTYBET_URL, "_blank");
+            } catch (err) {
+                alert("Copy failed, please copy manually: " + SPORTYBET_BOOKING_CODE);
+                window.open(SPORTYBET_URL, "_blank");
+            }
+            document.body.removeChild(tempInput);
+        }
+    }
+
+    // Betting Tips HTML & Layout with times and booking code section
     function getBettingTipsHtml() {
+        const matches = [
+            {
+                league: "🏟️ Brazil - Serie C",
+                games: [
+                    { teams: "Tombense 🆚 Caxias", pick: "X2", time: "20:00" }
+                ]
+            },
+            {
+                league: "🏟️ Czech Republic - FNL",
+                games: [
+                    { teams: "Ustinad Labern 🆚 Lisen", pick: "1X", time: "18:30" }
+                ]
+            },
+            {
+                league: "🏟️ Indonesia - Liga 1",
+                games: [
+                    { teams: "PSBS Biak 🆚 Pusamania Borneo", pick: "X2", time: "14:00" },
+                    { teams: "Persijap 🆚 Persis Bandung", pick: "X2", time: "16:30" }
+                ]
+            },
+            {
+                league: "🏟️ Portugal - Campeonato de Portugal",
+                games: [
+                    { teams: "Tirsense 🆚 Vianense", pick: "1X", time: "21:15" }
+                ]
+            },
+            {
+                league: "🏟️ Faroe Island - Meistaradeildlin",
+                games: [
+                    { teams: "B 36 Torshavn 🆚 KI Klaksvik", pick: "X2", time: "19:00" }
+                ]
+            },
+            {
+                league: "🏟️ Russia - First League",
+                games: [
+                    { teams: "Torpedo Moskva 🆚 Ural", pick: "X2", time: "17:45" }
+                ]
+            }
+        ];
+
         const now = new Date();
         const dd = String(now.getDate()).padStart(2, '0');
         const mm = String(now.getMonth() + 1).padStart(2, '0');
         const yyyy = now.getFullYear();
         const displayDate = `${dd}-${mm}-${yyyy}`;
-        return `
+
+        let html = `
             <div style="font-weight:600;font-size:1.07rem;margin-bottom:12px;">
                 <span class="tip-date">Betting Tips for 🗓️ ${displayDate}</span>
             </div>
             <ul class="betting-tips-list">
-                <li>
-                    <div class="game-league">🏟️ Brazil - Serie C</div>
-                    <div class="game-match">Tombense <span style="color:#eee">🆚</span> Caxias <span class="pick-label">Pick: X2</span></div>
-                </li>
-                <li>
-                    <div class="game-league">🏟️ Czech Republic - FNL</div>
-                    <div class="game-match">Ustinad Labern <span style="color:#eee">🆚</span> Lisen <span class="pick-label">Pick: 1X</span></div>
-                </li>
-                <li>
-                    <div class="game-league">🏟️ Indonesia - Liga 1</div>
-                    <div class="game-match">PSBS Biak <span style="color:#eee">🆚</span> Pusamania Borneo <span class="pick-label">Pick: X2</span></div>
-                    <div class="game-match">Persijap <span style="color:#eee">🆚</span> Persis Bandung <span class="pick-label">Pick: X2</span></div>
-                </li>
-                <li>
-                    <div class="game-league">🏟️ Portugal - Campeonato de Portugal</div>
-                    <div class="game-match">Tirsense <span style="color:#eee">🆚</span> Vianense <span class="pick-label">Pick: 1X</span></div>
-                </li>
-                <li>
-                    <div class="game-league">🏟️ Faroe Island - Meistaradeildlin</div>
-                    <div class="game-match">B 36 Torshavn <span style="color:#eee">🆚</span> KI Klaksvik <span class="pick-label">Pick: X2</span></div>
-                </li>
-                <li>
-                    <div class="game-league">🏟️ Russia - First League</div>
-                    <div class="game-match">Torpedo Moskva <span style="color:#eee">🆚</span> Ural <span class="pick-label">Pick: X2</span></div>
-                </li>
-            </ul>
+        `;
+        matches.forEach(match => {
+            html += `<li>
+                <div class="game-league">${match.league}</div>`;
+            match.games.forEach(game => {
+                html += `<div class="game-match">${game.teams}
+                    <span class="pick-label">Pick: ${game.pick}</span>
+                    <span class="game-time">Kickoff: ${game.time}</span>
+                </div>`;
+            });
+            html += `</li>`;
+        });
+        html += `</ul>
+            <div class="booking-section">
+                <span class="booking-code-label">Sportybet code:</span>
+                <div class="booking-actions">
+                    <span class="booking-code-box" id="booking-code-box" title="Sportybet code cannot be copied manually">${SPORTYBET_BOOKING_CODE}</span>
+                    <a href="#" id="copy-booking-code-icon" class="copy-link-icon" title="Copy &amp; Go to SportyBet" tabindex="0" aria-label="Copy Booking Code and Open">
+                        <!-- Copy SVG icon -->
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" style="display:inline;vertical-align:middle;">
+                            <path d="M6 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2v-1h1v2a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2V2H6zm3 0v2h5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h2zm0 2h5a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
             <div style="font-size:0.97rem;color:#ffe066;margin-top:6px;">
-                <em>TOTAL ODD is 4.10 Games are Uploaded By ⏱️ 06:00 AM</em>
+                <em>TOTAL ODD is 4.10. Games are Uploaded By ⏱️ 06:00 AM</em>
             </div>
         `;
+        return html;
     }
 
-    // Hide loader if user goes back
     window.onpopstate = function() {
         hideInternalLoader();
         hideAllExcept('pin-input-section');
     };
 
-    // Immediately restrict access if expired and logged in (show Access Denied with renew)
     setInterval(() => {
         if (loggedInPin && USERS[loggedInPin] && isExpiredAtMidnight(USERS[loggedInPin].expiry)) {
             showAccessDenied(loggedInPin);
