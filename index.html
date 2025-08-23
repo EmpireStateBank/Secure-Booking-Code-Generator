@@ -37,7 +37,8 @@
             align-items: center;
             flex-direction: column;
         }
-        #loader-container {
+        #loader-container,
+        #custom-loading-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(10,12,18,0.97);
@@ -53,11 +54,9 @@
             margin: 20px auto;
             animation: spin 1s linear infinite;
             background: url('AddText_07-29-05.39.03.png') center center/cover no-repeat;
+            background-size: 54px 54px;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg);}
-            100% { transform: rotate(360deg);}
-        }
+        @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
         #note {
             margin-top: 10px;
             font-size: 1.2rem;
@@ -227,7 +226,7 @@
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(10,12,18,0.78);
             z-index: 10001;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
         }
@@ -274,41 +273,63 @@
             padding: 16px 22px 16px 22px;
             overflow-y: auto;
         }
-        .betting-tips-list {
-            font-size: 1.12rem;
-            margin-bottom: 10px;
-            padding-left: 0;
-            list-style: none;
+        .fixture-card {
+            background: #21242b;
+            border-radius: 10px;
+            box-shadow: 0 1px 8px #0003;
+            display: flex;
+            align-items: center;
+            margin-bottom: 13px;
+            padding: 9px 13px;
+            gap: 13px;
         }
-        .betting-tips-list li {
-            margin-bottom: 10px;
-            background: #1d211c;
-            padding: 10px 12px;
-            border-radius: 7px;
-            font-weight: 500;
-            box-shadow: 0 1px 5px #0004;
+        .fixture-country-logo {
+            background: #fff;
+            object-fit: contain;
+            border-radius: 2px;
+            border: 1px solid #333;
+            min-width: 32px;
+            min-height: 22px;
+            max-width: 32px;
+            max-height: 22px;
         }
-        .game-league {
+        .fixture-league {
             color: var(--primary);
             font-weight: 600;
-            font-size: 1.08rem;
+            font-size: 1.03rem;
+            min-width: 100px;
         }
-        .game-match {
-            margin-left: 6px;
-        }
-        .game-time {
+        .fixture-time {
             color: #6fffd6;
-            font-size: 0.98rem;
-            margin-left: 7px;
+            font-size: 1.01rem;
+            font-weight: 600;
+            min-width: 48px;
+            text-align: center;
+        }
+        .fixture-teams {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            justify-content: center;
+            gap: 8px;
+        }
+        .fixture-team-name {
+            color: #fafbfa;
             font-weight: 500;
+            font-size: 1.06rem;
+            margin: 0 3px;
         }
-        .pick-label {
-            color: var(--accent);
-            font-weight: 600;
+        .fixture-vs {
+            color: #aaa;
+            font-size: 1.09rem;
+            margin: 0 4px;
         }
-        .tip-date {
+        .fixture-pick {
             color: var(--accent);
-            font-weight: 600;
+            font-weight: 700;
+            min-width: 42px;
+            text-align: center;
+            font-size: 1.09rem;
         }
         .booking-section {
             display: flex;
@@ -336,7 +357,7 @@
             box-shadow: 0 2px 8px #0003;
             user-select: none;
             -webkit-user-select: none;
-            pointer-events: none; /* disables copy */
+            pointer-events: none;
             position: relative;
             margin-right: 4px;
         }
@@ -376,75 +397,19 @@
                 height: 74vh;
                 padding: 0 0.5vw;
             }
-            #renew-msg-box {
-                padding: 22px 8vw 20px 8vw;
-            }
-            .booking-section {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 7px;
-            }
-        }
-        #renew-msg-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(10,12,18,0.86);
-            z-index: 20000;
-            align-items: center;
-            justify-content: center;
-        }
-        #renew-msg-box {
-            background: #191c22;
-            border-radius: 14px;
-            color: var(--text-main);
-            box-shadow: 0 4px 32px #0009;
-            padding: 34px 26px 28px 26px;
-            text-align: center;
-            max-width: 90vw;
-            min-width: 250px;
-            font-size: 1.18rem;
-            border: 2px solid var(--primary);
-        }
-        #renew-msg-box .modal-btn {
-            margin-top: 22px;
-            background: var(--btn-bg);
-            color: var(--btn-txt);
-            border: none;
-            border-radius: 6px;
-            padding: 11px 28px;
-            font-size: 1.04rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        #renew-msg-box .modal-btn:hover {
-            background: #18ff96;
-        }
-        #internal-loader {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(10,12,18,0.94);
-            z-index: 10300;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        #internal-loader-note {
-            margin-top: 18px;
-            font-size: 1.17rem;
-            color: var(--accent);
+            .fixture-league { min-width: 0; font-size: 0.95rem; }
+            .fixture-card { flex-direction: column; gap: 6px; align-items: flex-start;}
+            .fixture-teams { flex-direction: row; justify-content: flex-start;}
+            .fixture-country-logo { width: 24px; height: 20px; min-width: 24px; min-height: 20px; max-width: 24px; max-height: 20px;}
         }
     </style>
 </head>
 <body>
 <div id="main-content">
-    <!-- Loader -->
     <div id="loader-container">
         <div class="empire-loader"></div>
         <div id="note">EmpireBet, your trusted guide for Football Betting Tips.</div>
     </div>
-    <!-- PIN Input -->
     <div id="pin-input-section">
         <form id="pin-form" autocomplete="off">
             <label for="pin">Enter your 4-digit PIN to proceed:</label>
@@ -454,7 +419,6 @@
             <div class="error" id="pin-error"></div>
         </form>
     </div>
-    <!-- Profile Section -->
     <div id="profile-section">
         <h2>EmpireBet Profile</h2>
         <div class="profile-data">
@@ -471,7 +435,6 @@
         </div>
         <button class="generate-btn" id="generate-tips-btn" style="display:none;">Generate Betting Tips</button>
     </div>
-    <!-- Access Denied -->
     <div id="access-denied">
         <div>
             Access Denied.<br>
@@ -481,178 +444,139 @@
         <a href="#" class="renew-btn" id="renew-btn-denied">Renew Ticket</a>
     </div>
 </div>
-<!-- Tips Frame Overlay -->
 <div id="tips-frame-overlay">
     <div id="tips-frame">
         <div id="tips-frame-header">
             <span>Betting Tips</span>
             <button class="close-btn" id="close-tips-frame">&times;</button>
         </div>
-        <div id="tips-frame-content">
-            <!-- Tips will be inserted here -->
-        </div>
+        <div id="tips-frame-content"></div>
     </div>
 </div>
-<!-- Loader for internal actions -->
 <div id="internal-loader">
     <div class="empire-loader"></div>
     <div id="internal-loader-note"></div>
 </div>
-<!-- Renew Modal -->
 <div id="renew-msg-modal">
     <div id="renew-msg-box">
         <div id="renew-msg-text"></div>
         <button class="modal-btn" id="renew-modal-btn">Proceed</button>
     </div>
 </div>
+<div id="custom-loading-overlay" style="display:none;">
+    <div class="empire-loader"></div>
+    <div id="custom-loading-text" style="margin-top:14px;font-size:1.10rem;color:#ffea00"></div>
+</div>
 <script>
-    // === CONFIGURATION ===
-    const LOADER_IMAGE_URL = 'AddText_07-29-05.39.03.png'; // Loader image url
-    // Allowed users - 4 digit PINs only
+    // Users and PIN system config
     const USERS = {
-        // pin: { ticketId, expiry: Date String (ISO, at 00:00 of expiration date), renewLink }
-        '3572': {
-            ticketId: 'BOT85-August-2025',
-            expiry: '2025-08-05T00:00:00',
-            renewLink: 'https://paystack.shop/pay/qamw5-f3cr'
-        },
-        '2016': {
-            ticketId: 'BOT53-August-2025',
-            expiry: '2025-11-30T00:00:00',
-            renewLink: 'https://paystack.shop/pay/qamw5-f3cr'
-        },
-        '3921': {
-            ticketId: 'BOT54-August-2025',
-            expiry: '2025-08-30T00:00:00',
-            renewLink: 'https://paystack.shop/pay/qamw5-f3cr'
-        },
-        '2000': {
-            ticketId: 'BOT55-August-2025',
-            expiry: '2025-09-30T00:00:00',
-            renewLink: 'https://paystack.shop/pay/qamw5-f3cr'
-        }
+        '3572': {ticketId: 'BOT85-August-2025', expiry: '2025-08-10T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
+        '2016': {ticketId: 'BOT53-August-2025', expiry: '2025-11-30T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
+        '3921': {ticketId: 'BOT54-August-2025', expiry: '2025-08-30T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
+        '2000': {ticketId: 'BOT55-August-2025', expiry: '2025-09-30T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'}
     };
-
-    // --- SPORTYBET BOOKING CODE & LINK (edit as needed) ---
-    const SPORTYBET_BOOKING_CODE = "empirebot_108aug23x2025"; // Change to your actual booking code
+    const SPORTYBET_BOOKING_CODE = "empirebot_108aug23x2025";
     const SPORTYBET_URL = "https://www.sportybet.com/ng/m/code-hub/load-code?source=home";
-
-    // ===============
-
-    // Set loader image everywhere
-    document.querySelectorAll('.empire-loader').forEach(el => {
-        el.style.backgroundImage = `url('${LOADER_IMAGE_URL}')`;
-    });
-
-    // Show loader when page loads
-    document.getElementById('loader-container').style.display = 'flex';
-    document.getElementById('note').style.display = 'block';
-
-    // Hide everything else
-    hideAllExcept('loader-container');
-
-    setTimeout(() => {
-        hideAllExcept('pin-input-section');
-    }, 6000);
-
-    // PIN Login logic
-    let loggedInPin = null;
-    document.getElementById('pin-form').onsubmit = function(e) {
-        e.preventDefault();
-        const pinInput = document.getElementById('pin');
-        const pin = pinInput.value.trim();
-        // Validate: must be 4 digit numeric
-        if (!/^\d{4}$/.test(pin)) {
-            document.getElementById('pin-error').innerText = 'PIN must be 4 digits.';
-            pinInput.focus();
-            return;
-        }
-        if (!USERS[pin]) {
-            document.getElementById('pin-error').innerText = 'Invalid PIN. Please try again.';
-            pinInput.focus();
-            return;
-        }
-        document.getElementById('pin-error').innerText = '';
-        showInternalLoader('Logging in...');
-        setTimeout(() => {
-            hideInternalLoader();
-            loggedInPin = pin;
-            if (isExpiredAtMidnight(USERS[pin].expiry)) {
-                showAccessDenied(pin);
-            } else {
-                showProfile(pin);
-            }
-        }, 2200);
+    // ORIGINAL fixture data as in your prior files
+    const allFixtures = [
+        { time: "18:30", league: "Argentina - Liga Professional", country: "Argentina", teams: "San Lorenzo 🆚 Instituto", pick: "1X" },
+        { time: "11:00", league: "Japan - J1 League", country: "Japan", teams: "Albirex Niigarta 🆚 Kashima", pick: "X2" },
+        { time: "11:00", league: "Japan - J1 League", country: "Japan", teams: "Okayama 🆚 Shonan Bellmare", pick: "1X" },
+        { time: "15:00", league: "Norway - 1 Division", country: "Norway", teams: "Skeid 🆚 Lyn", pick: "X2" },
+        { time: "16:00", league: "Austria - Bundesliga", country: "Austria", teams: "Salzburg 🆚 Lask Linz", pick: "1X" },
+        { time: "16:00", league: "Czech Republic - Czech Liga", country: "Czech Republic", teams: "Teplice 🆚 Jablonec", pick: "X2" },
+        { time: "15:00", league: "England - League 1", country: "England", teams: "Peterborough 🆚 Bradford", pick: "X2" },
+        { time: "15:00", league: "England - Liga 2", country: "England", teams: "Cheltenham 🆚 Barnet", pick: "X2" },
+        { time: "12:00", league: "Germany - 2 Bundesliga", country: "Germany", teams: "Hannover 🆚 FC Magdeburg", pick: "1X" }
+    ];
+    // Full A-Z country codes (add more as needed)
+    const countryNameToCodeMap = {
+        "Afghanistan":"af","Albania":"al","Algeria":"dz","Andorra":"ad","Angola":"ao","Antigua and Barbuda":"ag","Argentina":"ar","Armenia":"am","Australia":"au","Austria":"at","Azerbaijan":"az",
+        "Bahamas":"bs","Bahrain":"bh","Bangladesh":"bd","Barbados":"bb","Belarus":"by","Belgium":"be","Belize":"bz","Benin":"bj","Bhutan":"bt","Bolivia":"bo","Bosnia and Herzegovina":"ba","Botswana":"bw","Brazil":"br","Brunei":"bn","Bulgaria":"bg","Burkina Faso":"bf","Burundi":"bi",
+        "Cabo Verde":"cv","Cambodia":"kh","Cameroon":"cm","Canada":"ca","Central African Republic":"cf","Chad":"td","Chile":"cl","China":"cn","Colombia":"co","Comoros":"km","Congo":"cg","Congo (Democratic Republic)":"cd","Costa Rica":"cr","Côte d'Ivoire":"ci","Croatia":"hr","Cuba":"cu","Cyprus":"cy","Czechia":"cz","Czech Republic":"cz",
+        "Denmark":"dk","Djibouti":"dj","Dominica":"dm","Dominican Republic":"do",
+        "Ecuador":"ec","Egypt":"eg","El Salvador":"sv","Equatorial Guinea":"gq","Eritrea":"er","Estonia":"ee","Eswatini":"sz","Ethiopia":"et",
+        "Fiji":"fj","Finland":"fi","France":"fr",
+        "Gabon":"ga","Gambia":"gm","Georgia":"ge","Germany":"de","Ghana":"gh","Greece":"gr","Grenada":"gd","Guatemala":"gt","Guinea":"gn","Guinea-Bissau":"gw","Guyana":"gy",
+        "Haiti":"ht","Honduras":"hn","Hungary":"hu",
+        "Iceland":"is","India":"in","Indonesia":"id","Iran":"ir","Iraq":"iq","Ireland":"ie","Israel":"il","Italy":"it",
+        "Jamaica":"jm","Japan":"jp","Jordan":"jo",
+        "Kazakhstan":"kz","Kenya":"ke","Kiribati":"ki","Korea, North":"kp","Korea, South":"kr","Kuwait":"kw","Kyrgyzstan":"kg",
+        "Laos":"la","Latvia":"lv","Lebanon":"lb","Lesotho":"ls","Liberia":"lr","Libya":"ly","Liechtenstein":"li","Lithuania":"lt","Luxembourg":"lu",
+        "Madagascar":"mg","Malawi":"mw","Malaysia":"my","Maldives":"mv","Mali":"ml","Malta":"mt","Marshall Islands":"mh","Mauritania":"mr","Mauritius":"mu","Mexico":"mx","Micronesia":"fm","Moldova":"md","Monaco":"mc","Mongolia":"mn","Montenegro":"me","Morocco":"ma","Mozambique":"mz","Myanmar":"mm",
+        "Namibia":"na","Nauru":"nr","Nepal":"np","Netherlands":"nl","New Zealand":"nz","Nicaragua":"ni","Niger":"ne","Nigeria":"ng","North Macedonia":"mk","Norway":"no",
+        "Oman":"om",
+        "Pakistan":"pk","Palau":"pw","Palestine":"ps","Panama":"pa","Papua New Guinea":"pg","Paraguay":"py","Peru":"pe","Philippines":"ph","Poland":"pl","Portugal":"pt",
+        "Qatar":"qa",
+        "Romania":"ro","Russia":"ru","Rwanda":"rw",
+        "Saint Kitts and Nevis":"kn","Saint Lucia":"lc","Saint Vincent and the Grenadines":"vc","Samoa":"ws","San Marino":"sm","Sao Tome and Principe":"st","Saudi Arabia":"sa","Senegal":"sn","Serbia":"rs","Seychelles":"sc","Sierra Leone":"sl","Singapore":"sg","Slovakia":"sk","Slovenia":"si","Solomon Islands":"sb","Somalia":"so","South Africa":"za","South Sudan":"ss","Spain":"es","Sri Lanka":"lk","Sudan":"sd","Suriname":"sr","Sweden":"se","Switzerland":"ch","Syria":"sy",
+        "Taiwan":"tw","Tajikistan":"tj","Tanzania":"tz","Thailand":"th","Timor-Leste":"tl","Togo":"tg","Tonga":"to","Trinidad and Tobago":"tt","Tunisia":"tn","Turkey":"tr","Turkmenistan":"tm","Tuvalu":"tv",
+        "Uganda":"ug","Ukraine":"ua","United Arab Emirates":"ae","United Kingdom":"gb","England":"gb-eng","United States":"us","Uruguay":"uy","Uzbekistan":"uz",
+        "Vanuatu":"vu","Vatican City":"va","Venezuela":"ve","Vietnam":"vn",
+        "Yemen":"ye",
+        "Zambia":"zm","Zimbabwe":"zw"
     };
-
-    function showProfile(pin) {
-        hideAllExcept('profile-section');
-        document.getElementById('profile-pin').innerText = pin;
-        document.getElementById('profile-ticket').innerText = USERS[pin].ticketId;
-        document.getElementById('profile-expiry').innerText = formatDate(USERS[pin].expiry);
-
-        const expired = isExpiredAtMidnight(USERS[pin].expiry);
-        document.getElementById('profile-expired').style.display = expired ? 'block' : 'none';
-        document.getElementById('generate-tips-btn').style.display = expired ? 'none' : 'inline-block';
-
-        document.getElementById('renew-btn-profile').onclick = function(e) {
-            e.preventDefault();
-            showRenewModal(USERS[pin].renewLink);
-        };
-    }
-
-    function showAccessDenied(pin) {
-        hideAllExcept('access-denied');
-        document.getElementById('renew-btn-denied').onclick = function(e) {
-            e.preventDefault();
-            showRenewModal(USERS[pin].renewLink);
-        };
-    }
-
-    function showRenewModal(renewLink) {
-        document.getElementById('renew-msg-text').innerText = "Please fill in your correct details.";
-        document.getElementById('renew-msg-modal').style.display = 'flex';
-        document.getElementById('renew-modal-btn').onclick = function() {
-            document.getElementById('renew-msg-modal').style.display = 'none';
-            window.location.href = renewLink;
-        };
-    }
-
-    document.getElementById('generate-tips-btn').onclick = function() {
-        showInternalLoader('Generating Tips...');
-        setTimeout(() => {
-            hideInternalLoader();
-            showTipsFrame();
-        }, 6000);
-    };
-
-    document.getElementById('tips-frame-overlay').style.display = 'none';
-    document.getElementById('close-tips-frame').onclick = function() {
-        document.getElementById('tips-frame-overlay').style.display = 'none';
-    };
-
-    function showTipsFrame() {
-        document.getElementById('tips-frame-content').innerHTML = getBettingTipsHtml();
-        document.getElementById('tips-frame-overlay').style.display = 'flex';
-        // Attach copy & go handler for booking code icon
-        const copyIcon = document.getElementById('copy-booking-code-icon');
-        if (copyIcon) {
-            copyIcon.onclick = function(e) {
-                e.preventDefault();
-                copyBookingCodeAndOpenSportybet();
-            };
+    function extractTeams(teamsString) {
+        let vsSplit = teamsString.split(/🆚|vs/i);
+        if (vsSplit.length === 2) {
+            return [vsSplit[0].trim(), vsSplit[1].trim()];
         }
+        return [teamsString, ""];
     }
-
-    function hideAllExcept(id) {
-        ['loader-container', 'pin-input-section', 'profile-section', 'access-denied'].forEach(function(sec) {
-            document.getElementById(sec).style.display = (sec === id) ? ((id === 'loader-container') ? 'flex' : 'block') : 'none';
-        });
-        document.getElementById('tips-frame-overlay').style.display = 'none';
-        document.getElementById('internal-loader').style.display = 'none';
-        document.getElementById('renew-msg-modal').style.display = 'none';
+    function getCountryFlagUrl(name) {
+        const code = countryNameToCodeMap[name];
+        return code ? `https://flagcdn.com/${code}.svg` : "";
     }
-
+    async function getBettingTipsHtmlWithDynamicLogos(fixtures) {
+        const now = new Date();
+        const dd = String(now.getDate()).padStart(2, '0');
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const yyyy = now.getFullYear();
+        const displayDate = `${dd}-${mm}-${yyyy}`;
+        let html = `
+            <div style="font-weight:600;font-size:1.07rem;margin-bottom:12px;">
+                <span class="tip-date">Fixtures for 🗓️ ${displayDate}</span>
+            </div>
+        `;
+        for (const fix of fixtures) {
+            const [teamA, teamB] = extractTeams(fix.teams);
+            const countryFlag = getCountryFlagUrl(fix.country || fix.league.split("-")[0].trim());
+            html += `
+            <div class="fixture-card">
+                ${countryFlag ? `<img class="fixture-country-logo" src="${countryFlag}" alt="${fix.country || ''} flag" title="${fix.country || ''}" style="margin-right:6px;">` : ""}
+                <span class="fixture-league">${fix.league}</span>
+                <span class="fixture-time">${fix.time}</span>
+                <div class="fixture-teams">
+                    <span class="fixture-team-name">${teamA}</span>
+                    <span class="fixture-vs">VS</span>
+                    <span class="fixture-team-name">${teamB}</span>
+                </div>
+                <span class="fixture-pick">${fix.pick}</span>
+            </div>
+            `;
+        }
+        html += `
+            <div class="booking-section">
+                <span class="booking-code-label">Sportybet code:</span>
+                <div class="booking-actions">
+                    <span class="booking-code-box" id="booking-code-box" title="Sportybet code cannot be copied manually">${SPORTYBET_BOOKING_CODE}</span>
+                    <a href="#" id="copy-booking-code-icon" class="copy-link-icon" title="Copy &amp; Go to SportyBet" tabindex="0" aria-label="Copy Booking Code and Open">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" style="display:inline;vertical-align:middle;">
+                            <path d="M6 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2v-1h1v2a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2V2H6zm3 0v2h5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h2zm0 2h5a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div style="font-size:0.97rem;color:#ffe066;margin-top:6px;">
+                <em>TOTAL ODD is 2.58 Predictions are Uploaded By ⏱️ 06:00 AM</em>
+            </div>
+        `;
+        return html;
+    }
+    function showCustomLoader(show, text) {
+        document.getElementById('custom-loading-text').innerText = text || '';
+        document.getElementById('custom-loading-overlay').style.display = show ? 'flex' : 'none';
+    }
     function showInternalLoader(note) {
         document.getElementById('internal-loader-note').innerText = note || '';
         document.getElementById('internal-loader').style.display = 'flex';
@@ -662,21 +586,6 @@
         document.getElementById('internal-loader').style.display = 'none';
         document.getElementById('main-content').style.opacity = 1;
     }
-
-    function formatDate(iso) {
-        const d = new Date(iso);
-        const dd = String(d.getDate()).padStart(2, '0');
-        const mm = String(d.getMonth() + 1).padStart(2, '0');
-        const yyyy = d.getFullYear();
-        return `${dd}-${mm}-${yyyy}`;
-    }
-    function isExpiredAtMidnight(iso) {
-        const now = new Date();
-        const expDate = new Date(iso);
-        return now >= expDate;
-    }
-
-    // Copy booking code and go to Sportybet
     function copyBookingCodeAndOpenSportybet() {
         if (navigator && navigator.clipboard) {
             navigator.clipboard.writeText(SPORTYBET_BOOKING_CODE).then(function() {
@@ -686,7 +595,6 @@
                 window.open(SPORTYBET_URL, "_blank");
             });
         } else {
-            // Fallback old browsers
             const tempInput = document.createElement("input");
             tempInput.style.position = "absolute";
             tempInput.style.opacity = "0";
@@ -703,120 +611,120 @@
             document.body.removeChild(tempInput);
         }
     }
-
-    // Betting Tips HTML & Layout with times and booking code section
-    function getBettingTipsHtml() {
-        const matches = [
-            {
-                league: "🏟️ Argentina - Liga Professional",
-                games: [
-                    { teams: "San Lorenzo 🆚 Instituto", pick: "1X", time: "18:30" }
-                ]
-            },
-            {
-                league: "🏟️ Japan - J1 League",
-                games: [
-                    { teams: "Albirex Niigarta 🆚 Kashima", pick: "X2", time: "11:00" }
-                    { teams: "Okayama 🆚 Shonan Bellmare", pick: "1X", time: "11:00" }
-                ]
-            },
-            {
-                league: "🏟️ Norway - 1 Division",
-                games: [
-                    { teams: "Skeid 🆚 Lyn", pick: "X2", time: "15:00" }
-                ]
-            },
-            {
-                league: "🏟️ Austria - Bundesliga",
-                games: [
-                    { teams: "Salzburg 🆚 Lask Linz", pick: "1X", time: "16:00" }
-                ]
-            },
-            {
-                league: "🏟️ Czech Republic - Czech Liga",
-                games: [
-                    { teams: "Teplice 🆚 Jablonec", pick: "X2", time: "16:00" }
-                ]
-            },
-            {
-               league: "🏟️ England - League 1",
-                games: [
-                    { teams: "Peterborough 🆚 Bradford", pick: "X2", time: "15:00" }
-                ]
-            },
-            {
-               league: "🏟️ England - Liga 2",
-                games: [
-                    { teams: "Cheltenham 🆚 Barnet", pick: "X2", time: "15:00" }
-                ]
-            },
-            {
-               league: "🏟️ Germany - 2 Bundesliga",
-                games: [
-                    { teams: "Hannover 🆚 FC Magdeburg", pick: "1X", time: "12:00" }
-                ]
-            },
-        
-        ];
-
-        const now = new Date();
-        const dd = String(now.getDate()).padStart(2, '0');
-        const mm = String(now.getMonth() + 1).padStart(2, '0');
-        const yyyy = now.getFullYear();
-        const displayDate = `${dd}-${mm}-${yyyy}`;
-
-        let html = `
-            <div style="font-weight:600;font-size:1.07rem;margin-bottom:12px;">
-                <span class="tip-date">Betting Tips for 🗓️ ${displayDate}</span>
-            </div>
-            <ul class="betting-tips-list">
-        `;
-        matches.forEach(match => {
-            html += `<li>
-                <div class="game-league">${match.league}</div>`;
-            match.games.forEach(game => {
-                html += `<div class="game-match">${game.teams}
-                    <span class="pick-label">Pick: ${game.pick}</span>
-                    <span class="game-time">Kickoff: ${game.time}</span>
-                </div>`;
+    document.addEventListener("DOMContentLoaded", function () {
+        function hideAllExcept(id) {
+            ['loader-container', 'pin-input-section', 'profile-section', 'access-denied'].forEach(function(sec) {
+                document.getElementById(sec).style.display = (sec === id) ? ((id === 'loader-container') ? 'flex' : 'block') : 'none';
             });
-            html += `</li>`;
-        });
-        html += `</ul>
-            <div class="booking-section">
-                <span class="booking-code-label">Sportybet code:</span>
-                <div class="booking-actions">
-                    <span class="booking-code-box" id="booking-code-box" title="Sportybet code cannot be copied manually">${SPORTYBET_BOOKING_CODE}</span>
-                    <a href="#" id="copy-booking-code-icon" class="copy-link-icon" title="Copy &amp; Go to SportyBet" tabindex="0" aria-label="Copy Booking Code and Open">
-                        <!-- Copy SVG icon -->
-                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" style="display:inline;vertical-align:middle;">
-                            <path d="M6 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2v-1h1v2a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2V2H6zm3 0v2h5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h2zm0 2h5a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"></path>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-            <div style="font-size:0.97rem;color:#ffe066;margin-top:6px;">
-                <em>TOTAL ODD is 2.58 Predictions are Uploaded By ⏱️ 06:00 AM</em>
-            </div>
-        `;
-        return html;
-    }
-
-    window.onpopstate = function() {
-        hideInternalLoader();
-        hideAllExcept('pin-input-section');
-    };
-
-    setInterval(() => {
-        if (loggedInPin && USERS[loggedInPin] && isExpiredAtMidnight(USERS[loggedInPin].expiry)) {
-            showAccessDenied(loggedInPin);
+            document.getElementById('tips-frame-overlay').style.display = 'none';
+            document.getElementById('internal-loader').style.display = 'none';
+            document.getElementById('renew-msg-modal').style.display = 'none';
         }
-    }, 15000);
-
-    // Only allow number input and prevent non-numeric input
-    document.getElementById('pin').addEventListener('input', function(e) {
-        this.value = this.value.replace(/[^0-9]/g,'').slice(0,4);
+        let loggedInPin = null;
+        document.getElementById('loader-container').style.display = 'flex';
+        document.getElementById('note').style.display = 'block';
+        hideAllExcept('loader-container');
+        // Show loader for 7 seconds at entry
+        setTimeout(() => { hideAllExcept('pin-input-section'); }, 7000);
+        document.getElementById('pin-form').onsubmit = function(e) {
+            e.preventDefault();
+            const pinInput = document.getElementById('pin');
+            const pin = pinInput.value.trim();
+            if (!/^\d{4}$/.test(pin)) {
+                document.getElementById('pin-error').innerText = 'PIN must be 4 digits.'; pinInput.focus(); return;
+            }
+            if (!USERS[pin]) {
+                document.getElementById('pin-error').innerText = 'Invalid PIN. Please try again.'; pinInput.focus(); return;
+            }
+            document.getElementById('pin-error').innerText = '';
+            showCustomLoader(true, "Loading profile...");
+            setTimeout(() => {
+                showCustomLoader(false);
+                loggedInPin = pin;
+                if (isExpiredAtMidnight(USERS[pin].expiry)) {
+                    showAccessDenied(pin);
+                } else {
+                    showProfile(pin);
+                }
+            }, 7000);
+        };
+        function showProfile(pin) {
+            hideAllExcept('profile-section');
+            document.getElementById('profile-pin').innerText = pin;
+            document.getElementById('profile-ticket').innerText = USERS[pin].ticketId;
+            document.getElementById('profile-expiry').innerText = formatDate(USERS[pin].expiry);
+            const expired = isExpiredAtMidnight(USERS[pin].expiry);
+            document.getElementById('profile-expired').style.display = expired ? 'block' : 'none';
+            document.getElementById('generate-tips-btn').style.display = expired ? 'none' : 'inline-block';
+            document.getElementById('renew-btn-profile').onclick = function(e) {
+                e.preventDefault(); showRenewModal(USERS[pin].renewLink);
+            };
+        }
+        function showAccessDenied(pin) {
+            hideAllExcept('access-denied');
+            document.getElementById('renew-btn-denied').onclick = function(e) {
+                e.preventDefault(); showRenewModal(USERS[pin].renewLink);
+            };
+        }
+        function showRenewModal(renewLink) {
+            document.getElementById('renew-msg-text').innerText = "Please fill in your correct details.";
+            document.getElementById('renew-msg-modal').style.display = 'flex';
+            document.getElementById('renew-modal-btn').onclick = function() {
+                document.getElementById('renew-msg-modal').style.display = 'none'; window.location.href = renewLink;
+            };
+        }
+        document.getElementById('generate-tips-btn').onclick = async function() {
+            showCustomLoader(true, "Loading predictions...");
+            setTimeout(async () => {
+                showCustomLoader(false);
+                await showTipsFrame();
+            }, 7000);
+        };
+        document.getElementById('tips-frame-overlay').style.display = 'none';
+        document.getElementById('close-tips-frame').onclick = function() {
+            document.getElementById('tips-frame-overlay').style.display = 'none';
+        };
+        window.onpopstate = function() {
+            hideInternalLoader();
+            hideAllExcept('pin-input-section');
+        };
+        setInterval(() => {
+            if (loggedInPin && USERS[loggedInPin] && isExpiredAtMidnight(USERS[loggedInPin].expiry)) {
+                showAccessDenied(loggedInPin);
+            }
+        }, 15000);
+        document.getElementById('pin').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g,'').slice(0,4);
+        });
     });
+    function formatDate(iso) {
+        const d = new Date(iso);
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        return `${dd}-${mm}-${yyyy}`;
+    }
+    function isExpiredAtMidnight(iso) {
+        const now = new Date();
+        const expDate = new Date(iso);
+        return now >= expDate;
+    }
+    async function showTipsFrame() {
+        document.getElementById('tips-frame-content').innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;">
+            <div class="empire-loader"></div>
+            <div style="margin-top:14px;font-size:1.10rem;color:#ffea00">Loading team and country logos...</div>
+        </div>`;
+        document.getElementById('tips-frame-overlay').style.display = 'flex';
+        const html = await getBettingTipsHtmlWithDynamicLogos(allFixtures);
+        document.getElementById('tips-frame-content').innerHTML = html;
+        const copyIcon = document.getElementById('copy-booking-code-icon');
+        if (copyIcon) {
+            copyIcon.onclick = function(e) {
+                e.preventDefault();
+                copyBookingCodeAndOpenSportybet();
+            };
+        }
+    }
 </script>
 </body>
 </html>
