@@ -431,7 +431,7 @@
         <div id="profile-expired" style="display:none;">
             <div class="expire-note">Your Ticket has expired!</div>
             <div class="renew-info">Renew now to continue enjoying betting tips.</div>
-            <a href="#" class="renew-btn" id="renew-btn-profile">Renew Ticket</a>
+            <a href="https://paystack.shop/pay/qamw5-f3cr" class="renew-btn" id="renew-btn-profile" target="_blank" rel="noopener">Renew Ticket</a>
         </div>
         <button class="generate-btn" id="generate-tips-btn" style="display:none;">Generate Betting Tips</button>
     </div>
@@ -441,7 +441,7 @@
             Your Ticket has expired.<br>
             Please renew your Ticket to continue accessing this month's betting tips.
         </div>
-        <a href="#" class="renew-btn" id="renew-btn-denied">Renew Ticket</a>
+        <a href="https://paystack.shop/pay/qamw5-f3cr" class="renew-btn" id="renew-btn-denied" target="_blank" rel="noopener">Renew Ticket</a>
     </div>
 </div>
 <div id="tips-frame-overlay">
@@ -656,21 +656,33 @@
             const expired = isExpiredAtMidnight(USERS[pin].expiry);
             document.getElementById('profile-expired').style.display = expired ? 'block' : 'none';
             document.getElementById('generate-tips-btn').style.display = expired ? 'none' : 'inline-block';
-            document.getElementById('renew-btn-profile').onclick = function(e) {
-                e.preventDefault(); showRenewModal(USERS[pin].renewLink);
-            };
+            // PATCH: Set renew button href directly
+            const renewBtnProfile = document.getElementById('renew-btn-profile');
+            if (renewBtnProfile) {
+                renewBtnProfile.setAttribute("href", USERS[pin].renewLink);
+                renewBtnProfile.setAttribute("target", "_blank");
+                renewBtnProfile.setAttribute("rel", "noopener");
+                renewBtnProfile.onclick = null;
+            }
         }
         function showAccessDenied(pin) {
             hideAllExcept('access-denied');
-            document.getElementById('renew-btn-denied').onclick = function(e) {
-                e.preventDefault(); showRenewModal(USERS[pin].renewLink);
-            };
+            // PATCH: Set renew button href directly
+            const renewBtnDenied = document.getElementById('renew-btn-denied');
+            if (renewBtnDenied) {
+                renewBtnDenied.setAttribute("href", USERS[pin].renewLink);
+                renewBtnDenied.setAttribute("target", "_blank");
+                renewBtnDenied.setAttribute("rel", "noopener");
+                renewBtnDenied.onclick = null;
+            }
         }
+        // The modal is still here for legacy, but not used for renew
         function showRenewModal(renewLink) {
             document.getElementById('renew-msg-text').innerText = "Please fill in your correct details.";
             document.getElementById('renew-msg-modal').style.display = 'flex';
             document.getElementById('renew-modal-btn').onclick = function() {
-                document.getElementById('renew-msg-modal').style.display = 'none'; window.location.href = renewLink;
+                document.getElementById('renew-msg-modal').style.display = 'none';
+                window.open(renewLink, "_blank");
             };
         }
         document.getElementById('generate-tips-btn').onclick = async function() {
