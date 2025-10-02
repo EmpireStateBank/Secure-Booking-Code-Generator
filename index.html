@@ -475,10 +475,10 @@
         '3921': {ticketId: 'BOT54-August-2025', expiry: '2025-12-31T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
         '0807': {ticketId: 'BOT55-August-2025', expiry: '2025-12-31T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
         '0909': {ticketId: 'BOT30-August-2025', expiry: '2025-12-31T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
-        '6699': {ticketId: 'BOT80-August-2025', expiry: '2025-09-04T13:15:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
+        '6699': {ticketId: 'BOT80-August-2025', expiry: '2025-09-04T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
         '4578': {ticketId: 'BOT40-August-2025', expiry: '2026-05-04T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
         '5555': {ticketId: 'BOT20-August-2025', expiry: '2026-05-04T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
-        '2025': {ticketId: 'BOT666-September-2025', expiry: '2026-09-27T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
+        '2025': {ticketId: 'BOT666-September-2025', expiry: '2025-09-27T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
     };
     const SPORTYBET_BOOKING_CODE = "empirebot_2octx2x119";
     const SPORTYBET_URL = "https://www.sportybet.com/ng/m/code-hub/load-code?source=home";
@@ -611,6 +611,71 @@
             document.body.removeChild(tempInput);
         }
     }
+    // Improved expiry check: handles timezones and logs for debugging
+    /**
+     * Returns true if the expiry date is in the past (i.e. expired), else false.
+     * Handles timezones by forcing UTC comparison.
+     * Also logs debugging info to the console.
+     * 
+     * @param {string} iso ISO date string (e.g. "2025-09-27T00:00:00")
+     * @returns {boolean} true if expired, false otherwise
+     */
+    function isExpiredAtMidnight(iso) {
+        // Parse expiry as UTC.
+        // If iso string has no timezone, treat it as UTC.
+        let expDate;
+        if (/Z$/.test(iso) || /\+\d{2}:\d{2}$/.test(iso) || /\-\d{2}:\d{2}$/.test(iso)) {
+            expDate = new Date(iso);
+        } else {
+            // Append Z if no timezone, to force UTC
+            expDate = new Date(iso + "Z");
+        }
+        // Get current time in UTC
+        const now = new Date();
+        const nowUTC = new Date(Date.UTC(
+            now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
+            now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()
+        ));
+        const expired = nowUTC >= expDate;
+        // Log for debugging
+        console.log(
+            "[EmpireBet] Expiry check:",
+            "\n  Now (local):", now.toString(),
+            "\n  Now (UTC):", nowUTC.toISOString(),
+            "\n  Expiry (UTC):", expDate.toISOString(),
+            "\n  Expired:", expired
+        );
+        return expired;
+    }
+    function formatDate(iso) {
+        // Always treat as UTC for display
+        let d;
+        if (/Z$/.test(iso) || /\+\d{2}:\d{2}$/.test(iso) || /\-\d{2}:\d{2}$/.test(iso)) {
+            d = new Date(iso);
+        } else {
+            d = new Date(iso + "Z");
+        }
+        const dd = String(d.getUTCDate()).padStart(2, '0');
+        const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+        const yyyy = d.getUTCFullYear();
+        return `${dd}-${mm}-${yyyy}`;
+    }
+    async function showTipsFrame() {
+        document.getElementById('tips-frame-content').innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;">
+            <div class="empire-loader"></div>
+            <div style="margin-top:14px;font-size:1.10rem;color:#ffea00">Loading team and country logos...</div>
+        </div>`;
+        document.getElementById('tips-frame-overlay').style.display = 'flex';
+        const html = await getBettingTipsHtmlWithDynamicLogos(allFixtures);
+        document.getElementById('tips-frame-content').innerHTML = html;
+        const copyIcon = document.getElementById('copy-booking-code-icon');
+        if (copyIcon) {
+            copyIcon.onclick = function(e) {
+                e.preventDefault();
+                copyBookingCodeAndOpenSportybet();
+            };
+        }
+    }
     document.addEventListener("DOMContentLoaded", function () {
         function hideAllExcept(id) {
             ['loader-container', 'pin-input-section', 'profile-section', 'access-denied'].forEach(function(sec) {
@@ -709,34 +774,6 @@
             this.value = this.value.replace(/[^0-9]/g,'').slice(0,4);
         });
     });
-    function formatDate(iso) {
-        const d = new Date(iso);
-        const dd = String(d.getDate()).padStart(2, '0');
-        const mm = String(d.getMonth() + 1).padStart(2, '0');
-        const yyyy = d.getFullYear();
-        return `${dd}-${mm}-${yyyy}`;
-    }
-    function isExpiredAtMidnight(iso) {
-        const now = new Date();
-        const expDate = new Date(iso);
-        return now >= expDate;
-    }
-    async function showTipsFrame() {
-        document.getElementById('tips-frame-content').innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;">
-            <div class="empire-loader"></div>
-            <div style="margin-top:14px;font-size:1.10rem;color:#ffea00">Loading team and country logos...</div>
-        </div>`;
-        document.getElementById('tips-frame-overlay').style.display = 'flex';
-        const html = await getBettingTipsHtmlWithDynamicLogos(allFixtures);
-        document.getElementById('tips-frame-content').innerHTML = html;
-        const copyIcon = document.getElementById('copy-booking-code-icon');
-        if (copyIcon) {
-            copyIcon.onclick = function(e) {
-                e.preventDefault();
-                copyBookingCodeAndOpenSportybet();
-            };
-        }
-    }
 </script>
 </body>
 </html>
