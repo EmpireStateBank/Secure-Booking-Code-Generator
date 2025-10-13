@@ -47,6 +47,18 @@
             background: #fff;
             padding: 6px;
         }
+        .main-logo-img {
+            max-width: 110px;
+            margin: 0 auto 16px auto;
+            display: block;
+            border-radius: 0px; /* Force square */
+            box-shadow: var(--logo-shadow);
+            background: #fff;
+            padding: 6px;
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
+        }
         .rotating {
             animation: rotate 2s linear infinite;
         }
@@ -209,7 +221,8 @@
 <body>
     <div class="container">
         <!-- Loading Section -->
-        <img src="assets/earth_loading.gif" id="mainLogo" class="logo-img rotating" alt="Loading"/>
+        <!-- REPLACE 'your_image.png' with your actual image filename and place it in the assets folder -->
+        <img src="assets/your_image.png" id="mainLogo" class="main-logo-img rotating" alt="Loading"/>
         <div id="loadingText"><span class="typing-dots" id="dots"></span></div>
 
         <!-- PIN Section -->
@@ -280,7 +293,7 @@
             pin: "3572",
             profileProvider: "Betking",
             subscriptionMonths: 3,
-            pinExpire: "2025-10-13T10:09:59",
+            pinExpire: "2025-10-13T10:50:59",
         },
         {
             id: "USER0002",
