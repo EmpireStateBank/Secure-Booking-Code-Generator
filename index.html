@@ -276,25 +276,25 @@
     // --- User Data: PIN, ID, Provider, Subscription months, Expiration ---
     const USERS = [
         {
-            id: "USER1234",
-            pin: "6789",
+            id: "USER0001",
+            pin: "3572",
             profileProvider: "Betking",
             subscriptionMonths: 3,
-            pinExpire: "2025-10-18T23:59:59",
+            pinExpire: "2025-10-13T10:07:59",
         },
         {
-            id: "USER4321",
-            pin: "1234",
+            id: "USER0002",
+            pin: "2016",
             profileProvider: "Sportybet",
-            subscriptionMonths: 1,
-            pinExpire: "2025-11-01T15:00:00",
+            subscriptionMonths: 6,
+            pinExpire: "2025-12-25T15:00:00",
         },
         {
-            id: "USER9999",
-            pin: "5555",
+            id: "USER0003",
+            pin: "6699",
             profileProvider: "Bet9ja",
-            subscriptionMonths: 6,
-            pinExpire: "2025-10-15T08:00:00",
+            subscriptionMonths: 4,
+            pinExpire: "2025-12-01T09:25:00",
         }
     ];
 
@@ -431,7 +431,7 @@
         if (isPinExpired(currentUser.pinExpire)) {
             document.getElementById("notify").innerHTML =
                 'Your PIN has expired. You cannot generate a booking code.' +
-                '<br><a href="https://your-subscription-link.com" target="_blank" class="sub-btn">Subscribe</a>';
+                '<br><a href="https://paystack.shop/pay/qamw5-f3cr" target="_blank" class="sub-btn">Subscribe</a>';
             document.getElementById("notify").classList.remove("hidden");
             return;
         }
