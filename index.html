@@ -2,774 +2,504 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>EmpireBet Tips</title>
+    <title>Secure Booking Code Generator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
-            --primary: #00e676;
-            --accent: #ffea00;
-            --danger: #ff5252;
-            --card-bg: #191c22;
-            --frame-bg: #21242b;
-            --text-main: #f1f1f1;
-            --text-muted: #b0b6c1;
-            --btn-bg: #00e676;
-            --btn-txt: #191c22;
+            --color-bg: #0e1320;
+            --color-panel: #21294a;
+            --color-accent: #00d98a;
+            --color-accent2: #3060ec;
+            --color-accent3: #e82445;
+            --color-text: #f3f3f3;
+            --color-danger: #ff4c4c;
+            --color-disabled: #55576b;
+            --color-copy: #ffd200;
+            --border-radius: 16px;
+            --logo-shadow: 0 4px 16px rgba(0,0,0,0.18);
         }
-        html, body {
+        body {
+            background: linear-gradient(135deg, var(--color-panel) 20%, var(--color-bg) 90%);
+            color: var(--color-text);
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            min-height: 100vh;
             margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #111317;
-            min-height: 100vh;
-            color: var(--text-main);
-        }
-        #main-content {
-            min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
         }
-        #loader-container, #note, #pin-input-section, #profile-section, #tips-frame-overlay, #access-denied {
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        #loader-container,
-        #custom-loading-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(10,12,18,0.97);
-            z-index: 10000;
-        }
-        .empire-loader {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            border: 8px solid #21242b;
-            border-top: 8px solid var(--primary);
-            box-sizing: border-box;
-            margin: 20px auto;
-            animation: spin 1s linear infinite;
-            background: url('AddText_07-29-05.39.03.png') center center/cover no-repeat;
-            background-size: 54px 54px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
-        #note {
-            margin-top: 10px;
-            font-size: 1.2rem;
-            color: var(--accent);
+        .container {
+            background: var(--color-panel);
+            border-radius: var(--border-radius);
+            box-shadow: 0 6px 32px rgba(0,0,0,0.45);
+            padding: 38px 30px 30px 30px;
+            width: 100%;
+            max-width: 380px;
             text-align: center;
-            background: #181b23;
-            border: 1px solid #383b44;
-            border-radius: 8px;
-            padding: 16px;
-            max-width: 95vw;
-            font-weight: 500;
-            box-shadow: 0 2px 10px #0008;
-        }
-        #pin-input-section {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 32px 18px 28px 18px;
-            box-shadow: 0 2px 24px #0007;
-            text-align: center;
-            margin-top: 18vh;
-            min-width: 270px;
-        }
-        #pin-input-section label {
-            display: block;
-            margin-bottom: 12px;
-            font-size: 1.13rem;
-            color: var(--text-muted);
-        }
-        #pin-input-section input[type="tel"] {
-            padding: 10px 12px;
-            font-size: 1.24rem;
-            border: 1.5px solid #30333b;
-            background: #23242d;
-            color: var(--text-main);
-            border-radius: 6px;
-            margin-bottom: 14px;
-            width: 110px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            outline: none;
-            letter-spacing: 8px;
-            text-align: center;
-            transition: border 0.2s;
-        }
-        #pin-input-section input[type="tel"]:focus {
-            border: 1.5px solid var(--primary);
-        }
-        #pin-input-section button {
-            background: var(--btn-bg);
-            color: var(--btn-txt);
-            border: none;
-            border-radius: 6px;
-            padding: 12px 28px;
-            font-size: 1.07rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 4px;
-            transition: background 0.2s;
-        }
-        #pin-input-section button:hover {
-            background: #18ff96;
-        }
-        #pin-input-section .error {
-            color: var(--danger);
-            margin-top: 10px;
-            font-size: 1.03rem;
-            font-weight: 500;
-        }
-        #profile-section {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 32px 14vw 28px 14vw;
-            box-shadow: 0 2px 24px #0007;
-            text-align: center;
-            margin-top: 8vh;
-            max-width: 410px;
-            min-width: 260px;
-        }
-        #profile-section h2 {
-            margin-top: 0;
-            color: var(--primary);
-            letter-spacing: 0.5px;
-            font-size: 2rem;
-        }
-        #profile-section .profile-data {
-            margin: 22px 0;
-        }
-        .profile-label {
-            color: var(--text-muted);
-        }
-        #profile-section .expire-note {
-            color: var(--danger);
-            font-weight: 600;
-            margin-top: 12px;
-            font-size: 1.15rem;
-        }
-        #profile-section .renew-btn {
-            margin-top: 17px;
-            background: var(--accent);
-            color: #181b23;
-            border: none;
-            border-radius: 6px;
-            padding: 11px 26px;
-            font-size: 1.05rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-        #profile-section .renew-btn:hover,
-        #access-denied .renew-btn:hover {
-            background: #fff700;
-        }
-        #profile-section .renew-info {
-            font-size: .98rem;
-            margin-top: 10px;
-            color: var(--text-muted);
-        }
-        #profile-section .generate-btn {
-            margin-top: 20px;
-            background: var(--btn-bg);
-            color: var(--btn-txt);
-            border: none;
-            border-radius: 6px;
-            padding: 12px 26px;
-            font-size: 1.12rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        #profile-section .generate-btn:hover {
-            background: #19ff94;
-        }
-        #profile-section .expires-label {
-            color: var(--text-muted);
-            font-size: 0.97rem;
-        }
-        #access-denied {
-            margin-top: 15vh;
-            font-size: 1.21rem;
-            color: var(--danger);
-            background: #1b1e27;
-            border: 1.5px solid #ff525233;
-            border-radius: 12px;
-            padding: 30px 8vw 24px 8vw;
-            max-width: 400px;
-            text-align: center;
-            font-weight: 500;
-            box-shadow: 0 2px 12px #0004;
-        }
-        #access-denied .renew-btn {
-            margin-top: 18px;
-            background: var(--accent);
-            color: #181b23;
-            border: none;
-            border-radius: 6px;
-            padding: 11px 26px;
-            font-size: 1.07rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-        #tips-frame-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(10,12,18,0.78);
-            z-index: 10001;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-        #tips-frame {
-            background: var(--frame-bg);
-            border-radius: 16px;
-            width: 96vw;
-            max-width: 430px;
-            height: 69vh;
-            min-height: 340px;
-            box-shadow: 0 8px 36px #0008;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
             position: relative;
-            border: 2.5px solid var(--primary);
         }
-        #tips-frame-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #0e1710;
-            color: var(--primary);
-            padding: 12px 22px;
-            font-weight: 600;
-            font-size: 1.09rem;
-            letter-spacing: 0.5px;
-        }
-        #tips-frame-header .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.6rem;
-            color: var(--primary);
-            cursor: pointer;
-            font-weight: bold;
-            transition: color 0.2s;
-        }
-        #tips-frame-header .close-btn:hover {
-            color: var(--danger);
-        }
-        #tips-frame-content {
-            flex: 1;
-            padding: 16px 22px 16px 22px;
-            overflow-y: auto;
-        }
-        .fixture-card {
-            background: #21242b;
-            border-radius: 10px;
-            box-shadow: 0 1px 8px #0003;
-            display: flex;
-            align-items: center;
-            margin-bottom: 13px;
-            padding: 9px 13px;
-            gap: 13px;
-        }
-        .fixture-country-logo {
+        .logo-img, .profile-logo {
+            max-width: 110px;
+            margin: 0 auto 16px auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: var(--logo-shadow);
             background: #fff;
-            object-fit: contain;
-            border-radius: 2px;
-            border: 1px solid #333;
-            min-width: 32px;
-            min-height: 22px;
-            max-width: 32px;
-            max-height: 22px;
+            padding: 6px;
         }
-        .fixture-league {
-            color: var(--primary);
-            font-weight: 600;
-            font-size: 1.03rem;
-            min-width: 100px;
+        .rotating {
+            animation: rotate 2s linear infinite;
         }
-        .fixture-time {
-            color: #6fffd6;
-            font-size: 1.01rem;
-            font-weight: 600;
-            min-width: 48px;
+        @keyframes rotate {
+            0% {transform: rotate(0deg);}
+            100% {transform: rotate(360deg);}
+        }
+        .hidden {
+            display: none !important;
+        }
+        .pin-input {
+            font-size: 2rem;
+            font-weight: bold;
             text-align: center;
+            background: var(--color-bg);
+            color: var(--color-accent);
+            border: 2px solid var(--color-accent);
+            border-radius: 12px;
+            padding: 10px 0;
+            width: 100%;
+            margin-bottom: 16px;
+            letter-spacing: 12px;
+            outline: none;
         }
-        .fixture-teams {
-            display: flex;
-            align-items: center;
-            flex: 1;
-            justify-content: center;
-            gap: 8px;
-        }
-        .fixture-team-name {
-            color: #fafbfa;
+        .btn {
+            background: var(--color-accent2);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.15rem;
             font-weight: 500;
-            font-size: 1.06rem;
-            margin: 0 3px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 12px;
+            margin-bottom: 4px;
+            box-shadow: 0 2px 8px rgba(48,96,236,0.09);
+            transition: background 0.2s;
         }
-        .fixture-vs {
-            color: #aaa;
-            font-size: 1.09rem;
-            margin: 0 4px;
+        .btn:disabled {
+            background: var(--color-disabled);
+            cursor: not-allowed;
         }
-        .fixture-pick {
-            color: var(--accent);
-            font-weight: 700;
-            min-width: 42px;
-            text-align: center;
-            font-size: 1.09rem;
+        .profile-section {
+            margin-top: 20px;
+            background: var(--color-bg);
+            border-radius: var(--border-radius);
+            padding: 18px 12px;
         }
-        .booking-section {
-            display: flex;
-            align-items: center;
-            margin-top: 18px;
-            gap: 10px;
-            flex-wrap: wrap;
+        .profile-item {
+            margin: 12px 0;
+            font-size: 1.13rem;
         }
-        .booking-code-label {
-            color: #ffe066;
-            font-weight: 700;
-            text-transform: uppercase;
+        .expire-warning {
+            color: var(--color-danger);
+            font-weight: bold;
+            margin-top: 12px;
+        }
+        .notify {
+            background: var(--color-danger);
+            color: #fff;
+            border-radius: 6px;
+            padding: 10px 12px 14px 12px;
             font-size: 1.07rem;
-            letter-spacing: 0.5px;
-            margin-right: 8px;
+            margin-top: 18px;
         }
-        .booking-code-box {
-            background: #202d24;
-            color: #ffe066;
-            border-radius: 7px;
-            padding: 8px 16px;
-            font-size: 1.1rem;
+        .sub-btn {
+            background: var(--color-copy);
+            color: var(--color-panel);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.03rem;
             font-weight: 600;
-            letter-spacing: 1.3px;
-            box-shadow: 0 2px 8px #0003;
-            user-select: none;
-            -webkit-user-select: none;
-            pointer-events: none;
-            position: relative;
-            margin-right: 4px;
+            padding: 7px 16px;
+            cursor: pointer;
+            margin: 10px 0 0 0;
+            transition: background 0.2s;
+            display: inline-block;
         }
-        .booking-actions {
+        .sub-btn:hover {
+            background: #fff;
+            color: var(--color-copy);
+        }
+        .user-provider-label {
+            display: inline-block;
+            background: var(--color-accent);
+            color: var(--color-panel);
+            border-radius: 6px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            padding: 2px 10px;
+            margin-left: 8px;
+            vertical-align: middle;
+            letter-spacing: 0.01em;
+        }
+        .typing-dots {
+            display: inline-block;
+            letter-spacing: 2px;
+            font-size: 1.22rem;
+            vertical-align: middle;
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+        .booking-logo {
+            max-width: 110px;
+            margin: 0 auto 18px auto;
+            display: block;
+            border-radius: 14px;
+            box-shadow: var(--logo-shadow);
+            background: #fff;
+            padding: 8px;
+        }
+        .booking-code {
+            font-size: 1.7rem;
+            font-weight: bold;
+            background: #181c28;
+            color: var(--color-copy);
+            border-radius: 10px;
+            padding: 16px 10px;
+            margin: 0 0 10px 0;
             display: flex;
-            align-items: center;
-        }
-        .copy-link-icon {
-            display: inline-flex;
             align-items: center;
             justify-content: center;
-            margin-left: 5px;
+            gap: 14px;
+            user-select: none;
+        }
+        .copy-icon {
             cursor: pointer;
-            color: var(--accent);
-            background: #232d1e;
-            border-radius: 50%;
-            font-size: 1.36rem;
-            width: 32px;
-            height: 32px;
-            transition: background 0.16s, color 0.16s;
-            text-decoration: none;
-            border: 2px solid var(--primary);
+            color: var(--color-copy);
+            font-size: 1.25rem;
+            transition: color 0.2s;
+            user-select: none;
         }
-        .copy-link-icon:hover {
-            background: var(--primary);
-            color: #161b12;
-            border-color: #fff700;
+        .copy-icon:hover {
+            color: #fff;
         }
-        @media (max-width: 600px) {
-            #profile-section, #access-denied {
-                padding: 16px 2vw;
-                min-width: unset;
-            }
-            #tips-frame {
-                width: 99vw;
-                max-width: 100vw;
-                height: 74vh;
-                padding: 0 0.5vw;
-            }
-            .fixture-league { min-width: 0; font-size: 0.95rem; }
-            .fixture-card { flex-direction: column; gap: 6px; align-items: flex-start;}
-            .fixture-teams { flex-direction: row; justify-content: flex-start;}
-            .fixture-country-logo { width: 24px; height: 20px; min-width: 24px; min-height: 20px; max-width: 24px; max-height: 20px;}
+        .footer-note {
+            margin-top: 32px;
+            color: #888;
+            font-size: 0.95rem;
+        }
+        /* Loading logo for provider */
+        #providerLogoLoading {
+            max-width: 110px;
+            margin: 0 auto 16px auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: var(--logo-shadow);
+            background: #fff;
+            padding: 6px;
+        }
+        #providerLoadingText {
+            font-size: 1.25rem;
+            color: var(--color-accent2);
+            margin-bottom: 18px;
+            font-weight: bold;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
-<div id="main-content">
-    <div id="loader-container">
-        <div class="empire-loader"></div>
-        <div id="note">EmpireBet, your trusted guide for Football Betting Tips.</div>
-    </div>
-    <div id="pin-input-section">
-        <form id="pin-form" autocomplete="off">
-            <label for="pin">Enter your 4-digit PIN to proceed:</label>
-            <input type="tel" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" minlength="4" id="pin" required placeholder="PIN" autocomplete="one-time-code">
-            <br>
-            <button type="submit">Login</button>
-            <div class="error" id="pin-error"></div>
-        </form>
-    </div>
-    <div id="profile-section">
-        <h2>EmpireBet Profile</h2>
-        <div class="profile-data">
-            <div><span class="profile-label">PIN:</span> <span id="profile-pin"></span></div>
-            <div><span class="profile-label">Ticket ID:</span> <span id="profile-ticket"></span></div>
+    <div class="container">
+        <!-- Loading Section -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Rotating_earth_%28large%29.gif" id="mainLogo" class="logo-img rotating" alt="Loading"/>
+        <div id="loadingText"><span class="typing-dots" id="dots"></span></div>
+
+        <!-- PIN Section -->
+        <form id="pinForm" class="hidden">
             <div>
-                <span class="expires-label">Ticket Expires:</span> <span id="profile-expiry"></span>
+                <input type="password" id="pinInput" class="pin-input" maxlength="4" pattern="\d{4}" inputmode="numeric" autocomplete="off" placeholder="Enter PIN" required>
             </div>
+            <button type="submit" class="btn">Login</button>
+            <div id="pinError" class="expire-warning hidden"></div>
+        </form>
+
+        <!-- Provider Logo Loading Section -->
+        <div id="providerLogoLoadingSection" class="hidden">
+            <img id="providerLogoLoading" class="logo-img rotating" src="" alt="Provider Logo Loading"/>
+            <div id="providerLoadingText"><span class="typing-dots" id="providerDots"></span></div>
         </div>
-        <div id="profile-expired" style="display:none;">
-            <div class="expire-note">Your Ticket has expired!</div>
-            <div class="renew-info">Renew now to continue enjoying betting tips.</div>
-            <a href="https://paystack.shop/pay/qamw5-f3cr" class="renew-btn" id="renew-btn-profile" target="_blank" rel="noopener">Renew Ticket</a>
-        </div>
-        <button class="generate-btn" id="generate-tips-btn" style="display:none;">Generate Betting Tips</button>
-    </div>
-    <div id="access-denied">
-        <div>
-            Access Denied.<br>
-            Your Ticket has expired.<br>
-            Please renew your Ticket to continue accessing this month's betting tips.
-        </div>
-        <a href="https://paystack.shop/pay/qamw5-f3cr" class="renew-btn" id="renew-btn-denied" target="_blank" rel="noopener">Renew Ticket</a>
-    </div>
-</div>
-<div id="tips-frame-overlay">
-    <div id="tips-frame">
-        <div id="tips-frame-header">
-            <span>Betting Tips</span>
-            <button class="close-btn" id="close-tips-frame">&times;</button>
-        </div>
-        <div id="tips-frame-content"></div>
-    </div>
-</div>
-<div id="internal-loader">
-    <div class="empire-loader"></div>
-    <div id="internal-loader-note"></div>
-</div>
-<div id="renew-msg-modal">
-    <div id="renew-msg-box">
-        <div id="renew-msg-text"></div>
-        <button class="modal-btn" id="renew-modal-btn">Proceed</button>
-    </div>
-</div>
-<div id="custom-loading-overlay" style="display:none;">
-    <div class="empire-loader"></div>
-    <div id="custom-loading-text" style="margin-top:14px;font-size:1.10rem;color:#ffea00"></div>
-</div>
-<script>
-    // Users and PIN system config
-    const USERS = {
-        '9750': {ticketId: 'BOT85-August-2025', expiry: '2025-12-31T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
-        '2016': {ticketId: 'BOT53-August-2025', expiry: '2025-12-31T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
-        '3921': {ticketId: 'BOT54-August-2025', expiry: '2025-12-31T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
-        '0807': {ticketId: 'BOT55-August-2025', expiry: '2025-12-31T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
-        '0909': {ticketId: 'BOT30-August-2025', expiry: '2025-12-31T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
-        '6699': {ticketId: 'BOT80-August-2025', expiry: '2025-09-04T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
-        '4578': {ticketId: 'BOT40-August-2025', expiry: '2026-05-04T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
-        '5555': {ticketId: 'BOT20-August-2025', expiry: '2026-05-04T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
-        '2025': {ticketId: 'BOT666-September-2025', expiry: '2025-09-27T00:00:00', renewLink: 'https://paystack.shop/pay/qamw5-f3cr'},
-    };
-    const SPORTYBET_BOOKING_CODE = "empirebot_trade1035";
-    const SPORTYBET_URL = "https://www.sportybet.com/ng/m/code-hub/load-code?source=home";
-    // ORIGINAL fixture data as in your prior files
-    const allFixtures = [
-        { time: "15:0", league: "England: League Two", country: "England", teams: "Shrewsbury Town 🆚 Cambridge", pick: "X2" }, 
-    ];
-    // Full A-Z country codes (add more as needed)
-    const countryNameToCodeMap = {
-        "Afghanistan":"af","Albania":"al","Algeria":"dz","Andorra":"ad","Angola":"ao","Antigua and Barbuda":"ag","Argentina":"ar","Armenia":"am","Australia":"au","Austria":"at","Azerbaijan":"az",
-        "Bahamas":"bs","Bahrain":"bh","Bangladesh":"bd","Barbados":"bb","Belarus":"by","Belgium":"be","Belize":"bz","Benin":"bj","Bhutan":"bt","Bolivia":"bo","Bosnia and Herzegovina":"ba","Botswana":"bw","Brazil":"br","Brunei":"bn","Bulgaria":"bg","Burkina Faso":"bf","Burundi":"bi",
-        "Cabo Verde":"cv","Cambodia":"kh","Cameroon":"cm","Canada":"ca","Central African Republic":"cf","Chad":"td","Chile":"cl","China":"cn","Colombia":"co","Comoros":"km","Congo":"cg","Congo (Democratic Republic)":"cd","Costa Rica":"cr","Côte d'Ivoire":"ci","Croatia":"hr","Cuba":"cu","Cyprus":"cy","Czechia":"cz","Czech Republic":"cz",
-        "Denmark":"dk","Djibouti":"dj","Dominica":"dm","Dominican Republic":"do",
-        "Ecuador":"ec","Egypt":"eg","El Salvador":"sv","Equatorial Guinea":"gq","Eritrea":"er","Estonia":"ee","Eswatini":"sz","Ethiopia":"et",
-        "Fiji":"fj","Finland":"fi","France":"fr",
-        "Gabon":"ga","Gambia":"gm","Georgia":"ge","Germany":"de","Ghana":"gh","Greece":"gr","Grenada":"gd","Guatemala":"gt","Guinea":"gn","Guinea-Bissau":"gw","Guyana":"gy",
-        "Haiti":"ht","Honduras":"hn","Hungary":"hu",
-        "Iceland":"is","India":"in","Indonesia":"id","Iran":"ir","Iraq":"iq","Ireland":"ie","Israel":"il","Italy":"it",
-        "Jamaica":"jm","Japan":"jp","Jordan":"jo",
-        "Kazakhstan":"kz","Kenya":"ke","Kiribati":"ki","Korea, North":"kp","Korea, South":"kr","Kuwait":"kw","Kyrgyzstan":"kg",
-        "Laos":"la","Latvia":"lv","Lebanon":"lb","Lesotho":"ls","Liberia":"lr","Libya":"ly","Liechtenstein":"li","Lithuania":"lt","Luxembourg":"lu",
-        "Madagascar":"mg","Malawi":"mw","Malaysia":"my","Maldives":"mv","Mali":"ml","Malta":"mt","Marshall Islands":"mh","Mauritania":"mr","Mauritius":"mu","Mexico":"mx","Micronesia":"fm","Moldova":"md","Monaco":"mc","Mongolia":"mn","Montenegro":"me","Morocco":"ma","Mozambique":"mz","Myanmar":"mm",
-        "Namibia":"na","Nauru":"nr","Nepal":"np","Netherlands":"nl","New Zealand":"nz","Nicaragua":"ni","Niger":"ne","Nigeria":"ng","North Macedonia":"mk","Norway":"no",
-        "Oman":"om",
-        "Pakistan":"pk","Palau":"pw","Palestine":"ps","Panama":"pa","Papua New Guinea":"pg","Paraguay":"py","Peru":"pe","Philippines":"ph","Poland":"pl","Portugal":"pt",
-        "Qatar":"qa",
-        "Romania":"ro","Russia":"ru","Rwanda":"rw",
-        "Saint Kitts and Nevis":"kn","Saint Lucia":"lc","Saint Vincent and the Grenadines":"vc","Samoa":"ws","San Marino":"sm","Sao Tome and Principe":"st","Saudi Arabia":"sa","Senegal":"sn","Serbia":"rs","Seychelles":"sc","Sierra Leone":"sl","Singapore":"sg","Slovakia":"sk","Slovenia":"si","Solomon Islands":"sb","Somalia":"so","South Africa":"za","South Sudan":"ss","Spain":"es","Sri Lanka":"lk","Sudan":"sd","Suriname":"sr","Sweden":"se","Switzerland":"ch","Syria":"sy",
-        "Taiwan":"tw","Tajikistan":"tj","Tanzania":"tz","Thailand":"th","Timor-Leste":"tl","Togo":"tg","Tonga":"to","Trinidad and Tobago":"tt","Tunisia":"tn","Turkey":"tr","Turkmenistan":"tm","Tuvalu":"tv",
-        "Uganda":"ug","Ukraine":"ua","United Arab Emirates":"ae","United Kingdom":"gb","England":"gb-eng","United States":"us","Uruguay":"uy","Uzbekistan":"uz",
-        "Vanuatu":"vu","Vatican City":"va","Venezuela":"ve","Vietnam":"vn",
-        "Yemen":"ye",
-        "Zambia":"zm","Zimbabwe":"zw"
-    };
-    function extractTeams(teamsString) {
-        let vsSplit = teamsString.split(/🆚|vs/i);
-        if (vsSplit.length === 2) {
-            return [vsSplit[0].trim(), vsSplit[1].trim()];
-        }
-        return [teamsString, ""];
-    }
-    function getCountryFlagUrl(name) {
-        const code = countryNameToCodeMap[name];
-        return code ? `https://flagcdn.com/${code}.svg` : "";
-    }
-    async function getBettingTipsHtmlWithDynamicLogos(fixtures) {
-        const now = new Date();
-        const dd = String(now.getDate()).padStart(2, '0');
-        const mm = String(now.getMonth() + 1).padStart(2, '0');
-        const yyyy = now.getFullYear();
-        const displayDate = `${dd}-${mm}-${yyyy}`;
-        let html = `
-            <div style="font-weight:600;font-size:1.07rem;margin-bottom:12px;">
-                <span class="tip-date">Fixtures for 🗓️ ${displayDate}</span>
+
+        <!-- Profile Section -->
+        <div id="profileSection" class="profile-section hidden">
+            <img id="profileLogo" class="logo-img" src="" alt="Provider Logo"/>
+            <div class="profile-item"><strong>User PIN:</strong> <span id="profilePin"></span></div>
+            <div class="profile-item"><strong>User ID:</strong> <span id="profileUserId"></span>
+                <span class="user-provider-label" id="profileProviderLabel"></span>
             </div>
-        `;
-        for (const fix of fixtures) {
-            const [teamA, teamB] = extractTeams(fix.teams);
-            const countryFlag = getCountryFlagUrl(fix.country || fix.league.split("-")[0].trim());
-            html += `
-            <div class="fixture-card">
-                ${countryFlag ? `<img class="fixture-country-logo" src="${countryFlag}" alt="${fix.country || ''} flag" title="${fix.country || ''}" style="margin-right:6px;">` : ""}
-                <span class="fixture-league">${fix.league}</span>
-                <span class="fixture-time">${fix.time}</span>
-                <div class="fixture-teams">
-                    <span class="fixture-team-name">${teamA}</span>
-                    <span class="fixture-vs">VS</span>
-                    <span class="fixture-team-name">${teamB}</span>
-                </div>
-                <span class="fixture-pick">${fix.pick}</span>
-            </div>
-            `;
-        }
-        html += `
+            <div class="profile-item"><strong>Subscription:</strong> <span id="profileMonths"></span> month(s)</div>
+            <div class="profile-item"><strong>Expiration:</strong> <span id="profilePinExpire"></span></div>
+            <div id="expireWarn" class="expire-warning hidden">Your PIN has expired. Please contact support.</div>
+            <div id="notify" class="notify hidden"></div>
             <div class="booking-section">
-                <span class="booking-code-label">Sportybet code:</span>
-                <div class="booking-actions">
-                    <span class="booking-code-box" id="booking-code-box" title="Sportybet code cannot be copied manually">${SPORTYBET_BOOKING_CODE}</span>
-                    <a href="#" id="copy-booking-code-icon" class="copy-link-icon" title="Copy &amp; Go to SportyBet" tabindex="0" aria-label="Copy Booking Code and Open">
-                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" style="display:inline;vertical-align:middle;">
-                            <path d="M6 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2v-1h1v2a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2V2H6zm3 0v2h5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h2zm0 2h5a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"></path>
-                        </svg>
-                    </a>
-                </div>
+                <button id="generateCodeBtn" class="btn">Generate Booking Code</button>
             </div>
-            <div style="font-size:0.97rem;color:#ffe066;margin-top:6px;">
-                <em>TOTAL ODD is 1.33 ✳️ Guarantee 100% ⚠️Predictions are Uploaded Before ⏱️ 12:00 PM</em>
+        </div>
+
+        <!-- Booking Code Section (separate) -->
+        <div id="bookingSection" class="hidden">
+            <img id="bookingLogo" class="booking-logo rotating" src="" alt="Booking Logo"/>
+            <div class="booking-code" id="bookingCodeRow">
+                <span id="bookingCode"></span>
+                <span id="copyIcon" class="copy-icon" title="Copy & Open">&#128203;</span>
             </div>
-        `;
-        return html;
+            <div id="bookingMsg" class="profile-item"></div>
+            <button id="backToProfileBtn" class="btn" style="margin-top:6px;">Back to Profile</button>
+        </div>
+
+        <div class="footer-note">
+            &copy; 2025 EmpireStateBank - Secure Booking System
+        </div>
+    </div>
+<script>
+    // --- Booking Codes Labels (edit only here!) ---
+    const BOOKING_CODES = {
+        Sportybet: { code: "SB-9988776", link: "https://www.sportybet.com/ng?code=SB-9988776" },
+        Betking:   { code: "BK-4455667", link: "https://www.betking.com/sportsbook?code=BK-4455667" },
+        Bet9ja:    { code: "BN-1234567", link: "https://www.bet9ja.com/?code=BN-1234567" }
+    };
+
+    // --- Provider logos for browser (PNG and Wikipedia Commons for best browser support) ---
+    const PROVIDER_LOGOS = {
+        Sportybet: "https://upload.wikimedia.org/wikipedia/commons/5/5e/SportyBet_logo.png",
+        Betking:   "https://upload.wikimedia.org/wikipedia/commons/8/88/BetKing_logo.png",
+        Bet9ja:    "https://upload.wikimedia.org/wikipedia/commons/1/1e/Bet9ja_logo.png"
+    };
+
+    // --- User Data: PIN, ID, Provider, Subscription months, Expiration ---
+    const USERS = [
+        {
+            id: "USER1234",
+            pin: "6789",
+            profileProvider: "Betking",
+            subscriptionMonths: 3,
+            pinExpire: "2025-10-18T23:59:59",
+        },
+        {
+            id: "USER4321",
+            pin: "1234",
+            profileProvider: "Sportybet",
+            subscriptionMonths: 1,
+            pinExpire: "2025-11-01T15:00:00",
+        },
+        {
+            id: "USER9999",
+            pin: "5555",
+            profileProvider: "Bet9ja",
+            subscriptionMonths: 6,
+            pinExpire: "2025-10-15T08:00:00",
+        }
+    ];
+
+    // Helper for date display in local time, 12/24hr formats, NO GMT/UTC
+    function formatDateLocal(dtString) {
+        const d = new Date(dtString);
+        const options24 = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit', second:'2-digit', hour12: false };
+        const options12 = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit', second:'2-digit', hour12: true };
+        return `${d.toLocaleString(undefined, options24)} / ${d.toLocaleString(undefined, options12)}`;
     }
-    function showCustomLoader(show, text) {
-        document.getElementById('custom-loading-text').innerText = text || '';
-        document.getElementById('custom-loading-overlay').style.display = show ? 'flex' : 'none';
+    function isPinExpired(dtString) {
+        return new Date() > new Date(dtString);
     }
-    function showInternalLoader(note) {
-        document.getElementById('internal-loader-note').innerText = note || '';
-        document.getElementById('internal-loader').style.display = 'flex';
-        document.getElementById('main-content').style.opacity = 0.4;
+
+    // Loading dots animation for main
+    let dotCount = 0;
+    let loadingInterval;
+    function startLoadingDots() {
+        const dotsElem = document.getElementById("dots");
+        loadingInterval = setInterval(() => {
+            dotCount = (dotCount + 1) % 4;
+            dotsElem.textContent = "Loading" + ".".repeat(dotCount);
+        }, 500);
     }
-    function hideInternalLoader() {
-        document.getElementById('internal-loader').style.display = 'none';
-        document.getElementById('main-content').style.opacity = 1;
+    function stopLoadingDots() {
+        clearInterval(loadingInterval);
+        document.getElementById("dots").textContent = "";
     }
-    function copyBookingCodeAndOpenSportybet() {
-        if (navigator && navigator.clipboard) {
-            navigator.clipboard.writeText(SPORTYBET_BOOKING_CODE).then(function() {
-                window.open(SPORTYBET_URL, "_blank");
-            }, function(err) {
-                alert("Copy failed, please copy manually: " + SPORTYBET_BOOKING_CODE);
-                window.open(SPORTYBET_URL, "_blank");
+    startLoadingDots();
+
+    // Loading dots for provider logo
+    let providerDotCount = 0;
+    let providerLoadingInterval;
+    function startProviderLoadingDots() {
+        const dotsElem = document.getElementById("providerDots");
+        providerDotCount = 0;
+        providerLoadingInterval = setInterval(() => {
+            providerDotCount = (providerDotCount + 1) % 4;
+            dotsElem.textContent = "Loading" + ".".repeat(providerDotCount);
+        }, 500);
+    }
+    function stopProviderLoadingDots() {
+        clearInterval(providerLoadingInterval);
+        document.getElementById("providerDots").textContent = "";
+    }
+
+    // State
+    let currentUser = null;
+
+    // Initial loading 6s
+    const mainLogo = document.getElementById("mainLogo");
+    const loadingText = document.getElementById("loadingText");
+    const pinForm = document.getElementById("pinForm");
+
+    // PIN input: only numbers, max 4 digits
+    const pinInput = document.getElementById("pinInput");
+    pinInput.addEventListener("input", function(e) {
+        this.value = this.value.replace(/[^\d]/g, '').slice(0,4);
+    });
+
+    pinInput.addEventListener("focus", function(e) {
+        this.setAttribute("inputmode", "numeric");
+        this.setAttribute("pattern", "\\d{4}");
+    });
+
+    setTimeout(() => {
+        stopLoadingDots();
+        mainLogo.classList.add("hidden");
+        loadingText.classList.add("hidden");
+        pinForm.classList.remove("hidden");
+        pinInput.focus();
+    }, 6000);
+
+    // PIN submit
+    pinForm.addEventListener("submit", function(e){
+        e.preventDefault();
+        const pinVal = pinInput.value;
+        const user = USERS.find(u => u.pin === pinVal);
+        const pinError = document.getElementById("pinError");
+        if (!user) {
+            pinError.textContent = "Incorrect PIN. Try again.";
+            pinError.classList.remove("hidden");
+            pinInput.value = "";
+            pinInput.focus();
+            return;
+        } else {
+            pinError.classList.add("hidden");
+            currentUser = user;
+            pinForm.classList.add("hidden");
+            showProviderLogoLoading(currentUser.profileProvider);
+        }
+    });
+
+    function showProviderLogoLoading(provider) {
+        // Show logo loading section
+        document.getElementById("providerLogoLoading").src = PROVIDER_LOGOS[provider];
+        document.getElementById("providerLogoLoadingSection").classList.remove("hidden");
+        startProviderLoadingDots();
+        setTimeout(() => {
+            stopProviderLoadingDots();
+            document.getElementById("providerLogoLoadingSection").classList.add("hidden");
+            showProfileSection();
+        }, 6000);
+    }
+
+    function showProfileSection() {
+        document.getElementById("profileSection").classList.remove("hidden");
+        document.getElementById("bookingSection").classList.add("hidden");
+
+        document.getElementById("profileLogo").src = PROVIDER_LOGOS[currentUser.profileProvider];
+        document.getElementById("profilePin").textContent = currentUser.pin;
+        document.getElementById("profileUserId").textContent = currentUser.id;
+        document.getElementById("profileProviderLabel").textContent = currentUser.profileProvider;
+        document.getElementById("profileMonths").textContent = currentUser.subscriptionMonths;
+        document.getElementById("profilePinExpire").textContent = formatDateLocal(currentUser.pinExpire);
+
+        if (isPinExpired(currentUser.pinExpire)) {
+            document.getElementById("expireWarn").classList.remove("hidden");
+            document.getElementById("generateCodeBtn").disabled = true;
+            document.getElementById("notify").innerHTML =
+                'Your PIN has expired. You cannot generate a booking code.' +
+                '<br><a href="https://your-subscription-link.com" target="_blank" class="sub-btn">Subscribe</a>';
+            document.getElementById("notify").classList.remove("hidden");
+        } else {
+            document.getElementById("expireWarn").classList.add("hidden");
+            document.getElementById("generateCodeBtn").disabled = false;
+            document.getElementById("notify").classList.add("hidden");
+            document.getElementById("notify").innerHTML = "";
+        }
+    }
+
+    // Generate booking code button
+    document.getElementById("generateCodeBtn").addEventListener("click", function(){
+        if (isPinExpired(currentUser.pinExpire)) {
+            document.getElementById("notify").innerHTML =
+                'Your PIN has expired. You cannot generate a booking code.' +
+                '<br><a href="https://your-subscription-link.com" target="_blank" class="sub-btn">Subscribe</a>';
+            document.getElementById("notify").classList.remove("hidden");
+            return;
+        }
+        document.getElementById("profileSection").classList.add("hidden");
+        const bookingSection = document.getElementById("bookingSection");
+        bookingSection.classList.remove("hidden");
+        const bookingLogo = document.getElementById("bookingLogo");
+        bookingLogo.src = PROVIDER_LOGOS[currentUser.profileProvider];
+        bookingLogo.classList.add('rotating');
+        document.getElementById("bookingCodeRow").classList.add("hidden");
+        document.getElementById("bookingMsg").textContent = "";
+        let bDotCount = 0;
+        let bInterval;
+        function showBookingDots() {
+            bInterval = setInterval(() => {
+                bDotCount = (bDotCount + 1) % 4;
+                document.getElementById("bookingMsg").textContent = "Generating code" + ".".repeat(bDotCount);
+            }, 500);
+        }
+        showBookingDots();
+        setTimeout(()=>{
+            clearInterval(bInterval);
+            const provider = currentUser.profileProvider;
+            const codeObj = BOOKING_CODES[provider];
+            document.getElementById("bookingCode").textContent = codeObj.code;
+            document.getElementById("bookingMsg").textContent = "Tap the copy icon to copy & open your code link.";
+            document.getElementById("bookingCodeRow").classList.remove("hidden");
+        }, 6000);
+    });
+
+    // Only copy on icon click (not long press/touch)
+    document.getElementById("copyIcon").addEventListener("click", function(e){
+        const provider = currentUser.profileProvider;
+        const codeObj = BOOKING_CODES[provider];
+        // Only allow copy when clicking the icon
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(codeObj.code).then(() => {
+                document.getElementById("bookingMsg").textContent = "Code copied! Opening link...";
             });
         } else {
-            const tempInput = document.createElement("input");
-            tempInput.style.position = "absolute";
-            tempInput.style.opacity = "0";
-            tempInput.value = SPORTYBET_BOOKING_CODE;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            try {
-                document.execCommand('copy');
-                window.open(SPORTYBET_URL, "_blank");
-            } catch (err) {
-                alert("Copy failed, please copy manually: " + SPORTYBET_BOOKING_CODE);
-                window.open(SPORTYBET_URL, "_blank");
-            }
-            document.body.removeChild(tempInput);
+            const textarea = document.createElement('textarea');
+            textarea.value = codeObj.code;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            document.getElementById("bookingMsg").textContent = "Code copied! Opening link...";
         }
-    }
-    // Improved expiry check: handles timezones and logs for debugging
-    /**
-     * Returns true if the expiry date is in the past (i.e. expired), else false.
-     * Handles timezones by forcing UTC comparison.
-     * Also logs debugging info to the console.
-     * 
-     * @param {string} iso ISO date string (e.g. "2025-09-27T00:00:00")
-     * @returns {boolean} true if expired, false otherwise
-     */
-    function isExpiredAtMidnight(iso) {
-        // Parse expiry as UTC.
-        // If iso string has no timezone, treat it as UTC.
-        let expDate;
-        if (/Z$/.test(iso) || /\+\d{2}:\d{2}$/.test(iso) || /\-\d{2}:\d{2}$/.test(iso)) {
-            expDate = new Date(iso);
-        } else {
-            // Append Z if no timezone, to force UTC
-            expDate = new Date(iso + "Z");
-        }
-        // Get current time in UTC
-        const now = new Date();
-        const nowUTC = new Date(Date.UTC(
-            now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
-            now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()
-        ));
-        const expired = nowUTC >= expDate;
-        // Log for debugging
-        console.log(
-            "[EmpireBet] Expiry check:",
-            "\n  Now (local):", now.toString(),
-            "\n  Now (UTC):", nowUTC.toISOString(),
-            "\n  Expiry (UTC):", expDate.toISOString(),
-            "\n  Expired:", expired
-        );
-        return expired;
-    }
-    function formatDate(iso) {
-        // Always treat as UTC for display
-        let d;
-        if (/Z$/.test(iso) || /\+\d{2}:\d{2}$/.test(iso) || /\-\d{2}:\d{2}$/.test(iso)) {
-            d = new Date(iso);
-        } else {
-            d = new Date(iso + "Z");
-        }
-        const dd = String(d.getUTCDate()).padStart(2, '0');
-        const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
-        const yyyy = d.getUTCFullYear();
-        return `${dd}-${mm}-${yyyy}`;
-    }
-    async function showTipsFrame() {
-        document.getElementById('tips-frame-content').innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;">
-            <div class="empire-loader"></div>
-            <div style="margin-top:14px;font-size:1.10rem;color:#ffea00">Loading team and country logos...</div>
-        </div>`;
-        document.getElementById('tips-frame-overlay').style.display = 'flex';
-        const html = await getBettingTipsHtmlWithDynamicLogos(allFixtures);
-        document.getElementById('tips-frame-content').innerHTML = html;
-        const copyIcon = document.getElementById('copy-booking-code-icon');
-        if (copyIcon) {
-            copyIcon.onclick = function(e) {
-                e.preventDefault();
-                copyBookingCodeAndOpenSportybet();
-            };
-        }
-    }
-    document.addEventListener("DOMContentLoaded", function () {
-        function hideAllExcept(id) {
-            ['loader-container', 'pin-input-section', 'profile-section', 'access-denied'].forEach(function(sec) {
-                document.getElementById(sec).style.display = (sec === id) ? ((id === 'loader-container') ? 'flex' : 'block') : 'none';
-            });
-            document.getElementById('tips-frame-overlay').style.display = 'none';
-            document.getElementById('internal-loader').style.display = 'none';
-            document.getElementById('renew-msg-modal').style.display = 'none';
-        }
-        let loggedInPin = null;
-        document.getElementById('loader-container').style.display = 'flex';
-        document.getElementById('note').style.display = 'block';
-        hideAllExcept('loader-container');
-        // Show loader for 7 seconds at entry
-        setTimeout(() => { hideAllExcept('pin-input-section'); }, 7000);
-        document.getElementById('pin-form').onsubmit = function(e) {
+        window.open(codeObj.link, "_blank");
+        e.preventDefault(); // Prevent long press copy
+    });
+
+    // Prevent long press/touch copy on bookingCode
+    document.getElementById("bookingCode").addEventListener("copy", function(e){
+        e.preventDefault();
+    });
+    document.getElementById("bookingCode").addEventListener("mousedown", function(e){
+        if(e.button === 2){ // right click
             e.preventDefault();
-            const pinInput = document.getElementById('pin');
-            const pin = pinInput.value.trim();
-            if (!/^\d{4}$/.test(pin)) {
-                document.getElementById('pin-error').innerText = 'PIN must be 4 digits.'; pinInput.focus(); return;
-            }
-            if (!USERS[pin]) {
-                document.getElementById('pin-error').innerText = 'Invalid PIN. Please try again.'; pinInput.focus(); return;
-            }
-            document.getElementById('pin-error').innerText = '';
-            showCustomLoader(true, "Loading profile...");
-            setTimeout(() => {
-                showCustomLoader(false);
-                loggedInPin = pin;
-                if (isExpiredAtMidnight(USERS[pin].expiry)) {
-                    showAccessDenied(pin);
-                } else {
-                    showProfile(pin);
-                }
-            }, 7000);
-        };
-        function showProfile(pin) {
-            hideAllExcept('profile-section');
-            document.getElementById('profile-pin').innerText = pin;
-            document.getElementById('profile-ticket').innerText = USERS[pin].ticketId;
-            document.getElementById('profile-expiry').innerText = formatDate(USERS[pin].expiry);
-            const expired = isExpiredAtMidnight(USERS[pin].expiry);
-            document.getElementById('profile-expired').style.display = expired ? 'block' : 'none';
-            document.getElementById('generate-tips-btn').style.display = expired ? 'none' : 'inline-block';
-            // PATCH: Set renew button href directly
-            const renewBtnProfile = document.getElementById('renew-btn-profile');
-            if (renewBtnProfile) {
-                renewBtnProfile.setAttribute("href", USERS[pin].renewLink);
-                renewBtnProfile.setAttribute("target", "_blank");
-                renewBtnProfile.setAttribute("rel", "noopener");
-                renewBtnProfile.onclick = null;
-            }
         }
-        function showAccessDenied(pin) {
-            hideAllExcept('access-denied');
-            // PATCH: Set renew button href directly
-            const renewBtnDenied = document.getElementById('renew-btn-denied');
-            if (renewBtnDenied) {
-                renewBtnDenied.setAttribute("href", USERS[pin].renewLink);
-                renewBtnDenied.setAttribute("target", "_blank");
-                renewBtnDenied.setAttribute("rel", "noopener");
-                renewBtnDenied.onclick = null;
-            }
-        }
-        // The modal is still here for legacy, but not used for renew
-        function showRenewModal(renewLink) {
-            document.getElementById('renew-msg-text').innerText = "Please fill in your correct details.";
-            document.getElementById('renew-msg-modal').style.display = 'flex';
-            document.getElementById('renew-modal-btn').onclick = function() {
-                document.getElementById('renew-msg-modal').style.display = 'none';
-                window.open(renewLink, "_blank");
-            };
-        }
-        document.getElementById('generate-tips-btn').onclick = async function() {
-            showCustomLoader(true, "Loading predictions...");
-            setTimeout(async () => {
-                showCustomLoader(false);
-                await showTipsFrame();
-            }, 7000);
-        };
-        document.getElementById('tips-frame-overlay').style.display = 'none';
-        document.getElementById('close-tips-frame').onclick = function() {
-            document.getElementById('tips-frame-overlay').style.display = 'none';
-        };
-        window.onpopstate = function() {
-            hideInternalLoader();
-            hideAllExcept('pin-input-section');
-        };
-        setInterval(() => {
-            if (loggedInPin && USERS[loggedInPin] && isExpiredAtMidnight(USERS[loggedInPin].expiry)) {
-                showAccessDenied(loggedInPin);
-            }
-        }, 15000);
-        document.getElementById('pin').addEventListener('input', function(e) {
-            this.value = this.value.replace(/[^0-9]/g,'').slice(0,4);
-        });
+    });
+    document.getElementById("bookingCode").addEventListener("touchstart", function(e){
+        e.preventDefault();
+    });
+
+    document.getElementById("backToProfileBtn").addEventListener("click", function(){
+        document.getElementById("bookingSection").classList.add("hidden");
+        showProfileSection();
     });
 </script>
 </body>
