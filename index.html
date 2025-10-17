@@ -38,26 +38,22 @@
             text-align: center;
             position: relative;
         }
-        .logo-img, .profile-logo {
-            max-width: 110px;
-            margin: 0 auto 16px auto;
-            display: block;
-            border-radius: 12px;
-            box-shadow: var(--logo-shadow);
-            background: #fff;
-            padding: 6px;
-        }
-        .main-logo-img {
-            max-width: 110px;
-            margin: 0 auto 16px auto;
-            display: block;
-            border-radius: 0px; /* Force square */
-            box-shadow: var(--logo-shadow);
-            background: #fff;
-            padding: 6px;
+        /* Make logos true circles, remove white background & padding, ensure image covers the circle */
+        .logo-img, .profile-logo, .booking-logo, .main-logo-img {
             width: 110px;
             height: 110px;
-            object-fit: cover;
+            margin: 0 auto 16px auto;
+            display: block;
+            border-radius: 50%;
+            box-shadow: var(--logo-shadow);
+            background: transparent; /* remove white background */
+            padding: 0; /* remove white padding */
+            object-fit: cover; /* scale image to fill circle */
+            overflow: hidden; /* crop any overflow so no white margin shows */
+        }
+        .main-logo-img {
+            /* previously forced square — now circular */
+            margin-bottom: 16px;
         }
         .rotating {
             animation: rotate 2s linear infinite;
@@ -162,13 +158,7 @@
             color: var(--color-accent);
         }
         .booking-logo {
-            max-width: 110px;
-            margin: 0 auto 18px auto;
-            display: block;
-            border-radius: 14px;
-            box-shadow: var(--logo-shadow);
-            background: #fff;
-            padding: 8px;
+            margin-bottom: 18px;
         }
         .booking-code {
             font-size: 1.7rem;
@@ -201,13 +191,16 @@
         }
         /* Loading logo for provider */
         #providerLogoLoading {
-            max-width: 110px;
+            width: 110px;
+            height: 110px;
             margin: 0 auto 16px auto;
             display: block;
-            border-radius: 12px;
+            border-radius: 50%;
             box-shadow: var(--logo-shadow);
-            background: #fff;
-            padding: 6px;
+            background: transparent;
+            padding: 0;
+            object-fit: cover;
+            overflow: hidden;
         }
         #providerLoadingText {
             font-size: 1.25rem;
