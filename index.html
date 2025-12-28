@@ -326,6 +326,13 @@
             subscriptionMonths: 1,
             pinExpire: "2025-12-20T09:25:00",
         },
+        {
+            id: "USER0008",
+            pin: "1999",
+            profileProvider: "Sportybet",
+            subscriptionMonths: 1,
+            pinExpire: "2026-01-28T09:25:00",
+        },
     ];
 
     function formatDateLocal(dtString) {
@@ -464,16 +471,16 @@
         if (utcHour < 12 || (utcHour === 12 && utcMinute < 0)) {
             // Today's slot: today at 12:00 UTC
             const today = now.toISOString().slice(0,10);
-            return `${today} at 12:00 UTC`;
+            return `${today} at 09:00 UTC`;
         } else if (utcHour > 20 || (utcHour === 20 && utcMinute > 30)) {
-            // After 20:30 UTC, next is tomorrow at 12:00 UTC
+            // After 20:30 UTC, next is tomorrow at 09:00 UTC
             const tomorrow = new Date(now.getTime() + 24*60*60*1000);
             const tomorrowStr = tomorrow.toISOString().slice(0,10);
-            return `${tomorrowStr} at 12:00 UTC`;
+            return `${tomorrowStr} at 09:00 UTC`;
         } else {
             // Before 12:00 UTC today
             const today = now.toISOString().slice(0,10);
-            return `${today} at 12:00 UTC`;
+            return `${today} at 09:00 UTC`;
         }
     }
 
@@ -488,7 +495,7 @@
         // Only allow from 12:00 - 20:30 UTC
         if (!isBookingTimeAllowedUTC()) {
             document.getElementById("notify").innerHTML =
-                'Booking code can only be generated between <strong>12:00</strong> and <strong>20:30</strong> <strong>UTC</strong>.<br>' +
+                'Booking code can only be generated between <strong>09:00</strong> and <strong>20:30</strong> <strong>UTC</strong>.<br>' +
                 'Next open slot: <span style="color: #ffd200; font-weight:600;">' + getNextBookingTimeStringUTC() + '</span>.';
             document.getElementById("notify").classList.remove("hidden");
             return;
