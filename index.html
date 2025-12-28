@@ -462,23 +462,25 @@
         const utcHour = now.getUTCHours();
         const utcMinute = now.getUTCMinutes();
         const minutes = utcHour * 60 + utcMinute;
-        return minutes >= 720 /*12:00*/ && minutes <= 1230 /*20:30*/;
+        return minutes >= 540 /*09:00*/ && minutes <= 1230 /*20:30*/;
     }
     function getNextBookingTimeStringUTC() {
         const now = new Date();
-        const utcHour = now.getUTCHours();
-        const utcMinute = now.getUTCMinutes();
-        if (utcHour < 12 || (utcHour === 12 && utcMinute < 0)) {
-            // Today's slot: today at 12:00 UTC
+        const minutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+        const start = 9 * 60; // 09:00 UTC
+        const end = 20 * 60 + 30; // 20:30 UTC
+
+        if (minutes < start) {
+            // Before today's 09:00 UTC -> today at 09:00 UTC
             const today = now.toISOString().slice(0,10);
             return `${today} at 09:00 UTC`;
-        } else if (utcHour > 20 || (utcHour === 20 && utcMinute > 30)) {
-            // After 20:30 UTC, next is tomorrow at 09:00 UTC
+        } else if (minutes > end) {
+            // After 20:30 UTC -> tomorrow at 09:00 UTC
             const tomorrow = new Date(now.getTime() + 24*60*60*1000);
             const tomorrowStr = tomorrow.toISOString().slice(0,10);
             return `${tomorrowStr} at 09:00 UTC`;
         } else {
-            // Before 12:00 UTC today
+            // Within the allowed window (shouldn't call this while open), return today's slot
             const today = now.toISOString().slice(0,10);
             return `${today} at 09:00 UTC`;
         }
@@ -492,7 +494,7 @@
             document.getElementById("notify").classList.remove("hidden");
             return;
         }
-        // Only allow from 12:00 - 20:30 UTC
+        // Only allow from 09:00 - 20:30 UTC
         if (!isBookingTimeAllowedUTC()) {
             document.getElementById("notify").innerHTML =
                 'Booking code can only be generated between <strong>09:00</strong> and <strong>20:30</strong> <strong>UTC</strong>.<br>' +
