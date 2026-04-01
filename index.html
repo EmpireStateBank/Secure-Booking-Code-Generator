@@ -622,6 +622,13 @@
             border: 1px solid rgba(212, 175, 55, 0.2);
             font-weight: 700;
             letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .booking-code:hover {
+            background: linear-gradient(135deg, #0f1428 0%, #1a1f3a 100%);
+            border-color: rgba(212, 175, 55, 0.4);
         }
 
         .rotating-logo {
@@ -757,11 +764,48 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .bottom-link:hover {
             color: #e8c547;
             text-decoration: underline;
+        }
+
+        /* ========== COPY NOTIFICATION ========== */
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #ffffff;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            z-index: 3000;
+            animation: slideDown 0.3s ease, slideUp 0.3s ease 3.7s forwards;
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
         }
 
         @media (max-width: 768px) {
@@ -854,7 +898,7 @@
                     <div class="rotating-logo" id="rotatingLogo"></div>
                     <div class="booking-box">
                         <div class="booking-code" id="bookingCodeDisplay"></div>
-                        <button class="btn btn-primary" onclick="loadBookingCode()">LOAD</button>
+                        <button class="btn btn-primary" onclick="loadBookingCode()">LOAD & PASTE</button>
                     </div>
                 </div>
             </div>
@@ -925,7 +969,7 @@
                 name: "Emmanuel Ekpa",
                 pin: "3572",
                 bookingSite: "Bet9ja",
-                expirationDate: "2026-04-25",
+                expirationDate: "2025-04-25",
                 subscriptionAmount: 3500
             },
             "1112": {
@@ -964,6 +1008,12 @@
             "Bet9ja": "58S9VHH"
         };
 
+        const bookingSiteLinks = {
+            "Sportybet": "https://www.sportybet.com/ng/m/code-hub/load-code?source=home",
+            "Betking": "https://m.betking.com/en-ng/sports/book-bet?ic_source=internal&ic_medium=Menu&ic_campaign=NG-MENU-BookBet-Mob&ic_content=MENU-BookBet-mob",
+            "Bet9ja": "https://old-mobile.bet9ja.com/Schedina.aspx"
+        };
+
         const channelLinks = {
             "channel1": "https://sporty.com/sporty-tv",
             "channel2": "https://www.camel1.tv/"
@@ -974,6 +1024,12 @@
             "mySportySocial": "https://www.sportybet.com/player/empirebot",
             "notificationCenter": "https://whatsapp.com/channel/0029VbAjCE67oQhZxHe5Kq3R",
             "renewSubscription": "https://paystack.shop/pay/hi79etvoja"
+        };
+
+        const externalLinkEmojis = {
+            "customerService": "📧",
+            "mySportySocial": "🏆",
+            "notificationCenter": "🔔"
         };
 
         const bookingSiteImages = {
@@ -1192,10 +1248,43 @@
             document.getElementById('bookingCodeSection').style.display = 'none';
         }
 
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showCopyNotification();
+            }).catch(() => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showCopyNotification();
+            });
+        }
+
+        function showCopyNotification() {
+            const notification = document.createElement('div');
+            notification.className = 'copy-notification';
+            notification.textContent = '✓ Code Copied to Clipboard';
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 4000);
+        }
+
         function loadBookingCode() {
             const bookingCode = bookingCodes[selectedBookingSite];
-            const link = `https://booking.example.com/?code=${bookingCode}`;
-            window.open(link, '_blank');
+            
+            // Copy the code to clipboard
+            copyToClipboard(bookingCode);
+            
+            // Open the booking site link after 4 seconds
+            setTimeout(() => {
+                const link = bookingSiteLinks[selectedBookingSite];
+                window.open(link, '_blank');
+            }, 4000);
         }
 
         function loadProfileContent() {
@@ -1260,9 +1349,9 @@
                 </div>
 
                 <div class="bottom-links">
-                    <a class="bottom-link" onclick="openExternalLink('customerService')">Customer Service</a>
-                    <a class="bottom-link" onclick="openExternalLink('mySportySocial')">My SportySocial</a>
-                    <a class="bottom-link" onclick="openExternalLink('notificationCenter')">Notification Center</a>
+                    <a class="bottom-link" onclick="openExternalLink('customerService')"><span>📧</span> Customer Service</a>
+                    <a class="bottom-link" onclick="openExternalLink('mySportySocial')"><span>🏆</span> My SportySocial</a>
+                    <a class="bottom-link" onclick="openExternalLink('notificationCenter')"><span>🔔</span> Notification Center</a>
                 </div>
             `;
 
